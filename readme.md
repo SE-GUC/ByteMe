@@ -2,7 +2,7 @@
 
 ### GUC SE ByteMe project
 
-This project is a web application to built on the MERN stack.
+This project is a web application to be built on the MERN stack.
 
 ### Goals
 
