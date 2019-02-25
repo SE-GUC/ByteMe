@@ -8,7 +8,7 @@ Ok so first things first, take a look at the structure you'll see we have an `ap
 create a folder for your own entity inside of it in the same structure, make inside of that 4 js files simillair to the ones in merchandise, I even suggest TAKING A CUP OF COFFEE (So you don't forget to change anything) and just copying the 4 files into your entity, renaming them, and just changing every "merchandise" into "yourentityname", bearing in mind capitalizations etc.
 
 
-#Setting up routes
+# Setting up routes
 open up the `server.js` file, on line 8 you can see I have:
 `var merchandiseRoutes = require('./api/merchandise/merchandise.routes');`
 , mimic it for your entity, for example:
