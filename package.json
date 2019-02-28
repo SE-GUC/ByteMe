@@ -1,5 +1,4 @@
 {
-
   "name": "byteme",
   "version": "1.0.0",
   "description": "",
@@ -23,7 +22,7 @@
     "express-joi": "^0.3.1",
     "joi": "^14.3.1",
     "mongoose": "^5.4.16",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.0",
     "moment": "^2.24.0",
