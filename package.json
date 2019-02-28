@@ -1,26 +1,33 @@
 {
-  "name": "express-test",
+
+  "name": "byteme",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SE-GUC/ByteMe.git"
+  },
+  "author": "team ByteMe",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SE-GUC/ByteMe/issues"
+  },
+  "homepage": "https://github.com/SE-GUC/ByteMe#readme",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "chalk": "^2.4.2",
     "express": "^4.16.4",
+    "express-joi": "^0.3.1",
     "joi": "^14.3.1",
+    "mongoose": "^5.4.16",
+    "morgan": "^1.9.1"
+    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.0",
     "moment": "^2.24.0",
-    "mongoose": "^5.4.15",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^1.18.10"
   }
 }
