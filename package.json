@@ -1,4 +1,5 @@
 {
+
   "name": "byteme",
   "version": "1.0.0",
   "description": "",
@@ -10,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/SE-GUC/ByteMe.git"
   },
-  "author": "",
+  "author": "team ByteMe",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/SE-GUC/ByteMe/issues"
@@ -23,5 +24,10 @@
     "joi": "^14.3.1",
     "mongoose": "^5.4.16",
     "morgan": "^1.9.1"
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.0",
+    "moment": "^2.24.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
   }
 }
