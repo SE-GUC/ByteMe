@@ -6,6 +6,7 @@ const users = require('./routes/api/users')
 const events = require('./routes/api/events')
 const announcements = require('./routes/api/announcements')
 
+
 const app = express()
 
 // DB Config
@@ -29,6 +30,7 @@ app.get('/', (req,res) => res.send(`<h1>Welcome to Our Platform</h1>`))
 app.use('/api/events', events)
 app.use('/api/users', users)
 app.use('/api/announcements', announcements)
+
 
 
 app.use((req,res) => res.status(404).send(`<h1>Can not find what you're looking for</h1>`))
