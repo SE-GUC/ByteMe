@@ -4,7 +4,9 @@ const mongoose = require('mongoose')
 // Require Router Handlers
 const users = require('./routes/api/users')
 const events = require('./routes/api/events')
+const announcements = require('./routes/api/announcements')
 const mailinglist = require('./routes/api/mailing_list')
+
 
 
 const app = express()
@@ -29,7 +31,9 @@ app.get('/', (req,res) => res.send(`<h1>Welcome to Our Platform</h1>`))
 // Direct to Route Handlers
 app.use('/api/events', events)
 app.use('/api/users', users)
+app.use('/api/announcements', announcements)
 app.use('/api/mailing_list', mailinglist)
+
 
 
 
