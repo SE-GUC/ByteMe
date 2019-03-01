@@ -163,7 +163,9 @@ router.put('/', async (req, res) => {
                 delete updatedUser.new_password
                 delete updatedUser.old_password
 
-                User.updateOne({ email: email }, updatedUser, { upsert: false })
+                console.log(updatedUser)
+
+                await User.updateOne({ email: email }, updatedUser, { upsert: false })
 
                 const userAfterUpdate = await User.findOne({ "email": finalemail })
                 console.log(finalemail)
