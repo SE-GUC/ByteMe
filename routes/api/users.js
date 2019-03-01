@@ -39,8 +39,40 @@ router.put('/giveAdmin', async (req, res) => {
                 if (!userTwo) return res.status(404).send({ error: 'No user with this guc id' })
                 if (userTwo.is_admin) return res.status(403).send({ error: 'User is also an admin' })
 
-                await User.updateOne({ guc_id: req.body.guc_id }, { is_admin: true}, { upsert: false })
+                await User.updateOne({ guc_id: req.body.guc_id }, { is_admin: true }, { upsert: false })
                 const updatedUser = await User.findOne({ guc_id: req.body.guc_id })
+                return res.json({ "message": "updated!", "user": updatedUser })
+            } else {
+                return res.status(403).json({ "error": "wrong password" })
+            }
+        });
+    }
+    catch (error) {
+        // We will be handling the error later
+        console.log(error)
+    }
+})
+
+router.put('/forefitAdmin', async (req, res) => {
+    try {
+        const isValidated = validator.basicValidation(req.body)
+        if (isValidated.error) return res.status(400).send(
+            { error: isValidated.error.details[0].message })
+
+        const email = req.body.email
+        const password = req.body.password
+        const userWithEmail = await User.findOne({ email })
+
+        if (!userWithEmail) return res.status(404).send({ error: 'No user with this email' })
+
+        const dbHash = userWithEmail["password"]
+
+        bcrypt.compare(password, dbHash, async (err, match) => {
+            if (match) {
+                if (!userWithEmail.is_admin) return res.json({ "message": "user isn't an admin" })
+
+                await User.updateOne({ email }, { is_admin: false }, { upsert: false })
+                const updatedUser = await User.findOne({ email })
                 return res.json({ "message": "updated!", "user": updatedUser })
             } else {
                 return res.status(403).json({ "error": "wrong password" })
@@ -154,6 +186,11 @@ router.put('/', async (req, res) => {
 
 router.delete('/', async (req, res) => {
     try {
+
+        const isValidated = validator.basicValidation(req.body)
+        if (isValidated.error) return res.status(400).send(
+            { error: isValidated.error.details[0].message })
+
         const email = req.body.email
         const password = req.body.password
         const userWithEmail = await User.findOne({ email })

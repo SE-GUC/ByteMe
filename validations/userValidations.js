@@ -59,4 +59,14 @@ module.exports = {
 
         return Joi.validate(request, giveMunRoleValidationScheme)
     },
+
+    basicValidation: request => {
+        const basicValidationScheme = {
+            email: Joi.string().email().required(),
+            password: Joi.string().regex(/^[a-zA-Z0-9]{8,36}$/).required(),
+
+        }
+
+        return Joi.validate(request, basicValidationScheme)
+    },
 }
