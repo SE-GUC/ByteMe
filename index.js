@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 const users = require('./routes/api/users')
 const events = require('./routes/api/events')
 const announcements = require('./routes/api/announcements')
+const mailinglist = require('./routes/api/mailing_list')
+
 
 
 const app = express()
@@ -30,6 +32,8 @@ app.get('/', (req,res) => res.send(`<h1>Welcome to Our Platform</h1>`))
 app.use('/api/events', events)
 app.use('/api/users', users)
 app.use('/api/announcements', announcements)
+app.use('/api/mailing_list', mailinglist)
+
 
 
 
