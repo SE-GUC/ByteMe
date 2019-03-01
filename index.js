@@ -4,15 +4,11 @@ const mongoose = require('mongoose')
 // Require Router Handlers
 const users = require('./routes/api/users')
 const events = require('./routes/api/events')
-
 const mailinglist = require('./routes/api/mailing_list')
 const faq = require('./routes/api/faq')
 const pages = require('./routes/api/page')
 const library = require('./routes/api/library')
 const announcements = require('./routes/api/announcements')
-
-
-
 
 
 
@@ -46,10 +42,6 @@ app.use('/api/mailing_list', mailinglist)
 app.use('/api/faq', faq)
 app.use('/api/library', library)
 app.use('/api/announcements', announcements)
-
-
-
-
 
 
 
