@@ -10,7 +10,6 @@ const faq = require('./routes/api/faq')
 
 const library = require('./routes/api/library')
 const announcements = require('./routes/api/announcements')
-const mailinglist = require('./routes/api/mailing_list')
 
 
 
