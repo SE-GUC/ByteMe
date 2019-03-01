@@ -31,7 +31,7 @@ module.exports = {
             birth_date: Joi.string(),
 
             picture_ref: Joi.string(),
-            is_private: Joi.boolean().required(),
+            is_private: Joi.boolean(),
         }
 
         return Joi.validate(request, updateSchema)
