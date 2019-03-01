@@ -1,4 +1,5 @@
 
+
 const express = require('express')
 const mongoose = require('mongoose')
 
@@ -10,7 +11,7 @@ const faq = require('./routes/api/faq')
 const pages = require('./routes/api/page')
 const library = require('./routes/api/library')
 const announcements = require('./routes/api/announcements')
-
+const clubs = require('./routes/api/clubs')
 
 
 
@@ -44,10 +45,11 @@ app.use('/api/mailing_list', mailinglist)
 app.use('/api/faq', faq)
 app.use('/api/library', library)
 app.use('/api/announcements', announcements)
-
+app.use('/api/clubs', clubs)
 
 
 app.use((req,res) => res.status(404).send(`<h1>Can not find what you're looking for</h1>`))
 
 const port = process.env.PORT || 3000
+
 app.listen(port, () => console.log(`Server on ${port}`))
