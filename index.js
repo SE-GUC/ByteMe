@@ -28,12 +28,17 @@ mongoose
 
 // Init middleware
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 
 
 // Entry point
 
-app.get('/', (req,res) => res.send(`<h1>Welcome to Our Platform</h1> <h2><a href="/api/page">Councils/Offices/Commitees</a> <br> <a href="/api/mailing_list">Mailing list</a> <br> <a href="/api/faq">FAQs</a> <br> <a href="/api/announcements">Announcements</a> <br> <a href="/api/library">Library</a> </h2>`))
+app.get('/', (req, res) => res.send(`<h1>Welcome to Our Platform</h1> 
+<h2><a href="/api/page">Councils/Offices/Commitees</a> 
+<br> <a href="/api/mailing_list">Mailing list</a> 
+<br> <a href="/api/faq">FAQs</a> 
+<br> <a href="/api/announcements">Announcements</a> 
+<br> <a href="/api/library">Library</a> </h2>`))
 
 
 
@@ -48,7 +53,7 @@ app.use('/api/announcements', announcements)
 app.use('/api/clubs', clubs)
 
 
-app.use((req,res) => res.status(404).send(`<h1>Can not find what you're looking for</h1>`))
+app.use((req, res) => res.status(404).send(`<h1>Can not find what you're looking for</h1>`))
 
 const port = process.env.PORT || 3000
 
