@@ -25,7 +25,7 @@ const UserSchema = new Schema({
         required: true
     },
     guc_id: {
-        type: String, 
+        type: String,
         required: true
     },
     picture_ref: {

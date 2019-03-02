@@ -2,18 +2,18 @@ const Joi = require('joi')
 
 module.exports = {
 
-createValidation:request => {
+    createValidation: request => {
 
-const createSchema = Joi.object({
+        const createSchema = Joi.object({
 
-email: Joi.string().email()
+            email: Joi.string().email()
 
-})
+        })
 
 
-return Joi.validate(request,createSchema)
+        return Joi.validate(request, createSchema)
 
-},
+    },
 
 
 }

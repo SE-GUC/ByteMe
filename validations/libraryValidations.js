@@ -2,29 +2,29 @@ const Joi = require('joi')
 
 
 module.exports = {
-    createValidation: request =>{ 
-        
-        
-        
+    createValidation: request => {
+
+
+
         const createSchema = {
-        name: Joi.string().min(3).max(500).required(),
-        date: Joi.date(),
-        link: Joi.string().link()
-        
-
-    }
-
-    return Joi.validate(request, createSchema)
-},
+            name: Joi.string().min(3).max(500).required(),
+            date: Joi.date(),
+            link: Joi.string().link()
 
 
-updateValidation: request => {
-    const updateSchema = {
-        name: Joi.string().min(3).max(500).required(),
-        date: Joi.date(),
-        link: Joi.link()
-    }
+        }
 
-    return Joi.validate(request, updateSchema)
-},
+        return Joi.validate(request, createSchema)
+    },
+
+
+    updateValidation: request => {
+        const updateSchema = {
+            name: Joi.string().min(3).max(500).required(),
+            date: Joi.date(),
+            link: Joi.link()
+        }
+
+        return Joi.validate(request, updateSchema)
+    },
 }

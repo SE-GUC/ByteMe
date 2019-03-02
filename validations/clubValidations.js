@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 module.exports = {
     createValidation: request => {
-       
+
         const createSchema = {
             name: Joi.string().min(1).max(500).required(),
             description: Joi.string().min(10).max(10000).required(),
@@ -22,5 +22,5 @@ module.exports = {
         }
 
         return Joi.validate(request, updateSchema)
-    }, 
+    },
 }

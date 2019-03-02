@@ -3,20 +3,20 @@ const Schema = mongoose.Schema
 
 // Create the schema
 const LibrarySchema = new Schema({
-    
-    name : {
+
+    name: {
         type: String,
         required: true
-    }, 
-    date : {
+    },
+    date: {
         type: Date,
         required: true
     },
-    link : {
+    link: {
         type: String,
         required: true
     }
 })
-    
+
 
 module.exports = Library = mongoose.model('Library', LibrarySchema)
