@@ -12,6 +12,7 @@ const pages = require('./routes/api/page')
 const library = require('./routes/api/library')
 const announcements = require('./routes/api/announcements')
 const clubs = require('./routes/api/clubs')
+const product = require('./routes/api/products')
 
 
 
@@ -51,6 +52,7 @@ app.use('/api/faq', faq)
 app.use('/api/library', library)
 app.use('/api/announcements', announcements)
 app.use('/api/clubs', clubs)
+app.use('/api/products', product)
 
 
 app.use((req, res) => res.status(404).send(`<h1>Can not find what you're looking for</h1>`))
