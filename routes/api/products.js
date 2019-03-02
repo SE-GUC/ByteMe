@@ -20,14 +20,14 @@ router.get('/:name', async (req, res) => {
   res.json({ data: product })
   })
 
-// it posts the whole Product
+// create a new product
 router.post('/', async (req, res) => {
   try {
     const newProduct = await Product.create(req.body)
     res.json({ msg: 'Product was created successfully', data: newProduct })
   }
   catch (error) {
-    console.log(error)
+    return res.sendStatus(400).json(error);
   }
 })
 
@@ -43,8 +43,7 @@ router.put('/:id', async (req, res) => {
     res.json({ msg: 'Product updated successfully' })
   }
   catch (error) {
-    // We will be handling the error later
-    console.log(error)
+    return res.sendStatus(400).json(error);
   }
 })
 
@@ -57,8 +56,7 @@ router.delete('/:id', async (req, res) => {
     res.json({ msg: 'Product was deleted successfully', data: deletedProduct })
   }
   catch (error) {
-    // We will be handling the error later
-    console.log(error)
+    return res.sendStatus(400).json(error);
   }
 })
 
