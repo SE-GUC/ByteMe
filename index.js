@@ -2,6 +2,7 @@
 
 const express = require('express')
 const mongoose = require('mongoose')
+const session = require('express-session')
 
 // Require Router Handlers
 const users = require('./routes/api/users')
@@ -30,10 +31,10 @@ mongoose
 // Init middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(session({secret: "Shh, its a secret!"}));
 
 
 // Entry point
-
 app.get('/', (req, res) => res.send(`<h1>Welcome to Our Platform</h1> 
 <h2><a href="/api/page">Councils/Offices/Commitees</a> 
 <br> <a href="/api/mailing_list">Mailing list</a> 
