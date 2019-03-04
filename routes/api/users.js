@@ -87,9 +87,17 @@ router.post('/logout', async (req, res) => {
 router.get('/:gucid', async (req, res) => {
     try {
         const guc_id = req.params.gucid
-        const user = await User.findOne({ guc_id })
+        var user = await User.findOne({ guc_id })
+
+        var userTwo
+        if (req.session.user_id) userTwo = await User.findById(req.session.user_id)
+
         if (!user) return res.status(404).send({ error: 'No user with this guc id' })
-        res.json({ data: user })
+        if (user.is_private && (!userTwo || !userTwo.is_admin)) return res.status(403).send({ message: "this user is private" })
+
+
+
+        res.json({ data: hideSecrets(user) })
     } catch (error) {
         console.log(error)
     }
@@ -112,7 +120,7 @@ router.put('/giveAdmin', async (req, res) => {
 
         //if (userTwo.mun_role && userTwo.mun_role > req.body.mun_role) return res.status(403).send({ error: 'That user has a higher role' })
 
-        await User.updateOne({ guc_id: req.body.guc_id }, {is_admin:true}, { upsert: false })
+        await User.updateOne({ guc_id: req.body.guc_id }, { is_admin: true }, { upsert: false })
         const updatedUser = await User.findOne({ guc_id: req.body.guc_id })
         return res.json({ "message": "updated!", "user": updatedUser })
     }
@@ -209,7 +217,7 @@ router.delete('/', async (req, res) => {
         if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
 
         await User.findByIdAndDelete(req.session.user_id)
-        return res.json({"message":"user successfuly deleted"})
+        return res.json({ "message": "user successfuly deleted" })
     }
     catch (error) {
         // We will be handling the error later
@@ -217,4 +225,13 @@ router.delete('/', async (req, res) => {
     }
 })
 
+function hideSecrets(user) {
+    const { email, first_name, last_name, birth_date,
+        guc_id, picture_ref, is_admin, is_private, mun_role } = user
+
+    return {
+        email: email, first_name: first_name, last_name: last_name, birth_date: birth_date,
+        guc_id: guc_id, picture_ref: picture_ref, is_admin: is_admin, is_private: is_private, mun_role: mun_role
+    }
+}
 module.exports = router
