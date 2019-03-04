@@ -93,7 +93,7 @@ router.get('/:gucid', async (req, res) => {
         if (req.session.user_id) userTwo = await User.findById(req.session.user_id)
 
         if (!user) return res.status(404).send({ error: 'No user with this guc id' })
-        if (user.is_private && (!userTwo || !userTwo.is_admin)) return res.status(403).send({ message: "this user is private" })
+        if (user.is_private && (!userTwo || (!userTwo.is_admin && !userTwo.guc_id == user.guc_id))) return res.status(403).send({ message: "this user is private" })
 
 
 
