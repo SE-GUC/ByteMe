@@ -7,218 +7,6 @@ const validator = require('../../validations/userValidations')
 
 router.get('/', (req, res) => res.json({ data: 'Users working' }))
 
-router.get('/:gucid', async (req, res) => {
-    try {
-        const guc_id = req.params.gucid
-        const user = await User.findOne({ guc_id })
-        if (!user) return res.status(404).send({ error: 'No user with this guc id' })
-        res.json({ data: user })
-    } catch (error) {
-        console.log(error)
-    }
-})
-
-router.put('/giveAdmin', async (req, res) => {
-    try {
-        const isValidated = validator.giveAdminValidation(req.body)
-        if (isValidated.error) return res.status(400).send(
-            { error: isValidated.error.details[0].message })
-
-        const userWithEmail = await User.findOne({ email: req.body.email })
-
-        if (!userWithEmail) return res.status(404).send({ error: 'No user with this email' })
-
-        const dbHash = userWithEmail["password"]
-
-        bcrypt.compare(req.body.password, dbHash, async (err, match) => {
-            if (match) {
-                const userTwo = await User.findOne({ guc_id: req.body.guc_id })
-
-                if (!userWithEmail.is_admin) return res.status(403).send({ error: 'This user can\'t assign the admin role' })
-
-                if (!userTwo) return res.status(404).send({ error: 'No user with this guc id' })
-                if (userTwo.is_admin) return res.status(403).send({ error: 'User is also an admin' })
-
-                await User.updateOne({ guc_id: req.body.guc_id }, { is_admin: true }, { upsert: false })
-                const updatedUser = await User.findOne({ guc_id: req.body.guc_id })
-                return res.json({ "message": "updated!", "user": updatedUser })
-            } else {
-                return res.status(403).json({ "error": "wrong password" })
-            }
-        });
-    }
-    catch (error) {
-        // We will be handling the error later
-        console.log(error)
-    }
-})
-
-router.put('/forefitAdmin', async (req, res) => {
-    try {
-        const isValidated = validator.basicValidation(req.body)
-        if (isValidated.error) return res.status(400).send(
-            { error: isValidated.error.details[0].message })
-
-        const email = req.body.email
-        const password = req.body.password
-        const userWithEmail = await User.findOne({ email })
-
-        if (!userWithEmail) return res.status(404).send({ error: 'No user with this email' })
-
-        const dbHash = userWithEmail["password"]
-
-        bcrypt.compare(password, dbHash, async (err, match) => {
-            if (match) {
-                if (!userWithEmail.is_admin) return res.json({ "message": "user isn't an admin" })
-
-                await User.updateOne({ email }, { is_admin: false }, { upsert: false })
-                const updatedUser = await User.findOne({ email })
-                return res.json({ "message": "updated!", "user": updatedUser })
-            } else {
-                return res.status(403).json({ "error": "wrong password" })
-            }
-        });
-    }
-    catch (error) {
-        // We will be handling the error later
-        console.log(error)
-    }
-})
-
-router.put('/munRole', async (req, res) => {
-    try {
-        const isValidated = validator.giveMunRoleValidation(req.body)
-        if (isValidated.error) return res.status(400).send(
-            { error: isValidated.error.details[0].message })
-
-        const userWithEmail = await User.findOne({ email: req.body.email })
-
-        if (!userWithEmail) return res.status(404).send({ error: 'No user with this email' })
-
-        const dbHash = userWithEmail["password"]
-
-        bcrypt.compare(req.body.password, dbHash, async (err, match) => {
-            if (match) {
-                const userTwo = await User.findOne({ guc_id: req.body.guc_id })
-
-                if (!userWithEmail.mun_role || userWithEmail.mun_role < req.body.mun_role || req.body.mun_role < 0) return res.status(403).send({ error: 'This user can\'t assign this role' })
-
-                if (!userTwo) return res.status(404).send({ error: 'No user with this guc id' })
-                if (userTwo.mun_role && userWithEmail.mun_role > req.body.mun_role) return res.status(403).send({ error: 'That user has a higher role' })
-
-                await User.updateOne({ guc_id: req.body.guc_id }, { mun_role: req.body.mun_role }, { upsert: false })
-                const updatedUser = await User.findOne({ guc_id: req.body.guc_id })
-                return res.json({ "message": "updated!", "user": updatedUser })
-            } else {
-                return res.status(403).json({ "error": "wrong password" })
-            }
-        });
-    }
-    catch (error) {
-        // We will be handling the error later
-        console.log(error)
-    }
-})
-
-router.put('/', async (req, res) => {
-    try {
-        const isValidated = validator.updateValidation(req.body)
-        if (isValidated.error) return res.status(400).send(
-            { error: isValidated.error.details[0].message })
-
-        const email = req.body.old_email
-        const newemail = req.body.new_email
-        const password = req.body.old_password
-
-        const userWithEmail = await User.findOne({ email })
-        if (!userWithEmail) return res.status(404).send({ error: 'No user with this email' })
-
-        if (newemail) {
-            const user = await User.findOne({ newemail })
-            if (user) return res.status(400).json({ error: 'An account with the requested email already exists' })
-        }
-
-        const dbHash = userWithEmail["password"]
-
-        let finalemail = email
-
-        bcrypt.compare(password, dbHash, async (err, match) => {
-            if (match) {
-                const updatedUser = req.body
-
-                if (updatedUser.new_email) {
-                    updatedUser.email = updatedUser.new_email
-                    finalemail = updatedUser.new_email
-                }
-
-                delete updatedUser.new_email
-                delete updatedUser.old_email
-
-                if (updatedUser.new_password) {
-                    const salt = bcrypt.genSaltSync(10)
-                    const hashedPassword = bcrypt.hashSync(updatedUser.new_password, salt)
-                    updatedUser.password = hashedPassword
-                }
-
-                delete updatedUser.new_password
-                delete updatedUser.old_password
-
-                console.log(updatedUser)
-
-                await User.updateOne({ email: email }, updatedUser, { upsert: false })
-
-                const userAfterUpdate = await User.findOne({ "email": finalemail })
-                console.log(finalemail)
-
-                return res.json({
-                    "message": "user updated!",
-                    "updated user": userAfterUpdate
-                })
-            } else {
-                return res.status(403).json({ "error": "wrong password" })
-            }
-        });
-    }
-    catch (error) {
-        // We will be handling the error later
-        console.log(error)
-    }
-})
-
-
-router.delete('/', async (req, res) => {
-    try {
-
-        const isValidated = validator.basicValidation(req.body)
-        if (isValidated.error) return res.status(400).send(
-            { error: isValidated.error.details[0].message })
-
-        const email = req.body.email
-        const password = req.body.password
-        const userWithEmail = await User.findOne({ email })
-
-        if (!userWithEmail) return res.status(404).send({ error: 'No user with this email' })
-
-        const dbHash = userWithEmail["password"]
-
-        bcrypt.compare(password, dbHash, async (err, match) => {
-            if (match) {
-                const deletedUser = await User.findOneAndRemove(email)
-                return res.json({
-                    "message": "user deleted!",
-                    "deleted user": userWithEmail
-                })
-            } else {
-                return res.status(403).json({ "error": "wrong password" })
-            }
-        });
-    }
-    catch (error) {
-        // We will be handling the error later
-        console.log(error)
-    }
-})
-
 router.post('/register', async (req, res) => {
     const isValidated = validator.createValidation(req.body)
     if (isValidated.error) return res.status(400).send(
@@ -252,4 +40,198 @@ router.post('/register', async (req, res) => {
         .catch(err => res.json({ error: 'Can not create user' }))
 })
 
+router.post('/login', async (req, res) => {
+    try {
+        if (req.session.user_id) return res.status(400).json({ "error": "already logged in" })
+
+        const isValidated = validator.basicValidation(req.body)
+        if (isValidated.error) return res.status(400).send(
+            { error: isValidated.error.details[0].message })
+
+        const email = req.body.email
+        const password = req.body.password
+
+        const userWithEmail = await User.findOne({ email })
+        if (!userWithEmail) return res.status(404).send({ error: 'No user with this email' })
+
+        const dbHash = userWithEmail["password"]
+
+        bcrypt.compare(password, dbHash, async (err, match) => {
+            if (match) {
+                req.session.user_id = userWithEmail._id
+                return res.json({ session: req.session })
+            } else {
+                return res.status(403).json({ "error": "wrong password" })
+            }
+        });
+    }
+    catch (error) {
+        // We will be handling the error later
+        console.log(error)
+    }
+})
+
+router.post('/logout', async (req, res) => {
+    try {
+        if (!req.session.user_id) return res.status(400).json({ "error": "not logged in" })
+        delete req.session.user_id
+
+        return res.json({ "message": "logout successful" })
+    }
+    catch (error) {
+        // We will be handling the error later
+        console.log(error)
+    }
+})
+
+router.get('/:gucid', async (req, res) => {
+    try {
+        const guc_id = req.params.gucid
+        var user = await User.findOne({ guc_id })
+
+        var userTwo
+        if (req.session.user_id) userTwo = await User.findById(req.session.user_id)
+
+        if (!user) return res.status(404).send({ error: 'No user with this guc id' })
+        if (user.is_private && (!userTwo || (!userTwo.is_admin && !userTwo.guc_id == user.guc_id))) return res.status(403).send({ message: "this user is private" })
+
+
+
+        res.json({ data: hideSecrets(user) })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.put('/giveAdmin', async (req, res) => {
+    try {
+        if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+        const isValidated = validator.giveAdminValidation(req.body)
+        if (isValidated.error) return res.status(400).send(
+            { error: isValidated.error.details[0].message })
+
+
+        const userOne = await User.findById(req.session.user_id)
+        const userTwo = await User.findOne({ guc_id: req.body.guc_id })
+
+        if (!userOne.is_admin) return res.status(403).send({ error: 'This user is not an admin' })
+        if (!userTwo) return res.status(404).send({ error: 'No user with this guc id' })
+
+        //if (userTwo.mun_role && userTwo.mun_role > req.body.mun_role) return res.status(403).send({ error: 'That user has a higher role' })
+
+        await User.updateOne({ guc_id: req.body.guc_id }, { is_admin: true }, { upsert: false })
+        const updatedUser = await User.findOne({ guc_id: req.body.guc_id })
+        return res.json({ "message": "updated!", "user": updatedUser })
+    }
+
+    catch (error) {
+        // We will be handling the error later
+        console.log(error)
+    }
+})
+
+router.put('/forefitAdmin', async (req, res) => {
+    try {
+
+        if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+        const user = await User.findByIdAndUpdate(req.session.user_id, { "is_admin": "false" }, { upsert: false })
+        return res.json({ "message": "you are no longer an admin!" })
+    }
+    catch (error) {
+        // We will be handling the error later
+        console.log(error)
+    }
+})
+
+router.put('/munRole', async (req, res) => {
+    try {
+        if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+        const isValidated = validator.giveMunRoleValidation(req.body)
+        if (isValidated.error) return res.status(400).send(
+            { error: isValidated.error.details[0].message })
+
+
+        const userOne = await User.findById(req.session.user_id)
+        const userTwo = await User.findOne({ guc_id: req.body.guc_id })
+
+        if (!userOne.mun_role || userOne.mun_role < req.body.mun_role || req.body.mun_role < 0) return res.status(403).send({ error: 'This user can\'t assign this role' })
+        if (!userTwo) return res.status(404).send({ error: 'No user with this guc id' })
+
+        //if (userTwo.mun_role && userTwo.mun_role > req.body.mun_role) return res.status(403).send({ error: 'That user has a higher role' })
+
+        await User.updateOne({ guc_id: req.body.guc_id }, { mun_role: req.body.mun_role }, { upsert: false })
+        const updatedUser = await User.findOne({ guc_id: req.body.guc_id })
+        return res.json({ "message": "updated!", "user": updatedUser })
+    }
+
+    catch (error) {
+        // We will be handling the error later
+        console.log(error)
+    }
+})
+
+router.put('/', async (req, res) => {
+    try {
+
+        if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+        const isValidated = validator.updateValidation(req.body)
+        if (isValidated.error) return res.status(400).send(
+            { error: isValidated.error.details[0].message })
+
+        const email = req.body.email
+
+        const userWithEmail = await User.findOne({ email })
+        if (userWithEmail) return res.status(400).json({ error: 'An account with the requested email already exists' })
+
+        const updatedUser = req.body
+
+        if (updatedUser.password) {
+            const salt = bcrypt.genSaltSync(10)
+            const hashedPassword = bcrypt.hashSync(updatedUser.password, salt)
+            updatedUser.password = hashedPassword
+        }
+
+        console.log(updatedUser)
+
+        await User.findByIdAndUpdate(req.session.user_id, updatedUser, { upsert: false })
+
+        const userAfterUpdate = await User.findById(req.session.user_id)
+
+        return res.json({
+            "message": "user updated!",
+            "updated user": userAfterUpdate
+        })
+    }
+    catch (error) {
+        // We will be handling the error later
+        console.log(error)
+    }
+})
+
+router.delete('/', async (req, res) => {
+    try {
+        if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+        await User.findByIdAndDelete(req.session.user_id)
+        return res.json({ "message": "user successfuly deleted" })
+    }
+    catch (error) {
+        // We will be handling the error later
+        console.log(error)
+    }
+})
+
+function hideSecrets(user) {
+    const { email, first_name, last_name, birth_date,
+        guc_id, picture_ref, is_admin, is_private, mun_role } = user
+
+    return {
+        email: email, first_name: first_name, last_name: last_name, birth_date: birth_date,
+        guc_id: guc_id, picture_ref: picture_ref, is_admin: is_admin, is_private: is_private, mun_role: mun_role
+    }
+}
 module.exports = router

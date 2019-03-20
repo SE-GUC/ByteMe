@@ -20,11 +20,8 @@ module.exports = {
 
     updateValidation: request => {
         const updateSchema = {
-            old_email: Joi.string().email().required(),
-            old_password: Joi.string().regex(/^[a-zA-Z0-9]{8,36}$/).required(),
-
-            new_email: Joi.string().email(),
-            new_password: Joi.string().regex(/^[a-zA-Z0-9]{8,36}$/),
+            email: Joi.string().email(),
+            password: Joi.string().regex(/^[a-zA-Z0-9]{8,36}$/),
 
             first_name: Joi.string().min(3).max(36),
             last_name: Joi.string().min(3).max(36),
@@ -39,9 +36,6 @@ module.exports = {
 
     giveAdminValidation: request => {
         const giveAdminValidationSchema = {
-            email: Joi.string().email().required(),
-            password: Joi.string().regex(/^[a-zA-Z0-9]{8,36}$/).required(),
-
             guc_id: Joi.string().regex(/^[0-9]{2,2}-[0-9]{1,6}$/).required(),
         }
 
@@ -50,9 +44,6 @@ module.exports = {
 
     giveMunRoleValidation: request => {
         const giveMunRoleValidationScheme = {
-            email: Joi.string().email().required(),
-            password: Joi.string().regex(/^[a-zA-Z0-9]{8,36}$/).required(),
-
             guc_id: Joi.string().regex(/^[0-9]{2,2}-[0-9]{1,6}$/).required(),
             mun_role: Joi.number().required()
         }
@@ -64,7 +55,6 @@ module.exports = {
         const basicValidationScheme = {
             email: Joi.string().email().required(),
             password: Joi.string().regex(/^[a-zA-Z0-9]{8,36}$/).required(),
-
         }
 
         return Joi.validate(request, basicValidationScheme)
