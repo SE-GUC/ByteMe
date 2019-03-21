@@ -46,5 +46,6 @@ const EventSchema = new Schema({
 
 
 })
+EventSchema.index({title:"text",description:"text",brief:"text",location:"text"});
 
 module.exports = Event = mongoose.model('Event', EventSchema)

@@ -26,5 +26,6 @@ const ClubSchema = new Schema({
 
 
 })
+ClubSchema.index({name:"text",description:"text", banner:"text"});
 
 module.exports = Club = mongoose.model('Club', ClubSchema)
