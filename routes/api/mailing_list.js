@@ -1,108 +1,86 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
+const Mailing_list = require("../../models/Mailing_list");
 
+const validator = require("../../validations/mailing_listvalidations");
 
-const Mailing_list = require('../../models/Mailing_list')
-
-const validator = require('../../validations/mailing_listvalidations')
-
-
-
-
-
-
-
-
-
+const User = require("../../models/User");
 
 //get mails
 
-router.get('/', async (req, res) => {
-    let data = "";
+router.get("/", async (req, res) => {
+  if (!req.session.user_id)
+    return res.status(403).send({ error: "You are not logged in" });
 
-    const mailing_list = await Mailing_list.find()
+  const userOne = await User.findById(req.session.user_id);
 
-    mailing_list.forEach((value) => {
+  if (!userOne.is_admin)
+    return res
+      .status(403)
+      .send({ error: "Only admins can view subscribed mails" });
 
-        data += `<a>${value.email}</a><br>`
+  let data = "";
 
-    })
+  const mailing_list = await Mailing_list.find();
 
-    res.send(data || 'welcome to our list');
+  mailing_list.forEach(value => {
+    data += `<a>${value.email}</a><br>`;
+  });
 
-})
-
-
-
-
-
+  res.send(data || "welcome to our list");
+});
 
 // it posts the whole mails
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
+  try {
+    if (!req.session.user_id)
+      return res.status(403).send({ error: "You are not logged in" });
 
-    try {
+    const userOne = await User.findById(req.session.user_id);
 
-        const isValidated = validator.createValidation(req.body)
+    const newMailinglist = await Mailing_list.create({ email: userOne.email });
 
-        if (isValidated.error) return
-        res.status(400).send({
-            error: isValidated.error.details[0].message
-        })
+    res.json({ data: newMailinglist });
+  } catch (error) {
+    // We will be handling the error later
 
-        const newMailinglist = await Mailing_list.create(req.body)
-
-        res.json({ msg: 'Mailing was created successfully', data: newMailinglist })
-
-    }
-
-    catch (error) {
-
-        // We will be handling the error later
-
-        console.log(error)
-
-    }
-
-})
-
-
-
-
-
-
-
-
-
+    console.log(error);
+  }
+});
 
 // delete the whole council
 
-router.delete('/:id', async (req, res) => {
+router.delete("/", async (req, res) => {
+  try {
+    if (!req.session.user_id)
+      return res.status(403).send({ error: "You are not logged in" });
 
-    try {
+    const userOne = await User.findById(req.session.user_id);
 
-        const id = req.params.id
+    if (userOne.is_admin) {
+      const deletedMail = await Mailing_list.findOneAndDelete(req.body);
 
-        const deletedMail = await Mailing_list.findByIdAndRemove(id)
+      res.json({ msg: "Mail was deleted successfully", data: deletedMail });
+    } else {
+      // const deletedMail = await Mailing_list.findByIdAndRemove(req.session.user_id)
 
-        res.json({ msg: 'Mail was deleted successfully', data: deletedMail })
+      const deletedMail = await Mailing_list.findOneAndDelete(
+        { email: userOne.email },
+        { upsert: false }
+      );
 
+      res.json({ msg: "Mail was deleted successfully", data: deletedMail });
     }
+  } catch (error) {
+    // We will be handling the error later
 
-    catch (error) {
-
-        // We will be handling the error later
-
-        console.log(error)
-
-    }
-
-})
-
-
+    console.log(error);
+  }
+});
 
 module.exports = router;
