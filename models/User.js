@@ -42,11 +42,12 @@ const UserSchema = new Schema({
     required: true
   },
   mun_role: {
-    type: String
+    type: String,
+    default:"none"
   },
-  can_assign: {
-    type: Boolean,
-    default: true
+  awg_admin: {
+    type: String,
+    default: "none"
   }
 });
 

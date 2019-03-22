@@ -8,8 +8,7 @@ const Event = require("../../models/Event");
 const validator = require("../../validations/pageValidations");
 const eventValidator = require("../../validations/eventValidations");
 
-// done
-// get the main page
+// 
 router.get("/", async (req, res) => {
   let data = "";
   const page = await Page.find();
@@ -21,9 +20,7 @@ router.get("/", async (req, res) => {
   res.send(data);
 });
 
-//done
-// Any one can view any council/office/page
-// get certain council or page
+//
 router.get("/:id", async (request, response) => {
   var data = "";
   const id = request.params.id;
@@ -37,8 +34,7 @@ router.get("/:id", async (request, response) => {
   response.send(data || "No student matches the requested id");
 });
 
-//done & checked
-// Any can view events for any certain council or office
+//
 router.get("/:id/events", async (req, res) => {
   try {
     var page = await Page.findById(req.params.id);
@@ -51,8 +47,7 @@ router.get("/:id/events", async (req, res) => {
   }
 });
 
-//done
-//Any can view members of any council
+//
 router.get("/:id/members", async (req, res) => {
   try {
     const id = req.params.id;
@@ -77,19 +72,20 @@ router.post("/", async (req, res) => {
 
     const userOne = await User.findById(req.session.user_id);
 
-    if (!userOne.is_admin)
-      return res.status(403).send({ error: "Only admins can add councils" });
+    if (!(userOne.awg_admin === "mun"))
+      return res
+        .status(403)
+        .send({ error: "Only mun admins can add councils" });
 
     const isValidated = validator.createValidation(req.body);
-    if (isValidated.error) return res.send(`<h1>error hah</h1>`); // res.status(400).send({ error: isValidated.error.details[0].message })
+    if (isValidated.error) return res.send(`<h1>error</h1>`); // res.status(400).send({ error: isValidated.error.details[0].message })
     const newPage = await Page.create(req.body);
     res.json({ msg: "Page was created successfully", data: newPage });
   } catch (error) {
     console.log(error);
   }
 });
-
-//
+//checked
 // add events to the council if he is logged in and is admin of this page or higher
 router.post("/:id/events", async (req, res) => {
   try {
@@ -97,11 +93,6 @@ router.post("/:id/events", async (req, res) => {
       return res.status(403).send({ error: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
-
-    if (!userOne.mun_role)
-      return res
-        .status(403)
-        .send({ error: "Only admins can add events to this entity" });
 
     var page = await Page.findById(req.params.id);
 
@@ -120,11 +111,6 @@ router.post("/:id/events", async (req, res) => {
         .send({ error: isValidated.error.details[0].message });
     const newEvent = await Event.create(req.body);
 
-    //   const isValidated = validator.addEventValidation(req.body)
-    //   if (isValidated.error) return res.send(`<h1>error hah</h1>`)
-    //   const id = req.params.id
-
-    //   Page.update({"_id": id},{$push:{"events": [ req.body ] }}).exec()
     res.json({ msg: "Events was creator successfully" });
   } catch (error) {
     // We will be handling the error later
@@ -132,7 +118,7 @@ router.post("/:id/events", async (req, res) => {
   }
 });
 
-// done & checked
+// checked
 // add members to the council if he is logged in and is admin of this page or higher
 router.post("/:id/members", async (req, res) => {
   try {
@@ -140,11 +126,6 @@ router.post("/:id/members", async (req, res) => {
       return res.status(403).send({ error: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
-
-    if (!userOne.mun_role)
-      return res
-        .status(403)
-        .send({ error: "Only MUN admins can add members to this entity" });
 
     var page = await Page.findById(req.params.id);
 
@@ -155,7 +136,7 @@ router.post("/:id/members", async (req, res) => {
     )
       return res
         .status(403)
-        .send({ error: "Only admins can add members to this entity" });
+        .send({ error: "Only MUN admins can add members to this entity" });
 
     const guc_id = req.body.guc_id;
     const user = await User.findOne({ guc_id: guc_id });
@@ -176,18 +157,13 @@ router.post("/:id/members", async (req, res) => {
   }
 });
 
-// done & checked
+// checked
 // assign role members if he is this member the same or page admin
 router.put("/:id/members/set_role", async (req, res) => {
   if (!req.session.user_id)
     return res.status(403).send({ error: "You are not logged in" });
 
   const userOne = await User.findById(req.session.user_id);
-
-  if (!userOne.mun_role)
-    return res
-      .status(403)
-      .send({ error: "Only admins can update members to this entity" });
 
   var page = await Page.findById(req.params.id);
 
@@ -202,7 +178,7 @@ router.put("/:id/members/set_role", async (req, res) => {
       .status(400)
       .json({ error: "A member with this id does not exists" });
 
-  if (user.mun_role)
+  if (!(user.mun_role=="none"))
     return res.status(403).send({ error: "role already assigned" });
 
   await User.updateOne(
@@ -248,7 +224,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-//done
+//checked
 // delete the whole council
 router.delete("/:id", async (req, res) => {
   try {
@@ -257,7 +233,7 @@ router.delete("/:id", async (req, res) => {
 
     const userOne = await User.findById(req.session.user_id);
 
-    if (!userOne.is_admin)
+    if (!(userOne.awg_admin === "mun"))
       return res
         .status(403)
         .send({ error: "Only admins can add events to this entity" });
@@ -271,7 +247,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// done & checked
+// checked
 // delete members from the council
 router.delete("/:id/members/:id1", async (req, res) => {
   try {
@@ -300,7 +276,7 @@ router.delete("/:id/members/:id1", async (req, res) => {
 
     await User.updateOne(
       { guc_id: req.body.guc_id },
-      { mun_role: null },
+      { mun_role: "none" },
       { upsert: false }
     );
 
@@ -314,7 +290,7 @@ router.delete("/:id/members/:id1", async (req, res) => {
   }
 });
 
-// done
+// checked
 // delete events from the council
 router.delete("/:id/events/:id1", async (req, res) => {
   try {
@@ -346,10 +322,3 @@ router.delete("/:id/events/:id1", async (req, res) => {
 });
 
 module.exports = router;
-
-/*
-
- before any action I should be logged in then if the entity id.roletocontrol equal the session id .munrole
-
- 
- */

@@ -24,7 +24,8 @@ router.post("/register", async (req, res) => {
     picture_ref,
     is_admin,
     is_private,
-    mun_role
+    mun_role,
+    awg_admin
   } = req.body;
 
   var user = await User.findOne({ email });
@@ -50,7 +51,8 @@ router.post("/register", async (req, res) => {
     picture_ref,
     is_admin,
     is_private,
-    mun_role
+    mun_role,
+    awg_admin
   });
   newUser
     .save()
@@ -146,11 +148,39 @@ router.put("/giveAdmin", async (req, res) => {
     if (!userTwo)
       return res.status(404).send({ error: "No user with this guc id" });
 
-    //if (userTwo.mun_role && userTwo.mun_role > req.body.mun_role) return res.status(403).send({ error: 'That user has a higher role' })
-
     await User.updateOne(
       { guc_id: req.body.guc_id },
       { is_admin: true },
+      { upsert: false }
+    );
+    const updatedUser = await User.findOne({ guc_id: req.body.guc_id });
+    return res.json({ message: "updated!", user: updatedUser });
+  } catch (error) {
+    // We will be handling the error later
+    console.log(error);
+  }
+});
+//checked
+router.put("/give_AWG_Admin", async (req, res) => {
+  try {
+    if (!req.session.user_id)
+      return res.status(403).send({ error: "You are not logged in" });
+
+    const isValidated = validator.giveAdminValidation(req.body);
+    if (isValidated.error)
+      return res
+        .status(400)
+        .send({ error: isValidated.error.details[0].message });
+
+    var userOne = await User.findById(req.session.user_id);
+    const userTwo = await User.findOne({ guc_id: req.body.guc_id });
+
+    if (!userTwo)
+      return res.status(404).send({ error: "No user with this guc id" });
+
+    await User.updateOne(
+      { guc_id: req.body.guc_id },
+      { awg_admin: userOne.awg_admin },
       { upsert: false }
     );
     const updatedUser = await User.findOne({ guc_id: req.body.guc_id });
@@ -177,8 +207,24 @@ router.put("/forefitAdmin", async (req, res) => {
     console.log(error);
   }
 });
+//checked
+router.put("/forefitawg_Admin", async (req, res) => {
+  try {
+    if (!req.session.user_id)
+      return res.status(403).send({ error: "You are not logged in" });
 
-//this should be handeled for admins also
+    const user = await User.findByIdAndUpdate(
+      req.session.user_id,
+      { awg_admin: "none" },
+      { upsert: false }
+    );
+    return res.json({ message: "you are no longer an admin!" });
+  } catch (error) {
+    // We will be handling the error later
+    console.log(error);
+  }
+});
+
 router.put("/", async (req, res) => {
   try {
     if (!req.session.user_id)
@@ -224,7 +270,6 @@ router.put("/", async (req, res) => {
   }
 });
 
-// this could be handeled for admin also
 router.delete("/", async (req, res) => {
   try {
     if (!req.session.user_id)
