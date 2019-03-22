@@ -2,8 +2,10 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 
-const User = require("../../models/User");
+const User = require("../../models/User").model;
 const validator = require("../../validations/userValidations");
+
+const hideSecrets = require("../../models/User").hideSecrets;
 
 router.get("/", (req, res) => res.json({ data: "Users working" }));
 
@@ -287,29 +289,4 @@ router.delete("/", async (req, res) => {
   }
 });
 
-function hideSecrets(user) {
-  const {
-    email,
-    first_name,
-    last_name,
-    birth_date,
-    guc_id,
-    picture_ref,
-    is_admin,
-    is_private,
-    mun_role
-  } = user;
-
-  return {
-    email: email,
-    first_name: first_name,
-    last_name: last_name,
-    birth_date: birth_date,
-    guc_id: guc_id,
-    picture_ref: picture_ref,
-    is_admin: is_admin,
-    is_private: is_private,
-    mun_role: mun_role
-  };
-}
 module.exports = router;

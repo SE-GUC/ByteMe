@@ -51,4 +51,32 @@ const UserSchema = new Schema({
   }
 });
 
-module.exports = User = mongoose.model("users", UserSchema);
+
+UserSchema.index({email:"text",first_name:"text", last_name:"text"});
+
+module.exports.model = User = mongoose.model("users", UserSchema);
+module.exports.hideSecrets = (user) => {
+  const {
+    email,
+    first_name,
+    last_name,
+    birth_date,
+    guc_id,
+    picture_ref,
+    is_admin,
+    is_private,
+    mun_role
+  } = user;
+
+  return {
+    email: email,
+    first_name: first_name,
+    last_name: last_name,
+    birth_date: birth_date,
+    guc_id: guc_id,
+    picture_ref: picture_ref,
+    is_admin: is_admin,
+    is_private: is_private,
+    mun_role: mun_role
+  };
+}

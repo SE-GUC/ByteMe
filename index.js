@@ -14,10 +14,8 @@ const library = require('./routes/api/library')
 const announcements = require('./routes/api/announcements')
 const clubs = require('./routes/api/clubs')
 const product = require('./routes/api/products')
-const Club = require("./models/Club")
-const Event = require("./models/Event")
-const Announcement = require("./models/Announcements")
-const validator = require('./validations/searchSubdomainsValidations')
+const search = require('./routes/api/search')
+
 
 
 const app = express()
@@ -50,40 +48,6 @@ app.get('/', (req, res) => res.send(`<h1>Welcome to Our Platform</h1>
 <br> <a href="/api/announcements">Announcements</a> 
 <br> <a href="/api/library">Library</a> </h2>`))
 
-app.post("/search", async (req, res) => {
-    try {
-        const isValidated = validator.createValidation(req.body)
-        if (isValidated.error) return res.status(400).send({ error: isValidated.error.details[0].message })
-
-      const clubs_responded_to_keyword = await Club.find(
-        { $text: { $search: req.body.searchkey } },
-        { score: { $meta: "textScore" } }
-      ).sort({ score: { $meta: "textScore" } });
-      const events_responded_to_keyword = await Event.find(
-        { $text: { $search: req.body.searchkey } },
-        { score: { $meta: "textScore" } }
-      ).sort({ score: { $meta: "textScore" } });
-      const announcements_responded_to_keyword = await Announcement.find(
-        { $text: { $search: req.body.searchkey } },
-        { score: { $meta: "textScore" } }
-      ).sort({ score: { $meta: "textScore" } });
-      if (
-        clubs_responded_to_keyword.length === 0 &&
-        events_responded_to_keyword.length === 0 &&
-        announcements_responded_to_keyword.length === 0
-      )
-        return res.send("No relevant data. Try searching with another keyword");
-      else
-        res.json({
-          data: clubs_responded_to_keyword + events_responded_to_keyword + announcements_responded_to_keyword
-        });
-    } catch (error) {
-      // We will be handling the error later
-      console.log(error);
-    }
-  });
-
-
 // Direct to Route Handlers
 app.use('/api/events', events)
 app.use('/api/users', users)
@@ -94,7 +58,7 @@ app.use('/api/library', library)
 app.use('/api/announcements', announcements)
 app.use('/api/clubs', clubs)
 app.use('/api/products', product)
-
+app.use('/api/search', search)
 
 app.use((req, res) => res.status(404).send(`<h1>Can not find what you're looking for</h1>`))
 
