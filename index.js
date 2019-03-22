@@ -27,14 +27,19 @@ const db = require('./config/keys').mongoURI
 
 // Connect to mongo
 mongoose
-    .connect(db)
+    .connect(db, {useNewUrlParser: true, 'useCreateIndex': true, 'useFindAndModify': false})
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.log(err))
 
 // Init middleware
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(session({secret: "Shh, its a secret!"}));
+app.use(express.urlencoded({ extended: true }))
+app.use(session({
+  secret: "Shh, its a secret!",
+  cookie_name: "cookie name",
+  resave: true,
+  saveUninitialized: true
+}));
 
 
 // Entry point

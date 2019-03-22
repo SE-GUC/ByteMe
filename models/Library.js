@@ -15,6 +15,10 @@ const LibrarySchema = new Schema({
     link: {
         type: String,
         required: true
+    },
+    year: {
+        type: Number,
+        required: true
     }
 })
 

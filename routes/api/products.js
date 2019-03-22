@@ -7,17 +7,25 @@ const Product = require('../../models/Product')
 
 // get all products
 router.get('/', async (req, res) => {
-
+  try{
     const products = await Product.find()
     res.json({ data: products })
+  }
+  catch (error) {
+    return res.sendStatus(400).json(error);
+  }
   })
 
-// get certain product by name
+// get certain product by name regex, case insenstive
 router.get('/:name', async (req, res) => {
-
-  const name = req.params.name
-  const product = await Product.find({ "name": name })
-  res.json({ data: product })
+  try{
+    const name = req.params.name
+    const product = await Product.find({ "name": { "$regex": name, "$options": "i" }  })
+    res.json({ data: product })
+  }
+  catch (error) {
+    return res.sendStatus(400).json(error);
+  }
   })
 
 // create a new product
@@ -38,7 +46,7 @@ router.put('/:id', async (req, res) => {
   try {
     const id = req.params.id
     const product = await Product.find({ id })
-    if (!product) return res.status(404).send({ error: 'Product does not exist' })
+    if (!product) return res.status(404).json({ error: 'Product does not exist' })
     const updateProduct = await Product.updateOne(req.body)
     res.json({ msg: 'Product updated successfully' })
   }
