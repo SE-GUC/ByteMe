@@ -18,24 +18,29 @@ router.post("/", async (req, res) => {
         { $text: { $search: req.body.searchkey } },
         { score: { $meta: "textScore" } }
       ).sort({ score: { $meta: "textScore" } });
+
       console.log(clubs_responded_to_keyword);
       const events_responded_to_keyword = await Event.find(
         { $text: { $search: req.body.searchkey } },
         { score: { $meta: "textScore" } }
+        
       ).sort({ score: { $meta: "textScore" } });
+
       console.log(events_responded_to_keyword);
       const announcements_responded_to_keyword = await Announcement.find(
         { $text: { $search: req.body.searchkey } },
         { score: { $meta: "textScore" } }
       ).sort({ score: { $meta: "textScore" } });
+
       console.log(announcements_responded_to_keyword)
       const users_responded_to_keyword = await User.find(
         { $text: { $search: req.body.searchkey } },
         { score: { $meta: "textScore" } }
       ).sort({ score: { $meta: "textScore" } });
+
       var users_responded_to_keyword_filtered = []
       users_responded_to_keyword.forEach(user => {
-        if(user.isPrivate == false) users_responded_to_keyword_filtered.push(hideSecrets(user))
+        if(user.is_private == false) users_responded_to_keyword_filtered.push(hideSecrets(user))
       })
       if (
         clubs_responded_to_keyword.length === 0 &&
