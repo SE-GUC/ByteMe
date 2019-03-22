@@ -26,7 +26,8 @@ module.exports = {
       picture_ref: Joi.string(),
       is_private: Joi.boolean().required(),
       is_admin: Joi.boolean(),
-      mun_role: Joi.string()
+      mun_role: Joi.string(),
+      awg_admin: Joi.string()
     };
 
     return Joi.validate(request, createSchema);
@@ -61,16 +62,7 @@ module.exports = {
 
     return Joi.validate(request, giveAdminValidationSchema);
   },
-  /*
-    giveMunRoleValidation: request => {
-        const giveMunRoleValidationScheme = {
-            guc_id: Joi.string().regex(/^[0-9]{2,2}-[0-9]{1,6}$/).required(),
-            mun_role: Joi.number().required()
-        }
 
-        return Joi.validate(request, giveMunRoleValidationScheme)
-    },
-*/
   basicValidation: request => {
     const basicValidationScheme = {
       email: Joi.string()

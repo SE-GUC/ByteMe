@@ -10,18 +10,16 @@ const validator = require("../../validations/mailing_listvalidations");
 
 const User = require("../../models/User");
 
-//get mails
-
 router.get("/", async (req, res) => {
   if (!req.session.user_id)
     return res.status(403).send({ error: "You are not logged in" });
 
   const userOne = await User.findById(req.session.user_id);
 
-  if (!userOne.is_admin)
+  if (!(userOne.awg_admin === "mun"))
     return res
       .status(403)
-      .send({ error: "Only admins can view subscribed mails" });
+      .send({ error: "Only mun admins can view subscribed mails" });
 
   let data = "";
 
@@ -33,8 +31,6 @@ router.get("/", async (req, res) => {
 
   res.send(data || "welcome to our list");
 });
-
-// it posts the whole mails
 
 router.post("/", async (req, res) => {
   try {
@@ -53,8 +49,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// delete the whole council
-
 router.delete("/", async (req, res) => {
   try {
     if (!req.session.user_id)
@@ -62,7 +56,7 @@ router.delete("/", async (req, res) => {
 
     const userOne = await User.findById(req.session.user_id);
 
-    if (userOne.is_admin) {
+    if (userOne.awg_admin === "mun") {
       const deletedMail = await Mailing_list.findOneAndDelete(req.body);
 
       res.json({ msg: "Mail was deleted successfully", data: deletedMail });
