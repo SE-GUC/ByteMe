@@ -11,11 +11,11 @@ module.exports = {
         .required(),
 
       first_name: Joi.string()
-        .min(3)
+        .min(2)
         .max(36)
         .required(),
       last_name: Joi.string()
-        .min(3)
+        .min(2)
         .max(36)
         .required(),
       birth_date: Joi.string().required(),
@@ -39,10 +39,10 @@ module.exports = {
       password: Joi.string().regex(/^[a-zA-Z0-9]{8,36}$/),
 
       first_name: Joi.string()
-        .min(3)
+        .min(2)
         .max(36),
       last_name: Joi.string()
-        .min(3)
+        .min(2)
         .max(36),
       birth_date: Joi.string(),
 

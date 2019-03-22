@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
 
       var users_responded_to_keyword_filtered = []
       users_responded_to_keyword.forEach(user => {
-        if(user.is_private == false) users_responded_to_keyword_filtered.push(hideSecrets(user))
+        if(!user.is_private) users_responded_to_keyword_filtered.push(hideSecrets(user))
       })
       if (
         clubs_responded_to_keyword.length === 0 &&

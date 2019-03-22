@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const id = req.params.id
-    const library = await Library.find({ id })
+    const library = await Library.findOne({ id })
     if (!library) return res.status(404).json({ error: 'Academic Paper requested was not found.' })
     const isValidated = validator.updateValidation(req.body)
     if (isValidated.error) return res.status(400).send({ error: isValidated.error.details[0].message })

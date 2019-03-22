@@ -229,48 +229,106 @@ router.put("/forefitawg_Admin", async (req, res) => {
 
 router.put("/", async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    if (req.query.gucid) { //editing someone else
+      try {
+        if (!req.session.user_id)
+          return res.status(403).send({ error: "You are not logged in" });
 
-    const isValidated = validator.updateValidation(req.body);
-    if (isValidated.error)
-      return res
-        .status(400)
-        .send({ error: isValidated.error.details[0].message });
+        const loggedUser = await User.findById(req.session.user_id)
+        if (!loggedUser.is_admin)
+          return res.status(403).send({ error: "You are not an admin!" })
 
-    const email = req.body.email;
+        const guc_id = req.query.gucid;
+        var user = await User.findOne({ guc_id });
+        if (!user)
+          return res.status(404).send({ error: "No user with this guc id" });
 
-    const userWithEmail = await User.findOne({ email });
-    if (userWithEmail)
-      return res
-        .status(400)
-        .json({ error: "An account with the requested email already exists" });
+        const isValidated = validator.updateValidation(req.body);
+        if (isValidated.error)
+          return res
+            .status(400)
+            .send({ error: isValidated.error.details[0].message });
 
-    const updatedUser = req.body;
+        const email = req.body.email;
 
-    if (updatedUser.password) {
-      const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(updatedUser.password, salt);
-      updatedUser.password = hashedPassword;
+        const userWithEmail = await User.findOne({ email });
+        if (userWithEmail)
+          return res
+            .status(400)
+            .json({ error: "An account with the requested email already exists" });
+
+        const updatedUser = req.body;
+
+        if (updatedUser.password) {
+          const salt = bcrypt.genSaltSync(10);
+          const hashedPassword = bcrypt.hashSync(updatedUser.password, salt);
+          updatedUser.password = hashedPassword;
+        }
+
+        console.log(updatedUser);
+
+        await User.findOneAndUpdate({ guc_id: req.params.gucid }, updatedUser, {
+          upsert: false
+        });
+
+        const userAfterUpdate = await User.findOne({guc_id: guc_id});
+
+        return res.json({
+          message: "user updated!",
+          "updated user": userAfterUpdate
+        });
+      } catch (error) {
+        // We will be handling the error later
+        console.log(error);
+      }
     }
 
-    console.log(updatedUser);
+    else { //editing yourself
+      if (!req.session.user_id)
+        return res.status(403).send({ error: "You are not logged in" });
 
-    await User.findByIdAndUpdate(req.session.user_id, updatedUser, {
-      upsert: false
-    });
+      const isValidated = validator.updateValidation(req.body);
+      if (isValidated.error)
+        return res
+          .status(400)
+          .send({ error: isValidated.error.details[0].message });
 
-    const userAfterUpdate = await User.findById(req.session.user_id);
+      const email = req.body.email;
 
-    return res.json({
-      message: "user updated!",
-      "updated user": userAfterUpdate
-    });
+      const userWithEmail = await User.findOne({ email });
+      if (userWithEmail)
+        return res
+          .status(400)
+          .json({ error: "An account with the requested email already exists" });
+
+      const updatedUser = req.body;
+
+      if (updatedUser.password) {
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(updatedUser.password, salt);
+        updatedUser.password = hashedPassword;
+      }
+
+      console.log(updatedUser);
+
+      await User.findByIdAndUpdate(req.session.user_id, updatedUser, {
+        upsert: false
+      });
+
+      const userAfterUpdate = await User.findById(req.session.user_id);
+
+      return res.json({
+        message: "user updated!",
+        "updated user": userAfterUpdate
+      });
+    }
   } catch (error) {
     // We will be handling the error later
     console.log(error);
   }
 });
+
+
 
 router.delete("/", async (req, res) => {
   try {
