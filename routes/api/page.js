@@ -8,30 +8,17 @@ const Event = require("../../models/Event");
 const validator = require("../../validations/pageValidations");
 const eventValidator = require("../../validations/eventValidations");
 
-// 
+//
 router.get("/", async (req, res) => {
-  let data = "";
-  const page = await Page.find();
-  page.forEach(value => {
-    const id = value.id;
-    const name = value.name;
-    data += `<a href="/api/page/${id}">${name}</a><br>`;
-  });
-  res.send(data);
+  const pages = await Page.find();
+  res.json({ data: pages });
 });
 
 //
 router.get("/:id", async (request, response) => {
-  var data = "";
   const id = request.params.id;
   const page = await Page.find({ _id: id });
-
-  page.forEach(value => {
-    data = `Description: ${
-      value.description
-    }<br><a href="/api/page/${id}/events">Events</a><br><a href="/api/page/${id}/members">Members</a>`;
-  });
-  response.send(data || "No student matches the requested id");
+  response.json({ data: page });
 });
 
 //
@@ -51,11 +38,8 @@ router.get("/:id/events", async (req, res) => {
 router.get("/:id/members", async (req, res) => {
   try {
     const id = req.params.id;
-    const page = await Page.find({ _id: id });
-    page.forEach(value => {
-      data = `Members: ${value.members.toString()}`;
-    });
-    res.send(data || "No feedbacks");
+    const page = await Page.findById(id);
+    res.json({ data: page.members });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
@@ -68,17 +52,16 @@ router.get("/:id/members", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
 
     if (!(userOne.awg_admin === "mun"))
-      return res
-        .status(403)
-        .send({ error: "Only mun admins can add councils" });
+      return res.json({ mesage: "Only mun admins can add councils" });
 
     const isValidated = validator.createValidation(req.body);
-    if (isValidated.error) return res.send(`<h1>error</h1>`); // res.status(400).send({ error: isValidated.error.details[0].message })
+    if (isValidated.error)
+      return res.json({ mesage: "validations not satisfied" });
     const newPage = await Page.create(req.body);
     res.json({ msg: "Page was created successfully", data: newPage });
   } catch (error) {
@@ -101,17 +84,15 @@ router.post("/:id/events", async (req, res) => {
       !(userOne.mun_role === page.role_to_control) &&
       !(userOne.mun_role === page.name)
     )
-      return res
-        .status(403)
-        .send({ error: "Only admins can add members to this entity" });
+      return res.json({
+        message: "Only admins can add members to this entity"
+      });
     const isValidated = eventValidator.createValidation(req.body);
     if (isValidated.error)
-      return res
-        .status(400)
-        .send({ error: isValidated.error.details[0].message });
+      return res.json({ message: "vaildations not satisfied" });
     const newEvent = await Event.create(req.body);
 
-    res.json({ msg: "Events was creator successfully" });
+    res.json({ data: newEvent });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
@@ -123,7 +104,7 @@ router.post("/:id/events", async (req, res) => {
 router.post("/:id/members", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
 
@@ -134,19 +115,18 @@ router.post("/:id/members", async (req, res) => {
       !(userOne.mun_role === page.role_to_control) &&
       !(userOne.mun_role === page.name)
     )
-      return res
-        .status(403)
-        .send({ error: "Only MUN admins can add members to this entity" });
+      return res.json({
+        message: "Only MUN admins can add members to this entity"
+      });
 
     const guc_id = req.body.guc_id;
     const user = await User.findOne({ guc_id: guc_id });
     if (!user)
-      return res
-        .status(400)
-        .json({ error: "A student with this id does not exists" });
+      return res.json({ message: "A student with this id does not exists" });
 
     const isValidated = validator.addMemberValidation(req.body);
-    if (isValidated.error) return res.send(`<h1>error hah</h1>`); // res.status(400).send({ error: isValidated.error.details[0].message })
+    if (isValidated.error)
+      return res.json({ message: "validations not satisfied" });
 
     const id = req.params.id;
     Page.update({ _id: id }, { $push: { members: [req.body] } }).exec();
@@ -161,7 +141,7 @@ router.post("/:id/members", async (req, res) => {
 // assign role members if he is this member the same or page admin
 router.put("/:id/members/set_role", async (req, res) => {
   if (!req.session.user_id)
-    return res.status(403).send({ error: "You are not logged in" });
+    return res.json({ message: "You are not logged in" });
 
   const userOne = await User.findById(req.session.user_id);
 
@@ -171,15 +151,13 @@ router.put("/:id/members/set_role", async (req, res) => {
   const user = await User.findOne({ guc_id: req.body.guc_id });
 
   if (!(userOne.mun_role === page.name))
-    return res.status(403).send({ error: " already assigned" });
+    return res.json({ message: " already assigned" });
 
   if (!user)
-    return res
-      .status(400)
-      .json({ error: "A member with this id does not exists" });
+    return res.json({ message: "A member with this id does not exists" });
 
-  if (!(user.mun_role=="none"))
-    return res.status(403).send({ error: "role already assigned" });
+  if (!(user.mun_role == "none"))
+    return res.json({ message: "role already assigned" });
 
   await User.updateOne(
     { guc_id: guc_id },
@@ -196,7 +174,7 @@ router.put("/:id/members/set_role", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
 
@@ -207,17 +185,15 @@ router.put("/:id", async (req, res) => {
       !(userOne.mun_role === page.role_to_control) &&
       !(userOne.mun_role === page.name)
     )
-      return res
-        .status(403)
-        .send({ error: "Only admins can delete events to this entity" });
+      return res.json({
+        message: "Only admins can delete events to this entity"
+      });
 
     const isValidated = validator.updateValidation(req.body);
     if (isValidated.error)
-      return res
-        .status(400)
-        .send({ error: isValidated.error.details[0].message });
+      return res.json({ message: "validations not satisfied" });
     const updatedPage = await Page.updateOne(req.body);
-    res.json({ msg: "Page updated successfully" });
+    res.json({ data: updatedPage });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
@@ -229,18 +205,16 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
 
     if (!(userOne.awg_admin === "mun"))
-      return res
-        .status(403)
-        .send({ error: "Only admins can add events to this entity" });
+      return res.json({ message: "Only admins can add events to this entity" });
 
     const id = req.params.id;
     const deletedPage = await Page.findByIdAndRemove(id);
-    res.json({ msg: "Page was deleted successfully", data: deletedPage });
+    res.json({ message: "Page was deleted successfully", data: deletedPage });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
@@ -252,7 +226,7 @@ router.delete("/:id", async (req, res) => {
 router.delete("/:id/members/:id1", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
 
@@ -263,16 +237,14 @@ router.delete("/:id/members/:id1", async (req, res) => {
       !(userOne.mun_role === page.role_to_control) &&
       !(userOne.mun_role === page.name)
     )
-      return res
-        .status(403)
-        .send({ error: "Only admins can delete events to this entity" });
+      return res.json({
+        message: "Only admins can delete events to this entity"
+      });
 
     const user = await User.findOne({ guc_id: req.body.guc_id });
 
     if (!user)
-      return res
-        .status(400)
-        .json({ error: "A member with this id does not exists" });
+      return res.json({ message: "A member with this id does not exists" });
 
     await User.updateOne(
       { guc_id: req.body.guc_id },
@@ -295,7 +267,7 @@ router.delete("/:id/members/:id1", async (req, res) => {
 router.delete("/:id/events/:id1", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
 
@@ -306,15 +278,13 @@ router.delete("/:id/events/:id1", async (req, res) => {
       !(userOne.mun_role === page.role_to_control) &&
       !(userOne.mun_role === page.name)
     )
-      return res
-        .status(403)
-        .send({ error: "Only admins can delete events to this entity" });
+      return res.json({
+        message: "Only admins can delete events to this entity"
+      });
 
     const id1 = req.params.id1;
     const deletedEvent = await Event.findByIdAndRemove(id1);
-    res.json({ msg: "Event was deleted successfully", data: deletedEvent });
-
-    res.json({ msg: "Events was deleted successfully" });
+    res.json({ message: "Event was deleted successfully", data: deletedEvent });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
