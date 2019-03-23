@@ -6,6 +6,8 @@ const FAQ = require('../../models/FAQ')
 const validator = require('../../validations/faqValidations')
 
 
+const User = require('../../models/User')
+
 // get the main page 
 router.get('/', async (req, res) => {
 
@@ -41,6 +43,11 @@ router.get('/:id', async (request, response) => {
 // it posts the whole Q&A
 router.post('/', async (req, res) => {
   try {
+    if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+    const userOne = await User.findById(req.session.user_id)
+
+    if (!userOne.is_admin) return res.status(403).send({ error: 'Only admins can add FAQ' })
     const isValidated = validator.createValidation(req.body)
     if (isValidated.error) return res.send(`<h1>error hah</h1>`) // res.status(400).send({ error: isValidated.error.details[0].message })
     const newFAQ = await FAQ.create(req.body)
@@ -58,6 +65,11 @@ router.post('/', async (req, res) => {
 // update the whole Q&A
 router.put('/:id', async (req, res) => {
   try {
+    if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+    const userOne = await User.findById(req.session.user_id)
+
+    if (!userOne.is_admin) return res.status(403).send({ error: 'Only admins can update FAQs' })
     const id = req.params.id
     const faq = await FAQ.find({ id })
     if (!faq) return res.status(404).send({ error: 'FAQ does not exist' })
@@ -76,6 +88,11 @@ router.put('/:id', async (req, res) => {
 // delete the whole Q&A 
 router.delete('/:id', async (req, res) => {
   try {
+    if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+    const userOne = await User.findById(req.session.user_id)
+
+    if (!userOne.is_admin) return res.status(403).send({ error: 'Only admins can delete FAQs' })
     const id = req.params.id
     const deletedFAQ = await FAQ.findByIdAndRemove(id)
     res.json({ msg: 'FAQ was deleted successfully', data: deletedFAQ })
