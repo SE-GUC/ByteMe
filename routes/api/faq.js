@@ -6,7 +6,7 @@ const FAQ = require('../../models/FAQ')
 const validator = require('../../validations/faqValidations')
 
 
-const User = require('../../models/User')
+const User = require('../../models/User').model
 
 // get the main page 
 router.get('/', async (req, res) => {
