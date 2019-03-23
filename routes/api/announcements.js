@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const Announcements = require('../../models/Announcements')
 const validator = require('../../validations/announcementsValidations')
 
+const User = require('../../models/User')
 
 // get the main page 
 router.get('/', async (req, res) => {
@@ -45,6 +46,11 @@ router.get('/:id', async (request, response) => {
 // it posts the whole Announcements
 router.post('/', async (req, res) => {
   try {
+    if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+    const userOne = await User.findById(req.session.user_id)
+
+    if (!userOne.is_admin) return res.status(403).send({ error: 'Only admins can post announcements' })
     const isValidated = validator.createValidation(req.body)
     if (isValidated.error) return res.send(`<h1>error hah</h1>`) // res.status(400).send({ error: isValidated.error.details[0].message })
     const newAnnouncements = await Announcements.create(req.body)
@@ -60,6 +66,11 @@ router.post('/', async (req, res) => {
 // update the whole council
 router.put('/:id', async (req, res) => {
   try {
+    if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+    const userOne = await User.findById(req.session.user_id)
+
+    if (!userOne.is_admin) return res.status(403).send({ error: 'Only admins can update announcements' })
     const id = req.params.id
     const announcements = await Announcements.find({ id })
     if (!announcements) return res.status(404).send({ error: 'Announcement does not exist' })
@@ -78,6 +89,11 @@ router.put('/:id', async (req, res) => {
 // delete the whole Announcement 
 router.delete('/:id', async (req, res) => {
   try {
+    if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+
+    const userOne = await User.findById(req.session.user_id)
+
+    if (!userOne.is_admin) return res.status(403).send({ error: 'Only admins can delete announcements' })
     const id = req.params.id
     const deletedAnnouncements = await Announcements.findByIdAndRemove(id)
     res.json({ msg: 'Announcement was deleted successfully', data: deletedAnnouncements })
@@ -89,11 +105,3 @@ router.delete('/:id', async (req, res) => {
 })
 
 module.exports = router;
-
-
-
-
-
-
-
-
