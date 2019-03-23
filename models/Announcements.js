@@ -14,5 +14,6 @@ const AnnouncementsSchema = new Schema({
     }
 
 })
+AnnouncementsSchema.index({info:"text"});
 
 module.exports = Announcements = mongoose.model('Announcements', AnnouncementsSchema)
