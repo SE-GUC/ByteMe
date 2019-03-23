@@ -180,6 +180,9 @@ router.put("/give_AWG_Admin", async (req, res) => {
     if (!userTwo)
       return res.status(404).send({ error: "No user with this guc id" });
 
+    if (userOne.awg_admin === "none")
+      return res.json({ message: "cannot give his role" });
+
     await User.updateOne(
       { guc_id: req.body.guc_id },
       { awg_admin: userOne.awg_admin },
@@ -229,14 +232,15 @@ router.put("/forefitawg_Admin", async (req, res) => {
 
 router.put("/", async (req, res) => {
   try {
-    if (req.query.gucid) { //editing someone else
+    if (req.query.gucid) {
+      //editing someone else
       try {
         if (!req.session.user_id)
           return res.status(403).send({ error: "You are not logged in" });
 
-        const loggedUser = await User.findById(req.session.user_id)
+        const loggedUser = await User.findById(req.session.user_id);
         if (!loggedUser.is_admin)
-          return res.status(403).send({ error: "You are not an admin!" })
+          return res.status(403).send({ error: "You are not an admin!" });
 
         const guc_id = req.query.gucid;
         var user = await User.findOne({ guc_id });
@@ -253,9 +257,9 @@ router.put("/", async (req, res) => {
 
         const userWithEmail = await User.findOne({ email });
         if (userWithEmail)
-          return res
-            .status(400)
-            .json({ error: "An account with the requested email already exists" });
+          return res.status(400).json({
+            error: "An account with the requested email already exists"
+          });
 
         const updatedUser = req.body;
 
@@ -271,7 +275,7 @@ router.put("/", async (req, res) => {
           upsert: false
         });
 
-        const userAfterUpdate = await User.findOne({guc_id: guc_id});
+        const userAfterUpdate = await User.findOne({ guc_id: guc_id });
 
         return res.json({
           message: "user updated!",
@@ -281,9 +285,8 @@ router.put("/", async (req, res) => {
         // We will be handling the error later
         console.log(error);
       }
-    }
-
-    else { //editing yourself
+    } else {
+      //editing yourself
       if (!req.session.user_id)
         return res.status(403).send({ error: "You are not logged in" });
 
@@ -297,9 +300,9 @@ router.put("/", async (req, res) => {
 
       const userWithEmail = await User.findOne({ email });
       if (userWithEmail)
-        return res
-          .status(400)
-          .json({ error: "An account with the requested email already exists" });
+        return res.status(400).json({
+          error: "An account with the requested email already exists"
+        });
 
       const updatedUser = req.body;
 
@@ -327,8 +330,6 @@ router.put("/", async (req, res) => {
     console.log(error);
   }
 });
-
-
 
 router.delete("/", async (req, res) => {
   try {

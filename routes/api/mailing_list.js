@@ -11,35 +11,28 @@ const validator = require("../../validations/mailing_listvalidations");
 const User = require("../../models/User");
 
 router.get("/", async (req, res) => {
-  if (!req.session.user_id)
-    return res.status(403).send({ error: "You are not logged in" });
+  if (!req.session.user_id) return res.json({ message: "not logged in" });
 
   const userOne = await User.findById(req.session.user_id);
 
-  if (!(userOne.awg_admin === "mun"))
-    return res
-      .status(403)
-      .send({ error: "Only mun admins can view subscribed mails" });
-
-  let data = "";
+  if (
+    !(userOne.awg_admin === "mun") &&
+    !(userOne.mun_role === "secretary_office")
+  )
+    return res.json({ message: "Only mun admins can view subscribed mails" });
 
   const mailing_list = await Mailing_list.find();
 
-  mailing_list.forEach(value => {
-    data += `<a>${value.email}</a><br>`;
-  });
-
-  res.send(data || "welcome to our list");
+  res.json({ data: mailing_list });
 });
 
 router.post("/", async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    const isValidated = validator.createValidation(req.body);
+    if (isValidated.error)
+      return res.json({ msg: "validations not satisfied" });
 
-    const userOne = await User.findById(req.session.user_id);
-
-    const newMailinglist = await Mailing_list.create({ email: userOne.email });
+    const newMailinglist = await Mailing_list.create(req.body);
 
     res.json({ data: newMailinglist });
   } catch (error) {
@@ -49,24 +42,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    if (!req.session.user_id) returnres.json({ msg: "not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
 
-    if (userOne.awg_admin === "mun") {
-      const deletedMail = await Mailing_list.findOneAndDelete(req.body);
-
-      res.json({ msg: "Mail was deleted successfully", data: deletedMail });
-    } else {
-      // const deletedMail = await Mailing_list.findByIdAndRemove(req.session.user_id)
-
-      const deletedMail = await Mailing_list.findOneAndDelete(
-        { email: userOne.email },
-        { upsert: false }
-      );
+    if (
+      userOne.awg_admin === "mun" ||
+      userOne.mun_role === "secretary_office"
+    ) {
+      const deletedMail = await Mailing_list.findByIdAndRemove(req.params.id);
 
       res.json({ msg: "Mail was deleted successfully", data: deletedMail });
     }

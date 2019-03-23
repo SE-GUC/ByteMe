@@ -18,7 +18,7 @@ router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const event = await Event.find({ _id: id });
-    if (!event) return res.status(404).send({ error: "Event does not exist" });
+    if (!event) return res.json({ message: "Event does not exist" });
 
     res.json({ msg: "Event data", data: event });
   } catch (error) {
@@ -30,11 +30,8 @@ router.get("/:id", async (req, res) => {
 router.get("/:id/viewfeedback", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.find({ _id: id });
-    event.forEach(value => {
-      data = `Feedback: ${value.feedback}`;
-    });
-    res.send(data || "No feedbacks");
+    const event = await Event.findById({id});
+    res.json({ data: event.feedback });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
@@ -45,11 +42,8 @@ router.get("/:id/viewfeedback", async (req, res) => {
 router.get("/:id/viewphotos", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.find({ _id: id });
-    event.forEach(value => {
-      data = `photos: ${value.photos}`;
-    });
-    res.send(data || "No photos");
+    const event = await Event.findById(id);
+    res.json({ data: event.photos });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
@@ -59,7 +53,7 @@ router.get("/:id/viewphotos", async (req, res) => {
 router.post("/addevent", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const userOne = await User.findById(req.session.user_id);
 
@@ -69,16 +63,14 @@ router.post("/addevent", async (req, res) => {
     ) {
       const isValidated = validator.createValidation(req.body);
       if (isValidated.error)
-        return res
-          .status(404)
-          .send({ error: isValidated.error.details[0].message });
+        return res.json({ message: "val not satisfied" });
       const newEvent = await Event.create(req.body);
       res.json({ msg: "Event was created successfully", data: newEvent });
     } else {
       const page = await Page.findOne({ name: req.body.creator });
 
       if (!page)
-        return res.status(403).send({ error: "Only admins can create events" });
+        return res.json({ message: "Only admins can create events" });
 
       if (
         !(userOne.mun_role == page.role_to_control) &&
@@ -87,9 +79,7 @@ router.post("/addevent", async (req, res) => {
         return res.json({ msg: "Eventa cannot not be added successfully" });
       const isValidated = validator.createValidation(req.body);
       if (isValidated.error)
-        return res
-          .status(40)
-          .send({ error: isValidated.error.details[0].message });
+        return res.json({ message: "val not satisfied" });
       const newEvent = await Event.create(req.body);
       res.json({ msg: "Event was created successfully", data: newEvent });
     }
@@ -106,9 +96,7 @@ router.post("/:id/addfeedback", async (req, res) => {
 
     const isValidated = validator.createFeedbackValidation(req.body);
     if (isValidated.error)
-      return res
-        .status(400)
-        .send({ error: isValidated.error.details[0].message });
+      return res.json({ message :"no validations" });
     const f = Event.update(
       { _id: id },
       { $push: { feedback: [req.body] } }
@@ -124,7 +112,7 @@ router.post("/:id/addfeedback", async (req, res) => {
 router.post("/:id/addphoto", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
     const userOne = await User.findById(req.session.user_id);
@@ -146,9 +134,7 @@ router.post("/:id/addphoto", async (req, res) => {
       const page = await Page.findOne({ name: event.creator });
 
       if (!page)
-        return res
-          .status(403)
-          .send({ error: "Only admins can delete this event photos" });
+        return res.json({ message: "Only admins can delete this event photos" });
 
       if (
         !(userOne.mun_role == page.role_to_control) &&
@@ -175,10 +161,9 @@ router.post("/:id/addphoto", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
-    // const id1 = req.params.id1;
     const userOne = await User.findById(req.session.user_id);
 
     if (
@@ -222,7 +207,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
     // const id1 = req.params.id1;
@@ -239,9 +224,7 @@ router.delete("/:id", async (req, res) => {
       const page = await Page.findOne({ name: event.creator });
 
       if (!page)
-        return res
-          .status(403)
-          .send({ error: "Only admins can delete this event " });
+        return res.json({ message: "Only admins can delete this event " });
 
       if (
         !(userOne.mun_role == page.role_to_control) &&
@@ -263,7 +246,7 @@ router.delete("/:id", async (req, res) => {
 router.delete("/:id/:id1/deletefeedback", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
     const id1 = req.params.id1;
@@ -280,9 +263,7 @@ router.delete("/:id/:id1/deletefeedback", async (req, res) => {
       const page = await Page.findOne({ name: event.creator });
 
       if (!page)
-        return res
-          .status(403)
-          .send({ error: "Only admins can delete this event feedback" });
+        return res.json({ message: "Only admins can delete this event feedback" });
 
       if (
         !(userOne.mun_role == page.role_to_control) &&
@@ -301,7 +282,7 @@ router.delete("/:id/:id1/deletefeedback", async (req, res) => {
 router.delete("/:id/:id1/deletephoto", async (req, res) => {
   try {
     if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+      return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
     const id1 = req.params.id1;
@@ -318,9 +299,7 @@ router.delete("/:id/:id1/deletephoto", async (req, res) => {
       const page = await Page.findOne({ name: event.creator });
      
       if (!page)
-        return res
-          .status(403)
-          .send({ error: "Only admins can delete this event photos" });
+        return res.json({ message: "Only admins can delete this event photos" });
 
       if (!(userOne.mun_role ==page.role_to_control) && !(userOne.mun_role == event.creator))
         return res.json({ msg: "Photo cannot not be successfully" });

@@ -17,7 +17,7 @@ router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const club = await Club.find({ "_id": id })
-        if (!club) return res.status(404).send({ error: 'Club does not exist' })
+        if (!club) return res.json({ message: 'Club does not exist' })
 
         res.json({ msg: 'Club data', data: club })
     }
@@ -30,13 +30,13 @@ router.get('/:id', async (req, res) => {
 
 router.post('/addclub', async (req, res) => {
     try {
-        if (!req.session.user_id) return res.status(403).send({ "error": "You are not logged in" })
+        if (!req.session.user_id) return res.json({ message: "You are not logged in" })
 
     const userOne = await User.findById(req.session.user_id)
 
-    if (!userOne.is_admin) return res.status(403).send({ error: 'Only admins can add clubs' })
+    if (!userOne.is_admin) return res.json({ message: 'Only admins can add clubs' })
         const isValidated = validator.createValidation(req.body)
-        if (isValidated.error) return   res.json({ msg: "validation"});
+        if (isValidated.error) return   res.json({ msg: "validation are not satisfied"});
         const newClub = await Club.create(req.body)
         res.json({ msg: 'Club was created successfully', data: newClub })
     }
@@ -56,9 +56,9 @@ router.put('/:id', async (req, res) => {
     if (!userOne.is_admin)  return  res.json({ msg: "admins only"});
         const id = req.params.id;
         const club = await Club.find({ "_id": id })
-        if (!club) return res.status(404).send({ error: 'Club does not exist' })
+        if (!club) return res.json({ message: 'Club does not exist' })
         const isValidated = validator.updateValidation(req.body)
-        if (isValidated.error) return res.status(403).send({ error: isValidated.error.details[0].message })
+        if (isValidated.error) return res.json({ message:  "validations are not satisfied"})
         const updatedClub = await Club.updateOne(req.body)
         res.json({ msg: 'Club updated successfully', data: updatedClub })
     }
