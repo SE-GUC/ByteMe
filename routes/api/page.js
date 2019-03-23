@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const Page = require("../../models/Page");
-const User = require("../../models/User");
+const User = require("../../models/User").model;
 const Event = require("../../models/Event");
 const validator = require("../../validations/pageValidations");
 const eventValidator = require("../../validations/eventValidations");

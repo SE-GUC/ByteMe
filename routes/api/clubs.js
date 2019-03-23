@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const Club = require('../../models/Club')
 const validator = require('../../validations/clubValidations')
 
-const User = require('../../models/User')
+const User = require('../../models/User').model
 
 router.get('/', async (req, res) => {
 

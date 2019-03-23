@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const Event = require("../../models/Event");
 const validator = require("../../validations/eventValidations");
 
-const User = require("../../models/User");
+const User = require("../../models/User").model;
 const Page = require("../../models/Page");
 
 //getting all events & finally checked

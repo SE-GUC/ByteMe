@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const Announcements = require('../../models/Announcements')
 const validator = require('../../validations/announcementsValidations')
 
-const User = require('../../models/User')
+const User = require('../../models/User').model
 
 // get the main page 
 router.get('/', async (req, res) => {
