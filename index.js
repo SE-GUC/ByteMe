@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 
 // Require Router Handlers
-const users = require('./routes/api/users').model
+const users = require('./routes/api/users')
 const events = require('./routes/api/events')
 const mailinglist = require('./routes/api/mailing_list')
 const faq = require('./routes/api/faq')
