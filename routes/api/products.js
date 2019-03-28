@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
+const passport = require('passport')
 const Product = require("../../models/Product");
 const User = require("../../models/User").model;
 
@@ -19,12 +19,12 @@ router.get("/:name", async (req, res) => {
 });
 
 // create a new product
-router.post("/", async (req, res) => {
+router.post("/",passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       !(userOne.awg_admin === "mun") &&
@@ -40,12 +40,12 @@ router.post("/", async (req, res) => {
 });
 
 // update the whole product by id
-router.put("/:id", async (req, res) => {
+router.put("/:id", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       !(userOne.awg_admin === "mun") &&
@@ -65,12 +65,12 @@ router.put("/:id", async (req, res) => {
 });
 
 // delete the whole product by id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       !(userOne.awg_admin === "mun") &&

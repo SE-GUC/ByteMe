@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
+const passport = require('passport')
 const Event = require("../../models/Event");
 const validator = require("../../validations/eventValidations");
 
@@ -50,12 +50,12 @@ router.get("/:id/viewphotos", async (req, res) => {
   }
 });
 // Create an event && checked//
-router.post("/addevent", async (req, res) => {
+router.post("/addevent", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       userOne.awg_admin === "mun" ||
@@ -109,13 +109,13 @@ router.post("/:id/addfeedback", async (req, res) => {
 });
 
 //add photo check done 
-router.post("/:id/addphoto", async (req, res) => {
+router.post("/:id/addphoto",passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       userOne.awg_admin === "mun" ||
@@ -158,13 +158,13 @@ router.post("/:id/addphoto", async (req, res) => {
 ///////////////////////
 
 /////////////////////// Update event done && checked
-router.put("/:id", async (req, res) => {
+router.put("/:id", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const id = req.params.id;
-    const userOne = await User.findById(req.session.user_id);
+     const id = req.params.id;
+    const userOne = req.user;
 
     if (
       userOne.awg_admin === "mun" ||
@@ -204,14 +204,14 @@ router.put("/:id", async (req, res) => {
 ////////////////////
 
 ////////////////////delete event & checked
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
-    // const id1 = req.params.id1;
-    const userOne = await User.findById(req.session.user_id);
+    //const id1 = req.params.id1;
+    const userOne = req.user
 
     if (
       userOne.awg_admin === "mun" ||
@@ -243,14 +243,14 @@ router.delete("/:id", async (req, res) => {
 /////////////////////
 
 ///////////to be checked
-router.delete("/:id/:id1/deletefeedback", async (req, res) => {
+router.delete("/:id/:id1/deletefeedback", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
     const id1 = req.params.id1;
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       userOne.awg_admin === "mun" ||
@@ -279,14 +279,14 @@ router.delete("/:id/:id1/deletefeedback", async (req, res) => {
   }
 });
 //need to check
-router.delete("/:id/:id1/deletephoto", async (req, res) => {
+router.delete("/:id/:id1/deletephoto",passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
     const id = req.params.id;
     const id1 = req.params.id1;
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       userOne.awg_admin === "mun" ||

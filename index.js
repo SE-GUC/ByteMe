@@ -3,6 +3,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const session = require('express-session')
+const passport = require('passport')
 
 // Require Router Handlers
 const users = require('./routes/api/users')
@@ -38,7 +39,8 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-
+app.use(passport.initialize())
+require('./config/passport')(passport)
 
 // Entry point
 app.get('/', (req, res) => res.send(`<h1>Welcome to Our Platform</h1> 

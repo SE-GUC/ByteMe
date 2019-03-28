@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
-
+const passport = require('passport')
 const Club = require('../../models/Club')
 const validator = require('../../validations/clubValidations')
 
@@ -28,11 +28,11 @@ router.get('/:id', async (req, res) => {
 })
 
 
-router.post('/addclub', async (req, res) => {
+router.post('/addclub',  passport.authenticate('jwt', {session: false}),async (req, res) => {
     try {
-        if (!req.session.user_id) return res.json({ message: "You are not logged in" })
+       // if (!req.session.user_id) return res.json({ message: "You are not logged in" })
 
-    const userOne = await User.findById(req.session.user_id)
+    const userOne = req.user
 
     if (!userOne.is_admin) return res.json({ message: 'Only admins can add clubs' })
         const isValidated = validator.createValidation(req.body)
@@ -47,12 +47,11 @@ router.post('/addclub', async (req, res) => {
 })
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id',  passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
-        if (!req.session.user_id)  return  res.json({ msg: "not logged in"});
+       // if (!req.session.user_id)  return  res.json({ msg: "not logged in"});
 
-    const userOne = await User.findById(req.session.user_id)
-
+    const userOne = req.user
     if (!userOne.is_admin)  return  res.json({ msg: "admins only"});
         const id = req.params.id;
         const club = await Club.find({ "_id": id })
@@ -70,11 +69,11 @@ router.put('/:id', async (req, res) => {
 
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',  passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
-        if (!req.session.user_id)  return  res.json({ msg: "not logged in"});
+       // if (!req.session.user_id)  return  res.json({ msg: "not logged in"});
 
-    const userOne = await User.findById(req.session.user_id)
+    const userOne = req.user
 
     if (!userOne.is_admin)  return  res.json({ msg: "admins only"});
         const id = req.params.id

@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
-
+const passport = require('passport')
 const Announcements = require('../../models/Announcements')
 const validator = require('../../validations/announcementsValidations')
 
@@ -34,11 +34,11 @@ router.get('/:id', async (request, response) => {
 
 
 // it posts the whole Announcements
-router.post('/', async (req, res) => {
+router.post('/',passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id) return res.json({ msg: 'You are not logged in' })
+    //if (!req.session.user_id) return res.json({ msg: 'You are not logged in' })
 
-    const userOne = await User.findById(req.session.user_id)
+    const userOne = req.user
 
     if (!userOne.is_admin) return res.json({ msg: 'Only admins can post' })
     const isValidated = validator.createValidation(req.body)
@@ -54,11 +54,11 @@ router.post('/', async (req, res) => {
 
 
 // update the whole council
-router.put('/:id', async (req, res) => {
+router.put('/:id',passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id) return  res.json({ msg: 'You are not logged in' })
+   // if (!req.session.user_id) return  res.json({ msg: 'You are not logged in' })
 
-    const userOne = await User.findById(req.session.user_id)
+    const userOne = req.user
 
     if (!userOne.is_admin) return  res.json({ msg: 'Only admins can update' })
     const id = req.params.id
@@ -77,11 +77,11 @@ router.put('/:id', async (req, res) => {
 
 
 // delete the whole Announcement 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id) return  res.json({ msg: 'You are not logged in' })
+    //if (!req.session.user_id) return  res.json({ msg: 'You are not logged in' })
 
-    const userOne = await User.findById(req.session.user_id)
+    const userOne = req.user
 
     if (!userOne.is_admin) return  res.json({ msg: 'Only admins can delete' })
     const id = req.params.id

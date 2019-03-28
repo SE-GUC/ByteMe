@@ -1,9 +1,11 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
-
+const jwt = require('jsonwebtoken')
+const passport = require('passport')
 const User = require("../../models/User").model;
 const validator = require("../../validations/userValidations");
+const tokenKey = require('../../config/keys').secretOrKey
 
 const hideSecrets = require("../../models/User").hideSecrets;
 
@@ -84,8 +86,16 @@ router.post("/login", async (req, res) => {
 
     bcrypt.compare(password, dbHash, async (err, match) => {
       if (match) {
-        req.session.user_id = userWithEmail._id;
-        return res.json({ session: req.session });
+        const payload = {
+          id: userWithEmail.id,
+          name: userWithEmail.name,
+          email: userWithEmail.email
+      }
+      const token = jwt.sign(payload, tokenKey, { expiresIn: '1h' })
+      return res.json({data: `Bearer ${token}`})
+     // return res.json({ data: 'Token' })
+        // req.session.user_id = userWithEmail._id;
+        // return res.json({ session: req.session });
       } else {
         return res.status(403).json({ error: "wrong password" });
       }
@@ -96,12 +106,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/logout", async (req, res) => {
+router.post("/logout", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(400).json({ error: "not logged in" });
-    delete req.session.user_id;
-
+    // if (!req.session.user_id)
+    //   return res.status(400).json({ error: "not logged in" });
+   // delete req.session.user_id;
+//delete token
     return res.json({ message: "logout successful" });
   } catch (error) {
     // We will be handling the error later
@@ -131,10 +141,10 @@ router.get("/:gucid", async (req, res) => {
   }
 });
 
-router.put("/giveAdmin", async (req, res) => {
+router.put("/giveAdmin", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.status(403).send({ error: "You are not logged in" });
 
     const isValidated = validator.giveAdminValidation(req.body);
     if (isValidated.error)
@@ -142,7 +152,7 @@ router.put("/giveAdmin", async (req, res) => {
         .status(400)
         .send({ error: isValidated.error.details[0].message });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
     const userTwo = await User.findOne({ guc_id: req.body.guc_id });
 
     if (!userOne.is_admin)
@@ -163,10 +173,10 @@ router.put("/giveAdmin", async (req, res) => {
   }
 });
 //checked
-router.put("/give_AWG_Admin", async (req, res) => {
+router.put("/give_AWG_Admin", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.status(403).send({ error: "You are not logged in" });
 
     const isValidated = validator.giveAdminValidation(req.body);
     if (isValidated.error)
@@ -174,7 +184,7 @@ router.put("/give_AWG_Admin", async (req, res) => {
         .status(400)
         .send({ error: isValidated.error.details[0].message });
 
-    var userOne = await User.findById(req.session.user_id);
+    var userOne = req.user;
     const userTwo = await User.findOne({ guc_id: req.body.guc_id });
 
     if (!userTwo)
@@ -198,11 +208,11 @@ router.put("/give_AWG_Admin", async (req, res) => {
 
 router.put("/forefitAdmin", async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.status(403).send({ error: "You are not logged in" });
 
     const user = await User.findByIdAndUpdate(
-      req.session.user_id,
+      req.user,
       { is_admin: "false" },
       { upsert: false }
     );
@@ -213,13 +223,13 @@ router.put("/forefitAdmin", async (req, res) => {
   }
 });
 //checked
-router.put("/forefitawg_Admin", async (req, res) => {
+router.put("/forefitawg_Admin", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.status(403).send({ error: "You are not logged in" });
 
     const user = await User.findByIdAndUpdate(
-      req.session.user_id,
+      req.user,
       { awg_admin: "none" },
       { upsert: false }
     );
@@ -230,6 +240,7 @@ router.put("/forefitawg_Admin", async (req, res) => {
   }
 });
 
+//JWT not done here
 router.put("/", async (req, res) => {
   try {
     if (req.query.gucid) {
@@ -331,12 +342,12 @@ router.put("/", async (req, res) => {
   }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.status(403).send({ error: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (!userOne.is_admin) await User.findOneAndDelete({ guc_id });
     else await User.findByIdAndDelete(req.session.user_id);

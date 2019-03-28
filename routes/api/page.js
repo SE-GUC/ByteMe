@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
+const passport = require('passport')
 const Page = require("../../models/Page");
 const User = require("../../models/User").model;
 const Event = require("../../models/Event");
@@ -49,12 +49,12 @@ router.get("/:id/members", async (req, res) => {
 //done & checked
 // should be for the website admin for the first time to create a council/page/office
 // it posts the whole council
-router.post("/", async (req, res) => {
+router.post("/", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (!(userOne.awg_admin === "mun"))
       return res.json({ mesage: "Only mun admins can add councils" });
@@ -70,12 +70,12 @@ router.post("/", async (req, res) => {
 });
 //checked
 // add events to the council if he is logged in and is admin of this page or higher
-router.post("/:id/events", async (req, res) => {
+router.post("/:id/events", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.status(403).send({ error: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.status(403).send({ error: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     var page = await Page.findById(req.params.id);
 
@@ -101,12 +101,12 @@ router.post("/:id/events", async (req, res) => {
 
 // checked
 // add members to the council if he is logged in and is admin of this page or higher
-router.post("/:id/members", async (req, res) => {
+router.post("/:id/members", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     var page = await Page.findById(req.params.id);
 
@@ -139,11 +139,11 @@ router.post("/:id/members", async (req, res) => {
 
 // checked
 // assign role members if he is this member the same or page admin
-router.put("/:id/members/set_role", async (req, res) => {
-  if (!req.session.user_id)
-    return res.json({ message: "You are not logged in" });
+router.put("/:id/members/set_role", passport.authenticate('jwt', {session: false}),async (req, res) => {
+  // if (!req.session.user_id)
+  //   return res.json({ message: "You are not logged in" });
 
-  const userOne = await User.findById(req.session.user_id);
+  const userOne = req.user;
 
   var page = await Page.findById(req.params.id);
 
@@ -171,12 +171,12 @@ router.put("/:id/members/set_role", async (req, res) => {
 //done & checked
 //this update will be limited for desc. only
 // update the whole council if council admin or higher
-router.put("/:id", async (req, res) => {
+router.put("/:id", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     var page = await Page.findById(req.params.id);
 
@@ -202,12 +202,12 @@ router.put("/:id", async (req, res) => {
 
 //checked
 // delete the whole council
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (!(userOne.awg_admin === "mun"))
       return res.json({ message: "Only admins can add events to this entity" });
@@ -223,12 +223,12 @@ router.delete("/:id", async (req, res) => {
 
 // checked
 // delete members from the council
-router.delete("/:id/members/:id1", async (req, res) => {
+router.delete("/:id/members/:id1", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     var page = await Page.findById(req.params.id);
 
@@ -264,12 +264,12 @@ router.delete("/:id/members/:id1", async (req, res) => {
 
 // checked
 // delete events from the council
-router.delete("/:id/events/:id1", async (req, res) => {
+router.delete("/:id/events/:id1",passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     var page = await Page.findById(req.params.id);
 

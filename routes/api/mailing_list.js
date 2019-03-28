@@ -1,7 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
-
+const passport = require('passport')
 const mongoose = require("mongoose");
 
 const Mailing_list = require("../../models/Mailing_list");
@@ -10,11 +10,10 @@ const validator = require("../../validations/mailing_listvalidations");
 
 const User = require("../../models/User").model;
 
-router.get("/", async (req, res) => {
-  if (!req.session.user_id) return res.json({ message: "not logged in" });
-
-  const userOne = await User.findById(req.session.user_id);
-
+router.get("/", passport.authenticate('jwt', {session: false}), async (req, res) => {
+  //if (!req.session.user_id) return res.json({ message: "not logged in" });
+  
+  const userOne = req.user
   if (
     !(userOne.awg_admin === "mun") &&
     !(userOne.mun_role === "secretary_office")
@@ -42,11 +41,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id) returnres.json({ msg: "not logged in" });
+    //if (!req.session.user_id) returnres.json({ msg: "not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       userOne.awg_admin === "mun" ||
@@ -54,8 +53,9 @@ router.delete("/:id", async (req, res) => {
     ) {
       const deletedMail = await Mailing_list.findByIdAndRemove(req.params.id);
 
-      res.json({ msg: "Mail was deleted successfully", data: deletedMail });
+      return res.json({ msg: "Mail was deleted successfully", data: deletedMail });
     }
+    return res.json({ message: "Only mun admins can view subscribed mails" });
   } catch (error) {
     // We will be handling the error later
 

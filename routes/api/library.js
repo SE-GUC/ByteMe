@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
+const passport = require('passport')
 const Library = require("../../models/Library");
 const User = require("../../models/User").model ;
 const validator = require("../../validations/libraryValidations");
@@ -30,12 +30,12 @@ router.get("/:name", async (req, res) => {
 });
 
 // post a new library entry
-router.post("/", async (req, res) => {
+router.post("/", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne =req.user;
 
     if (
       !(userOne.awg_admin === "mun") &&
@@ -56,12 +56,12 @@ router.post("/", async (req, res) => {
 });
 
 // update a library entry
-router.put("/:id", async (req, res) => {
+router.put("/:id",passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       !(userOne.awg_admin === "mun") &&
@@ -88,12 +88,12 @@ router.put("/:id", async (req, res) => {
 });
 
 // delete a library entry
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ message: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (
       !(userOne.awg_admin === "mun") &&

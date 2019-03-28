@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
+const passport = require('passport')
 const FAQ = require("../../models/FAQ");
 const validator = require("../../validations/faqValidations");
 
@@ -21,12 +21,12 @@ router.get("/:id", async (request, response) => {
 });
 
 // it posts the whole Q&A
-router.post("/", async (req, res) => {
+router.post("/", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id)
-      return res.json({ msg: "You are not logged in" });
+    // if (!req.session.user_id)
+    //   return res.json({ msg: "You are not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (!userOne.is_admin)
       return res.json({ message : "Only admins can add FAQ" });
@@ -40,11 +40,11 @@ router.post("/", async (req, res) => {
 });
 
 // update the whole Q&A
-router.put("/:id", async (req, res) => {
+router.put("/:id", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id) return res.json({ message: "not logged in" });
+    // if (!req.session.user_id) return res.json({ message: "not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (!userOne.is_admin) return res.json({ message: "not admin" });
     const id = req.params.id;
@@ -61,11 +61,11 @@ router.put("/:id", async (req, res) => {
 });
 
 // delete the whole Q&A
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", passport.authenticate('jwt', {session: false}),async (req, res) => {
   try {
-    if (!req.session.user_id) return res.json({ message: "not logged in" });
+    // if (!req.session.user_id) return res.json({ message: "not logged in" });
 
-    const userOne = await User.findById(req.session.user_id);
+    const userOne = req.user;
 
     if (!userOne.is_admin) return res.json({ message: "not logged in" });
     const id = req.params.id;
