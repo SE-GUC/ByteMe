@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
-
+const passport = require("passport");
 const Library = require("../../models/Library");
-const User = require("../../models/User").model ;
 const validator = require("../../validations/libraryValidations");
 
 // Return all library entries
@@ -29,87 +27,96 @@ router.get("/:name", async (req, res) => {
   }
 });
 
-// post a new library entry
-router.post("/", async (req, res) => {
-  try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+// admins post a new library entry
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const userOne = req.user;
 
-    const userOne = await User.findById(req.session.user_id);
+      if (
+        !(userOne.awg_admin === "mun") &&
+        !(userOne.mun_role === "secretary_office")
+      )
+        return res.json({
+          message: "Only authorized admins can create new library entry"
+        });
 
-    if (
-      !(userOne.awg_admin === "mun") &&
-      !(userOne.mun_role === "secretary_office")
-    )
-      return res.json({ message: "not an admin" });
-
-    const isValidated = await validator.createValidation(req.body);
-    if (isValidated.error)
-      return res
-        .status(400)
-        .json({ error: isValidated.error.details[0].message });
-    const newLibrary = await Library.create(req.body);
-    res.json({ msg: "Entry was created successfully", data: newLibrary });
-  } catch (error) {
-    res.sendStatus(400).json(error);
+      const isValidated = await validator.createValidation(req.body);
+      if (isValidated.error)
+        return res
+          .status(400)
+          .json({ error: isValidated.error.details[0].message });
+      const newLibrary = await Library.create(req.body);
+      res.json({ msg: "Entry was created successfully", data: newLibrary });
+    } catch (error) {
+      res.sendStatus(400).json(error);
+    }
   }
-});
+);
 
-// update a library entry
-router.put("/:id", async (req, res) => {
-  try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+// admins update a library entry by id
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const userOne = req.user;
 
-    const userOne = await User.findById(req.session.user_id);
+      if (
+        !(userOne.awg_admin === "mun") &&
+        !(userOne.mun_role === "secretary_office")
+      )
+        return res.json({
+          message: "Only authorized admins can update library"
+        });
 
-    if (
-      !(userOne.awg_admin === "mun") &&
-      !(userOne.mun_role === "secretary_office")
-    )
-      return res.json({ message: "not an admin" });
-
-    const id = req.params.id;
-    const library = await Library.findOne({ id });
-    if (!library)
-      return res
-        .status(404)
-        .json({ error: "Academic Paper requested was not found." });
-    const isValidated = validator.updateValidation(req.body);
-    if (isValidated.error)
-      return res
-        .status(400)
-        .send({ error: isValidated.error.details[0].message });
-    const updateLibrary = await Library.updateOne(req.body);
-    res.json({ msg: updateLibrary });
-  } catch (error) {
-    res.sendStatus(400).json(error);
+      const id = req.params.id;
+      const library = await Library.findOne({ id });
+      if (!library)
+        return res
+          .status(404)
+          .json({ error: "Academic Paper requested was not found." });
+      const isValidated = validator.updateValidation(req.body);
+      if (isValidated.error)
+        return res
+          .status(400)
+          .send({ error: isValidated.error.details[0].message });
+      const updateLibrary = await Library.updateOne(req.body);
+      res.json({ msg: updateLibrary });
+    } catch (error) {
+      res.sendStatus(400).json(error);
+    }
   }
-});
+);
 
-// delete a library entry
-router.delete("/:id", async (req, res) => {
-  try {
-    if (!req.session.user_id)
-      return res.json({ message: "You are not logged in" });
+// admins delete a library entry by id
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const userOne = req.user;
 
-    const userOne = await User.findById(req.session.user_id);
+      if (
+        !(userOne.awg_admin === "mun") &&
+        !(userOne.mun_role === "secretary_office")
+      )
+        return res.json({
+          message: "Only authorized admins can delete library entries"
+        });
 
-    if (
-      !(userOne.awg_admin === "mun") &&
-      !(userOne.mun_role === "secretary_office")
-    )
-      return res.json({ message: "not an admin" });
-
-    const id = req.params.id;
-    const deletedLibrary = await Library.findByIdAndRemove(id);
-    res.json({
-      msg: "Academic paper was deleted successfully",
-      data: deletedLibrary
-    });
-  } catch (error) {
-    res.sendStatus(400).json(error);
+      const id = req.params.id;
+      const deletedLibrary = await Library.findByIdAndRemove(id);
+      res.json({
+        msg: "Academic paper was deleted successfully",
+        data: deletedLibrary
+      });
+    } catch (error) {
+      res.sendStatus(400).json(error);
+    }
   }
-});
+);
 
 module.exports = router;
