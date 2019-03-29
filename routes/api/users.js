@@ -6,6 +6,7 @@ const passport = require("passport");
 const User = require("../../models/User").model;
 const validator = require("../../validations/userValidations");
 const tokenKey = require("../../config/keys").secretOrKey;
+const emailer = require("../../emailer");
 
 const hideSecrets = require("../../models/User").hideSecrets;
 
@@ -365,5 +366,53 @@ router.delete(
     }
   }
 );
+const randomString = length => {
+  let text = "";
+  const possible = "abcdefghijklmnopqrstuvwxyz0123456789_-.";
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+
+router.put("/forgotpass", (req, res) => {
+  if (!req.body) return res.status(400).json({ message: "No request body" });
+  if (!req.body.email)
+    return res.status(400).json({ message: "No Email request body" });
+  const token = randomString(40);
+  const emailData = {
+    to: req.body.email,
+    subject: "AWG reset Password",
+    text: `Please use the following link to reset your password: localhost:3000/api/users/resetpass/${token}`,
+    html: `<p>Please use the following link to reset your password:</p><p>localhost:3000/api/users/resetpass/${token}</p>`
+  };
+  return User.update(
+    { email: req.body.email },
+    { $set: { resetPassLink: token } },
+    function(error, feedback) {
+      if (error) return res.send(error);
+      else {
+        emailer.sendEmail(emailData);
+        return res
+          .status(200)
+          .json({ message: `Email sent to: ${req.body.email}` });
+      }
+    }
+  );
+});
+
+router.put("/resetpass", (req, res) => {
+  const { resetPassLink, newPassword } = req.body;
+  const salt = bcrypt.genSaltSync(10);
+  const hashedPassword = bcrypt.hashSync(newPassword, salt);
+  return User.update(
+    { resetPassLink },
+    { $set: { password: hashedPassword, resetPassLink: "" } },
+    function(error, feedback) {
+      if (error) return res.send(error);
+      return res.send(feedback);
+    }
+  );
+});
 
 module.exports = router;
