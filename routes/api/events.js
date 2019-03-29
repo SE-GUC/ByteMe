@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.find({ _id: id });
+    const event = await Event.findById(id);
     if (!event) return res.json({ message: "Event does not exist" });
 
     res.json({ msg: "Event data", data: event });
@@ -29,7 +29,7 @@ router.get("/:id", async (req, res) => {
 router.get("/:id/viewfeedback", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.findById({ id });
+    const event = await Event.findById(id);
     res.json({ data: event.feedback });
   } catch (error) {
     // We will be handling the error later
@@ -99,6 +99,24 @@ router.post("/:id/addfeedback", async (req, res) => {
       { _id: id },
       { $push: { feedback: [req.body] } }
     ).exec();
+    var count = 0;
+    var rating = 0;
+    var event = await Event.findById(id);
+    event.feedback.forEach(value => {
+      rating += value.rating;
+      count += 1;
+    });
+    rating += Number(req.body.rating);
+    count += 1;
+    console.log(rating);
+    console.log(count);
+    const result = rating / count;
+    console.log(result);
+    const e = await Event.findByIdAndUpdate(
+      id,
+      { rating: result },
+      { upsert: false }
+    );
     return res.json({ msg: "Feedback was created successfully", data: f });
   } catch (error) {
     // We will be handling the error later
