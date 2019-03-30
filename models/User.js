@@ -43,19 +43,22 @@ const UserSchema = new Schema({
   },
   mun_role: {
     type: String,
-    default:"none"
+    default: "none"
   },
   awg_admin: {
     type: String,
     default: "none"
+  },
+  resetPassLink: {
+    type: String,
+    default: ""
   }
 });
 
-
-UserSchema.index({email:"text",first_name:"text", last_name:"text"});
+UserSchema.index({ email: "text", first_name: "text", last_name: "text" });
 
 module.exports.model = User = mongoose.model("users", UserSchema);
-module.exports.hideSecrets = (user) => {
+module.exports.hideSecrets = user => {
   const {
     email,
     first_name,
@@ -79,4 +82,4 @@ module.exports.hideSecrets = (user) => {
     is_private: is_private,
     mun_role: mun_role
   };
-}
+};
