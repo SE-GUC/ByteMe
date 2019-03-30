@@ -70,7 +70,6 @@ router.post("/login", async (req, res) => {
     // if (req.headers.Authorization)
     //   if (req.headers.Authorization.email === req.body.email)
     //     return res.status(400).json({ error: "already logged in" });
-
     const isValidated = validator.basicValidation(req.body);
     if (isValidated.error)
       return res
@@ -111,6 +110,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
+      // req.batee5 = 'maamad'
       //req.logOut();
       return res.json({ message: "logout successful" });
     } catch (error) {
