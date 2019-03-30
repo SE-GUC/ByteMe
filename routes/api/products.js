@@ -9,10 +9,10 @@ router.get("/", async (req, res) => {
   res.json({ data: products });
 });
 
-// get certain product by name
+// get certain product by name using name regex, case insenstive
 router.get("/:name", async (req, res) => {
   const name = req.params.name;
-  const product = await Product.find({ name: name });
+  const product = await Product.find({ name: { $regex: name, $options: "i" } });
   res.json({ data: product });
 });
 
