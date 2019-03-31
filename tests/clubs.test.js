@@ -83,6 +83,28 @@ describe("getting all clubs - No token", () => {
   });
 });
 
+describe("full text search clubs - No token", () => {
+  const key = {
+    //declare new club to be sent in creation
+    searchkey: `blablala 1233 ${newClub.name} aa jsd ${
+      newClub.description
+    } jdsj ${newClub.banner}`
+  };
+  // token not being sent - As its not needed
+  test("A JSON response is returned", () => {
+    return request(app)
+      .post("/api/search")
+      .send(key)
+      .then(response => {
+        expect(response.statusCode).toBe(200);
+        expect(response.type).toBe("application/json");
+        expect(response.body.clubs[0].name).toBe(newClub.name);
+        expect(response.body.clubs[0].description).toBe(newClub.description);
+        expect(response.body.clubs[0].banner).toBe(newClub.banner);
+      });
+  });
+});
+
 describe("Updating the club", () => {
   const newClubUpdate = {
     //declare new club to be sent in creation
