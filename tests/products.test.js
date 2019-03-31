@@ -118,7 +118,7 @@ describe("Updating the product", () => {
       .get("/api/products/" + newProductUpdate.name)
       .then(response => {
         expect(response.statusCode).toBe(200);
-        //expect(response.body.data[0]._id).toBe(createdProductID);  //Can be restored if test DB is implemented and not testing on prod
+        expect(response.body.data[0]._id).toBe(createdProductID); //Can be restored if test DB is implemented and not testing on prod
         expect(response.body.data[0].name).toBe(newProductUpdate.name);
         expect(response.body.data[0].description).toBe(
           newProductUpdate.description
@@ -144,7 +144,7 @@ describe("Deleting a Product", () => {
       .delete("/api/products/" + createdProductID)
       .set("Authorization", `${token}`)
       .then(response => {
-        createdProductID = response.body.data._id;
+        expect(createdProductID).toBe(response.body.data._id);
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
         expect(response.body.msg).toBe("Product was deleted successfully");
