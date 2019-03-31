@@ -551,19 +551,24 @@ describe("Delete profile", async () => {
             .send(newUser)
             .end((err, response) => {
                 request(app)
-                    .post("/api/users/login")
-                    .send({
-                        email: "jestuser@mail.com",
-                        password: "jestuser123"
-                    })
+                    .post("/api/users/register")
+                    .send(newUser2)
                     .end((err, response) => {
-                        token = response.body.data; // save the token!
-                        done();
-                    });
+                        request(app)
+                            .post("/api/users/login")
+                            .send({
+                                email: "jestuser@mail.com",
+                                password: "jestuser123"
+                            })
+                            .end((err, response) => {
+                                token = response.body.data; // save the token!
+                                done();
+                            });
+                    })
             })
+        var token2;
+        var token3;
     })
-    var token2;
-    var token3;
     beforeAll(done => {
         request(app)
             .post("/api/users/login")
