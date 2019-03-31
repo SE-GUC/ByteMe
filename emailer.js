@@ -1,16 +1,16 @@
 const { SMTP_URL } = process.env;
 const nodemailer = require("nodemailer");
 var smtpTransport = require("nodemailer-smtp-transport");
-const defaultEmailData = { from: "micah10@ethereal.email" };
+const defaultEmailData = { from: "GUCMUN@gucmun.me" };
 const sendEmail = (emailData, smtpUrl = SMTP_URL) => {
   const completeEmailData = Object.assign(defaultEmailData, emailData);
   const transporter = nodemailer.createTransport(
     smtpTransport({
-      host: "smtp.ethereal.email",
+      host: "smtp.mailgun.org",
       port: 587,
       auth: {
-        user: "micah10@ethereal.email",
-        pass: "Hv9PVnBkQnHCR2zNWP"
+        user: "postmaster@mail.gucmun.me",
+        pass: "cde1ff2951ab0e4d6f3ee44aa16170ab-e51d0a44-ac0408c5"
       }
     })
   );
