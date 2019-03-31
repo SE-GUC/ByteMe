@@ -73,7 +73,7 @@ router.put(
         });
 
       const id = req.params.id;
-      const library = await Library.findOne({ id });
+      const library = await Library.find({ id });
       if (!library)
         return res
           .status(404)
@@ -84,7 +84,7 @@ router.put(
           .status(400)
           .send({ error: isValidated.error.details[0].message });
       const updateLibrary = await Library.updateOne(req.body);
-      res.json({ msg: updateLibrary });
+      res.json({ msg: "Entry updated successfully" });
     } catch (error) {
       res.sendStatus(400).json(error);
     }
