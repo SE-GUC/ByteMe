@@ -11,8 +11,8 @@ router.get("/", async (req, res) => {
 });
 
 // get certain Announcement
-router.get("/:id", async (request, response) => {
-  const id = request.params.id;
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
   const announcements = await Announcements.find({ _id: id });
   res.json({ data: announcements });
 });

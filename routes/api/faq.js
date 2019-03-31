@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 // get certain Q&A
 router.get("/:id", async (request, response) => {
   const id = request.params.id;
-  const faq = await FAQ.findById({ id });
+  const faq = await FAQ.find({ _id: id });
   response.json({ data: faq });
 });
 
