@@ -10,7 +10,7 @@ const emailer = require("../../emailer");
 
 const hideSecrets = require("../../models/User").hideSecrets;
 
-router.get("/", (req, res) => res.json({ data: "Users working" }));
+router.get("/", (req, res) => res.json({ data: "Users Route Online" }));
 
 router.post("/register", async (req, res) => {
   const isValidated = validator.createValidation(req.body);
@@ -67,9 +67,6 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    // if (req.headers.Authorization)
-    //   if (req.headers.Authorization.email === req.body.email)
-    //     return res.status(400).json({ error: "already logged in" });
     const isValidated = validator.basicValidation(req.body);
     if (isValidated.error)
       return res
@@ -93,7 +90,6 @@ router.post("/login", async (req, res) => {
           email: userWithEmail.email
         };
         const token = jwt.sign(payload, tokenKey, { expiresIn: "1h" });
-        //console.log(req.user.email);
         return res.json({ data: `Bearer ${token}` });
       } else {
         return res.status(403).json({ error: "wrong password" });
@@ -120,27 +116,41 @@ router.post(
   }
 );
 
-router.get("/:gucid", async (req, res) => {
-  try {
-    const guc_id = req.params.gucid;
-    var user = await User.findOne({ guc_id });
+router.get("/:gucid",
+  async (req, res) => {
+    try {
+      const guc_id = req.params.gucid;
+      var user = await User.findOne({ guc_id });
 
-    var userTwo;
-    if (req.user.user_id) userTwo = await User.findById(req.user.user_id);
+      if (!user)
+        return res.status(404).send({ error: "No user with this guc id" });
+      if (user.is_private)
+        return res.status(403).send({ message: "this user is private" });
 
-    if (!user)
-      return res.status(404).send({ error: "No user with this guc id" });
-    if (
-      user.is_private &&
-      (!userTwo || (!userTwo.is_admin && !userTwo.guc_id == user.guc_id))
-    )
-      return res.status(403).send({ message: "this user is private" });
+      res.json({ data: hideSecrets(user) });
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
-    res.json({ data: hideSecrets(user) });
-  } catch (error) {
-    console.log(error);
-  }
-});
+router.get("/asAdmin/:gucid",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const guc_id = req.params.gucid;
+      var user = await User.findOne({ guc_id });
+      var userTwo = req.user
+
+      if (!user)
+        return res.status(404).send({ error: "No user with this guc id" });
+      if (user.is_private && !userTwo.is_admin && user.email != userTwo.email)
+        return res.status(403).send({ message: "this user is private" });
+
+      res.json({ data: hideSecrets(user) });
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
 router.put(
   "/giveAdmin",
@@ -176,7 +186,7 @@ router.put(
 );
 
 router.put(
-  "/give_AWG_Admin",
+  "/give_awgAdmin",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
@@ -190,10 +200,13 @@ router.put(
       const userTwo = await User.findOne({ guc_id: req.body.guc_id });
 
       if (!userTwo)
-        return res.status(404).send({ error: "No user with this guc id" });
+        return res.status(404).json({ error: "No user with this guc id" });
 
       if (userOne.awg_admin === "none")
-        return res.json({ message: "cannot give his role" });
+        return res.status(403).json({ error: "this user is not an admin of any AWG" });
+
+      if (userTwo.awg_admin !== "none")
+        return res.status(403).json({ error: "that user is an admin of an AWG" });
 
       await User.updateOne(
         { guc_id: req.body.guc_id },
@@ -228,7 +241,7 @@ router.put(
 );
 //checked
 router.put(
-  "/forefitawg_Admin",
+  "/forefit_awgAdmin",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
@@ -284,10 +297,9 @@ router.put(
             updatedUser.password = hashedPassword;
           }
 
-          console.log(updatedUser);
 
           await User.findOneAndUpdate(
-            { guc_id: req.params.gucid },
+            { guc_id: guc_id },
             updatedUser,
             {
               upsert: false
@@ -329,13 +341,11 @@ router.put(
           updatedUser.password = hashedPassword;
         }
 
-        console.log(updatedUser);
-
         await User.findByIdAndUpdate(req.user, updatedUser, {
           upsert: false
         });
 
-        const userAfterUpdate = req.user;
+        const userAfterUpdate = await User.findById(req.user);
 
         return res.json({
           message: "user updated!",
@@ -348,18 +358,22 @@ router.put(
     }
   }
 );
-//:user_id
 router.delete(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      const userOne = req.user;
-
-      if (!userOne.is_admin) await User.findOneAndDelete({ guc_id });
-      else await User.findByIdAndDelete(req.user.user_id);
-
-      return res.json({ message: "user successfuly deleted" });
+      if (req.query.gucid) {
+        const userOne = req.user
+        if (!userOne.is_admin) return res.status(403).json({ error: "User is not an Admin" })
+        const userToDel = await User.findOne({ guc_id: req.query.gucid })
+        if (!userToDel) return res.status(400).json({ error: "No user with this guc id" })
+        await User.findByIdAndDelete(userToDel)
+        return res.json({ message: "User deleted!" })
+      } else {
+        await User.findByIdAndDelete(req.user)
+        return res.json({ message: "User deleted!" })
+      }
     } catch (error) {
       // We will be handling the error later
       console.log(error);
@@ -386,10 +400,10 @@ router.put("/forgotpass", (req, res) => {
     text: `Please use the following link to reset your password: localhost:3000/api/users/resetpass/${token}`,
     html: `<p>Please use the following link to reset your password:</p><p>localhost:3000/api/users/resetpass/${token}</p>`
   };
-  return User.update(
+  return User.updateOne(
     { email: req.body.email },
     { $set: { resetPassLink: token } },
-    function(error, feedback) {
+    function (error, feedback) {
       if (error) return res.send(error);
       else {
         emailer.sendEmail(emailData);
@@ -405,10 +419,10 @@ router.put("/resetpass", (req, res) => {
   const { resetPassLink, newPassword } = req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(newPassword, salt);
-  return User.update(
+  return User.updateOne(
     { resetPassLink },
     { $set: { password: hashedPassword, resetPassLink: "" } },
-    function(error, feedback) {
+    function (error, feedback) {
       if (error) return res.send(error);
       return res.send(feedback);
     }
