@@ -79,6 +79,28 @@ describe("getting all events - No token", () => {
       });
   });
 });
+describe("full text search events - No token", () => {
+  const key = {
+    //declare new club to be sent in creation
+    searchkey: `blablala 1233 ${newEvent.title} aa jsd ${
+      newEvent.description
+    } jdsj ${newEvent.brief} vcdvsjkbkjbs ${newEvent.location}`
+  };
+  // token not being sent - As its not needed
+  test("A JSON response is returned", () => {
+    return request(app)
+      .post("/api/search")
+      .send(key)
+      .then(response => {
+        expect(response.statusCode).toBe(200);
+        expect(response.type).toBe("application/json");
+        expect(response.body.events[0].title).toBe(newEvent.title);
+        expect(response.body.events[0].description).toBe(newEvent.description);
+        expect(response.body.events[0].brief).toBe(newEvent.brief);
+        expect(response.body.events[0].description).toBe(newEvent.description);
+      });
+  });
+});
 
 describe("Updating an event", () => {
   const newEventUpdate = {

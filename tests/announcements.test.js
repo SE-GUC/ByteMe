@@ -81,6 +81,24 @@ describe("getting all Announcements - No token", () => {
   });
 });
 
+describe("full text search announcements - No token", () => {
+  const key = {
+    //declare new club to be sent in creation
+    searchkey: `blablala 1233 ${newAnnouncement.info} aa vvvvgg`
+  };
+  // token not being sent - As its not needed
+  test("A JSON response is returned", () => {
+    return request(app)
+      .post("/api/search")
+      .send(key)
+      .then(response => {
+        expect(response.statusCode).toBe(200);
+        expect(response.type).toBe("application/json");
+        expect(response.body.announcements[0].info).toBe(newAnnouncement.info);
+      });
+  });
+});
+
 describe("Updating the Announcement", () => {
   const newAnnouncementUpdate = {
     //declare new Announcement to be sent in creation
