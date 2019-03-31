@@ -2,22 +2,75 @@ const request = require("supertest");
 const app = require("../index.js"); // the express server
 
 jest.setTimeout(30000); //setting timeout to 30 seconds instead of the 5 default 3shan el net 5ara fel gam3a
+let token;
+let token2; //for the member management, needs council admin
 
 const newPage = {
   //declare new product to be sent in creation
-  name: "commitee",
-  role_to_control: "commitees",
+  name: "security_council",
+  role_to_control: "council",
   description: "shshsh"
 };
 
 let createdPageID;
 let addMemberID;
+beforeAll(done => {
+  request(app)
+    .post("/api/users/login")
+    .send({
+      email: "ahn@gmail.com",
+      password: "AaAA8532a"
+    })
+    .end((err, response) => {
+      token2 = response.body.data;
+    });
+
+  request(app)
+    .post("/api/users/login")
+    .send({
+      email: "ahabaa@gmail.com",
+      password: "AaAA8532a"
+    })
+    .end((err, response) => {
+      token = response.body.data;
+      done();
+    });
+});
+
+afterAll(done => {
+  //logout
+  done();
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+describe("Creating Page", () => {
+  test("It should require authorization", () => {
+    return request(app)
+      .post("/api/page")
+      .send(newPage)
+      .then(response => {
+        expect(response.statusCode).toBe(401);
+      });
+  });
+  test("It responds with a JSON - Created successfully", () => {
+    return request(app)
+      .post("/api/page")
+      .send(newPage)
+      .set("Authorization", `${token}`)
+      .then(response => {
+        expect(response.statusCode).toBe(200);
+        expect(response.type).toBe("application/json");
+        expect(response.body.msg).toBe("Page was created successfully");
+        createdPageID = response.body.data._id;
+      });
+  });
+});
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 describe("getting a specific Page - The one that's just been created", () => {
-  // token not being sent - As its not needed
   test("Find specific product by name - No token", () => {
     return request(app)
-      .get("/api/page/5c92c3bbed27c105bcda5966/")
+      .get("/api/page/" + createdPageID + "/")
       .then(response => {
         expect(response.statusCode).toBe(200);
         expect(response.body.data[0].name).toBe("security_council");
@@ -26,113 +79,43 @@ describe("getting a specific Page - The one that's just been created", () => {
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////
 describe("getting all pages - No token", () => {
-  // token not being sent - As its not needed
   test("A JSON response is returned", () => {
     return request(app)
       .get("/api/page/")
       .then(response => {
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
-        expect(response.body.data.length).toEqual(1);
       });
   });
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 describe("getting all events pages - No token", () => {
-  // token not being sent - As its not needed
   test("A JSON response is returned", () => {
     return request(app)
-      .get("/api/page/5c92c3bbed27c105bcda5966/events/")
+      .get("/api/page/" + createdPageID + "/events/")
       .then(response => {
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
-        expect(response.body.data.length).toEqual(0);
       });
   });
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 describe("getting all members pages - No token", () => {
-  // token not being sent - As its not needed
   test("A JSON response is returned", () => {
     return request(app)
-      .get("/api/page/5c92c3bbed27c105bcda5966/members/")
+      .get("/api/page/" + createdPageID + "/members/")
       .then(response => {
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
-        expect(response.body.data.length).toEqual(0);
-      });
-  });
-});
-////////////////////////////////////////////////////////////////////////////////////////////////////
-describe("Creating Page", () => {
-  // token not being sent - should respond with a 401
-  var token;
-  beforeAll(done => {
-    request(app)
-      .post("/api/users/login")
-      .send({
-        email: "ahabaa@gmail.com",
-        password: "AaAA8532a"
-      })
-      .end((err, response) => {
-        token = response.body.data; // save the token!
-        done();
-      });
-  });
-
-  afterAll(done => {
-    //logout
-    done();
-  });
-
-  test("It should require authorization", () => {
-    return request(app)
-      .post("/api/page")
-      .send(newPage)
-      .then(response => {
-        expect(response.statusCode).toBe(401);
-      });
-  });
-  // send the token - should respond with a 200
-  test("It responds with a JSON - Created successfully", () => {
-    return request(app)
-      .post("/api/page")
-      .send(newPage)
-      .set("Authorization", `${token}`)
-      .then(response => {
-        createdPageID = response.body.data._id;
-        expect(response.statusCode).toBe(200);
-        expect(response.type).toBe("application/json");
-        expect(response.body.msg).toBe("Page was created successfully");
       });
   });
 });
 
+///////////////////////////////////////////////////////////////////////////////////////////////
 describe("Updating the page", () => {
-  var token;
-  beforeAll(done => {
-    request(app)
-      .post("/api/users/login")
-      .send({
-        email: "ahabaa@gmail.com",
-        password: "AaAA8532a"
-      })
-      .end((err, response) => {
-        token = response.body.data; // save the token!
-        done();
-      });
-  });
-
-  afterAll(done => {
-    //logout
-    done();
-  });
-
   const newPageUpdate = {
-    //declare new product to be sent in creation
     description: "updatedDescription"
   };
-  // token not being sent - should respond with a 401
   test("It should require authorization", () => {
     return request(app)
       .put("/api/page/" + createdPageID)
@@ -141,7 +124,6 @@ describe("Updating the page", () => {
         expect(response.statusCode).toBe(401);
       });
   });
-  // send the token - should respond with a 200
   test("It responds with a JSON - Page updated", () => {
     return request(app)
       .put("/api/page/" + createdPageID)
@@ -155,88 +137,25 @@ describe("Updating the page", () => {
   });
 });
 
-describe("Deleting a Page", () => {
-  // token not being sent - should respond with a 401
-  var token;
-  beforeAll(done => {
-    request(app)
-      .post("/api/users/login")
-      .send({
-        email: "ahabaa@gmail.com",
-        password: "AaAA8532a"
-      })
-      .end((err, response) => {
-        token = response.body.data; // save the token!
-        done();
-      });
-  });
-
-  afterAll(done => {
-    //logout
-    done();
-  });
-
-  test("It should require authorization", () => {
-    return request(app)
-      .delete("/api/page/" + createdPageID)
-      .then(response => {
-        expect(response.statusCode).toBe(401);
-      });
-  });
-  // send the token - should respond with a 200
-  test("It responds with a JSON - Page Deleted", () => {
-    return request(app)
-      .delete("/api/page/" + createdPageID)
-      .set("Authorization", `${token}`)
-      .then(response => {
-        createdPageID = response.body.data._id;
-        expect(response.statusCode).toBe(200);
-        expect(response.type).toBe("application/json");
-        expect(response.body.msg).toBe("Page was deleted successfully");
-      });
-  });
-});
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 describe("add member , set role , delete this memeber", () => {
-  // token not being sent - should respond with a 401
-  var token;
-  beforeAll(done => {
-    request(app)
-      .post("/api/users/login")
-      .send({
-        email: "ahn@gmail.com",
-        password: "AaAA8532a"
-      })
-      .end((err, response) => {
-        token = response.body.data; // save the token!
-        done();
-      });
-  });
-
-  afterAll(done => {
-    //logout
-    done();
-  });
-
   const newID = {
-    //declare new product to be sent in creation
     guc_id: "40-8752"
   };
 
   test("It should require authorization", () => {
     return request(app)
-      .post("/api/page/5c92c3bbed27c105bcda5966/members")
+      .post("/api/page/" + createdPageID + "/members")
       .send(newID)
       .then(response => {
         expect(response.statusCode).toBe(401);
       });
   });
-  // send the token - should respond with a 200
   test("It responds with a JSON - Created successfully", () => {
     return request(app)
-      .post("/api/page/5c92c3bbed27c105bcda5966/members")
+      .post("/api/page/" + createdPageID + "/members")
       .send(newID)
-      .set("Authorization", `${token}`)
+      .set("Authorization", `${token2}`)
       .then(response => {
         addMemberID = response.body.data;
         expect(response.statusCode).toBe(200);
@@ -247,18 +166,17 @@ describe("add member , set role , delete this memeber", () => {
 
   test("It should require authorization", () => {
     return request(app)
-      .put("/api/page/5c92c3bbed27c105bcda5966/members/set_role")
+      .put("/api/page/" + createdPageID + "/members/set_role")
       .send(newID)
       .then(response => {
         expect(response.statusCode).toBe(401);
       });
   });
-  // send the token - should respond with a 200
   test("It responds with a JSON - Created successfully", () => {
     return request(app)
-      .put("/api/page/5c92c3bbed27c105bcda5966/members/set_role")
+      .put("/api/page/" + createdPageID + "/members/set_role")
       .send(newID)
-      .set("Authorization", `${token}`)
+      .set("Authorization", `${token2}`)
       .then(response => {
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
@@ -269,27 +187,43 @@ describe("add member , set role , delete this memeber", () => {
   test("It should require authorization", () => {
     return request(app)
       .delete(
-        "/api/page/5c92c3bbed27c105bcda5966/members/" +
-          addMemberID +
-          "/40-8752/"
+        "/api/page/" + createdPageID + "/members/" + addMemberID + "/40-8752/"
       )
       .then(response => {
         expect(response.statusCode).toBe(401);
       });
   });
-  // send the token - should respond with a 200
   test("It responds with a JSON - Page Deleted", () => {
     return request(app)
       .delete(
-        "/api/page/5c92c3bbed27c105bcda5966/members/" +
-          addMemberID +
-          "/40-8752/"
+        "/api/page/" + createdPageID + "/members/" + addMemberID + "/40-8752/"
       )
-      .set("Authorization", `${token}`)
+      .set("Authorization", `${token2}`)
       .then(response => {
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
         expect(response.body.msg).toBe("Members was deleted successfully");
+      });
+  });
+});
+////////////////////////////////////////////////////////////////////
+describe("Deleting a Page", () => {
+  test("It should require authorization", () => {
+    return request(app)
+      .delete("/api/page/" + createdPageID)
+      .then(response => {
+        expect(response.statusCode).toBe(401);
+      });
+  });
+  test("It responds with a JSON - Page Deleted", () => {
+    return request(app)
+      .delete("/api/page/" + createdPageID)
+      .set("Authorization", `${token}`)
+      .then(response => {
+        createdPageID = response.body.data._id;
+        expect(response.statusCode).toBe(200);
+        expect(response.type).toBe("application/json");
+        expect(response.body.msg).toBe("Page was deleted successfully");
       });
   });
 });
