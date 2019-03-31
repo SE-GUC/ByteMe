@@ -82,16 +82,17 @@ router.post(
     try {
       const userOne = req.user;
       const id = req.params.id;
-      var page = await Page.find({ id });
+      var page = await Page.findById(id);
 
       if (
         !(userOne.mun_role === "secretary_office") &&
         !(userOne.mun_role === page.role_to_control) &&
         !(userOne.mun_role === page.name)
-      )
+      ) {
         return res.json({
           msg: "Only MUN admins can add members to this entity"
         });
+      }
 
       const guc_id = req.body.guc_id;
       const user = await User.findOne({ guc_id: guc_id });
@@ -102,11 +103,11 @@ router.post(
       if (isValidated.error)
         return res.json({ msg: "validations not satisfied" });
 
-      const y = await Page.update(
+      const y = await Page.updateOne(
         { _id: id },
         { $push: { members: [req.body] } }
       ).exec();
-      var page1 = await Page.find({ id });
+      var page1 = await Page.findById(id);
       var x = page1.members[0]._id;
       res.json({ msg: "Member was added successfully", data: x });
     } catch (error) {
@@ -127,7 +128,7 @@ router.put(
 
     const userOne = req.user;
     const id = req.params.id;
-    var page = await Page.find({ id });
+    var page = await Page.findById(id);
 
     const guc_id = req.body.guc_id;
     const user = await User.findOne({ guc_id: req.body.guc_id });
@@ -161,7 +162,7 @@ router.put(
     try {
       const userOne = req.user;
       const id = req.params.id;
-      var page = await Page.find({ id });
+      var page = await Page.findById(id);
 
       if (
         !(userOne.mun_role === "secretary_office") &&
@@ -223,7 +224,7 @@ router.delete(
 
       const userOne = req.user;
       const id = req.params.id;
-      var page = await Page.find({ id });
+      var page = await Page.findById(id);
 
       if (
         !(userOne.mun_role === "secretary_office") &&
@@ -246,7 +247,7 @@ router.delete(
       );
 
       const id1 = req.params.id1;
-      Page.update({ _id: id }, { $pull: { members: { _id: id1 } } }).exec();
+      Page.updateOne({ _id: id }, { $pull: { members: { _id: id1 } } }).exec();
       res.json({ msg: "Members was deleted successfully" });
     } catch (error) {
       // We will be handling the error later
