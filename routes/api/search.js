@@ -20,19 +20,16 @@ router.post("/", async (req, res) => {
       { score: { $meta: "textScore" } }
     ).sort({ score: { $meta: "textScore" } });
 
-    console.log(clubs_responded_to_keyword);
     const events_responded_to_keyword = await Event.find(
       { $text: { $search: req.body.searchkey } },
       { score: { $meta: "textScore" } }
     ).sort({ score: { $meta: "textScore" } });
 
-    console.log(events_responded_to_keyword);
     const announcements_responded_to_keyword = await Announcement.find(
       { $text: { $search: req.body.searchkey } },
       { score: { $meta: "textScore" } }
     ).sort({ score: { $meta: "textScore" } });
 
-    console.log(announcements_responded_to_keyword);
     const users_responded_to_keyword = await User.find(
       { $text: { $search: req.body.searchkey } },
       { score: { $meta: "textScore" } }
@@ -49,7 +46,9 @@ router.post("/", async (req, res) => {
       announcements_responded_to_keyword.length === 0 &&
       users_responded_to_keyword_filtered.length === 0
     )
-      return res.json({ message: "No relevant data. Try searching with another keyword" });
+      return res.json({
+        message: "No relevant data. Try searching with another keyword"
+      });
     else
       res.json({
         clubs: clubs_responded_to_keyword,
@@ -58,7 +57,6 @@ router.post("/", async (req, res) => {
         users: users_responded_to_keyword_filtered
       });
   } catch (error) {
-    // We will be handling the error later
     console.log(error);
   }
 });
