@@ -47,9 +47,9 @@ router.post("/", async (req, res) => {
       clubs_responded_to_keyword.length === 0 &&
       events_responded_to_keyword.length === 0 &&
       announcements_responded_to_keyword.length === 0 &&
-      users_responded_to_keyword.length === 0
+      users_responded_to_keyword_filtered.length === 0
     )
-      return res.send("No relevant data. Try searching with another keyword");
+      return res.json({ message: "No relevant data. Try searching with another keyword" });
     else
       res.json({
         clubs: clubs_responded_to_keyword,
