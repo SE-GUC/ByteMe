@@ -24,8 +24,8 @@ router.get("/:id", async (request, response) => {
 //test done
 router.get("/:id/events", async (req, res) => {
   try {
-    var page = await Page.findById(req.params.id);
-
+    const id = req.params.id;
+    var page = await Page.find({ id });
     const events = await Event.find({ creator: page.name });
     res.json({ data: events });
   } catch (error) {
@@ -38,7 +38,7 @@ router.get("/:id/events", async (req, res) => {
 router.get("/:id/members", async (req, res) => {
   try {
     const id = req.params.id;
-    const page = await Page.findById(id);
+    const page = await Page.find({ id });
     res.json({ data: page.members });
   } catch (error) {
     // We will be handling the error later
@@ -81,8 +81,8 @@ router.post(
   async (req, res) => {
     try {
       const userOne = req.user;
-
-      var page = await Page.findById(req.params.id);
+      const id = req.params.id;
+      var page = await Page.find({ id });
 
       if (
         !(userOne.mun_role === "secretary_office") &&
@@ -102,12 +102,11 @@ router.post(
       if (isValidated.error)
         return res.json({ msg: "validations not satisfied" });
 
-      const id = req.params.id;
       const y = await Page.update(
         { _id: id },
         { $push: { members: [req.body] } }
       ).exec();
-      var page1 = await Page.findById(req.params.id);
+      var page1 = await Page.find({ id });
       var x = page1.members[0]._id;
       res.json({ msg: "Member was added successfully", data: x });
     } catch (error) {
@@ -127,8 +126,8 @@ router.put(
     //   return res.json({ message: "You are not logged in" });
 
     const userOne = req.user;
-
-    var page = await Page.findById(req.params.id);
+    const id = req.params.id;
+    var page = await Page.find({ id });
 
     const guc_id = req.body.guc_id;
     const user = await User.findOne({ guc_id: req.body.guc_id });
@@ -161,8 +160,8 @@ router.put(
   async (req, res) => {
     try {
       const userOne = req.user;
-
-      var page = await Page.findById(req.params.id);
+      const id = req.params.id;
+      var page = await Page.find({ id });
 
       if (
         !(userOne.mun_role === "secretary_office") &&
@@ -223,8 +222,8 @@ router.delete(
       //   return res.json({ message: "You are not logged in" });
 
       const userOne = req.user;
-
-      var page = await Page.findById(req.params.id);
+      const id = req.params.id;
+      var page = await Page.find({ id });
 
       if (
         !(userOne.mun_role === "secretary_office") &&
@@ -246,7 +245,6 @@ router.delete(
         { upsert: false }
       );
 
-      const id = req.params.id;
       const id1 = req.params.id1;
       Page.update({ _id: id }, { $pull: { members: { _id: id1 } } }).exec();
       res.json({ msg: "Members was deleted successfully" });
