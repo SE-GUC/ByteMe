@@ -27,7 +27,7 @@ afterAll(done => {
 
 const newAnnouncement = {
   //declare new Announcement to be sent in creation
-  date: "2019-09-08",
+  date: "2019-09-08T00:00:00.000Z",
   info: "here's my Announcement test"
 };
 let createdAnnouncementID; //declare the new Announcement ID variable in a scope accessible by test suite for the specific find function and to be deleted.
@@ -84,7 +84,7 @@ describe("getting all Announcements - No token", () => {
 describe("Updating the Announcement", () => {
   const newAnnouncementUpdate = {
     //declare new Announcement to be sent in creation
-    date: "2018-09-08",
+    date: "2018-07-09T00:00:00.000Z",
     info: "here's my updated Announcement test"
   };
   // token not being sent - should respond with a 401
@@ -108,18 +108,17 @@ describe("Updating the Announcement", () => {
         expect(response.body.msg).toBe("Announcement updated successfully");
       });
   });
-  //Can be restored if test DB is implemented and not testing on prod
 
   //Check everything has actually been updated
-  //   test("Everything has actually been updated", () => {
-  //     return request(app)
-  //       .get("/api/announcements/" + createdAnnouncementID)
-  //       .then(response => {
-  //         expect(response.statusCode).toBe(200);
-  //         expect(response.body.data[0].info).toEqual(newAnnouncementUpdate.info);
-  //         expect(response.body.data[0].date).toEqual(newAnnouncementUpdate.date);
-  //       });
-  //   });
+  test("Everything has actually been updated", () => {
+    return request(app)
+      .get("/api/announcements/" + createdAnnouncementID)
+      .then(response => {
+        expect(response.statusCode).toBe(200);
+        expect(response.body.data[0].info).toEqual(newAnnouncementUpdate.info);
+        expect(response.body.data[0].date).toEqual(newAnnouncementUpdate.date);
+      });
+  });
 });
 
 describe("Deleting an Announcement", () => {
