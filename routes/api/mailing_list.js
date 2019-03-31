@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 
     const newMailinglist = await Mailing_list.create(req.body);
 
-    res.json({ data: newMailinglist });
+    res.json({ msg: "Subscribed successfully", data: newMailinglist });
   } catch (error) {
     // We will be handling the error later
 
