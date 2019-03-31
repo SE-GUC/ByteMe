@@ -204,7 +204,7 @@ describe("add member , set role , delete this memeber", () => {
     request(app)
       .post("/api/users/login")
       .send({
-        email: "ahnad@gmail.com",
+        email: "ahn@gmail.com",
         password: "AaAA8532a"
       })
       .end((err, response) => {
