@@ -116,30 +116,30 @@ router.post(
   }
 );
 
-router.get("/:gucid",
-  async (req, res) => {
-    try {
-      const guc_id = req.params.gucid;
-      var user = await User.findOne({ guc_id });
+router.get("/:gucid", async (req, res) => {
+  try {
+    const guc_id = req.params.gucid;
+    var user = await User.findOne({ guc_id });
 
-      if (!user)
-        return res.status(404).send({ error: "No user with this guc id" });
-      if (user.is_private)
-        return res.status(403).send({ message: "this user is private" });
+    if (!user)
+      return res.status(404).send({ error: "No user with this guc id" });
+    if (user.is_private)
+      return res.status(403).send({ message: "this user is private" });
 
-      res.json({ data: hideSecrets(user) });
-    } catch (error) {
-      console.log(error);
-    }
-  });
+    res.json({ data: hideSecrets(user) });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-router.get("/asAdmin/:gucid",
+router.get(
+  "/asAdmin/:gucid",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
       const guc_id = req.params.gucid;
       var user = await User.findOne({ guc_id });
-      var userTwo = req.user
+      var userTwo = req.user;
 
       if (!user)
         return res.status(404).send({ error: "No user with this guc id" });
@@ -150,7 +150,8 @@ router.get("/asAdmin/:gucid",
     } catch (error) {
       console.log(error);
     }
-  });
+  }
+);
 
 router.put(
   "/giveAdmin",
@@ -203,10 +204,14 @@ router.put(
         return res.status(404).json({ error: "No user with this guc id" });
 
       if (userOne.awg_admin === "none")
-        return res.status(403).json({ error: "this user is not an admin of any AWG" });
+        return res
+          .status(403)
+          .json({ error: "this user is not an admin of any AWG" });
 
       if (userTwo.awg_admin !== "none")
-        return res.status(403).json({ error: "that user is an admin of an AWG" });
+        return res
+          .status(403)
+          .json({ error: "that user is an admin of an AWG" });
 
       await User.updateOne(
         { guc_id: req.body.guc_id },
@@ -297,14 +302,9 @@ router.put(
             updatedUser.password = hashedPassword;
           }
 
-
-          await User.findOneAndUpdate(
-            { guc_id: guc_id },
-            updatedUser,
-            {
-              upsert: false
-            }
-          );
+          await User.findOneAndUpdate({ guc_id: guc_id }, updatedUser, {
+            upsert: false
+          });
 
           const userAfterUpdate = await User.findOne({ guc_id: guc_id });
 
@@ -364,15 +364,17 @@ router.delete(
   async (req, res) => {
     try {
       if (req.query.gucid) {
-        const userOne = req.user
-        if (!userOne.is_admin) return res.status(403).json({ error: "User is not an Admin" })
-        const userToDel = await User.findOne({ guc_id: req.query.gucid })
-        if (!userToDel) return res.status(400).json({ error: "No user with this guc id" })
-        await User.findByIdAndDelete(userToDel)
-        return res.json({ message: "User deleted!" })
+        const userOne = req.user;
+        if (!userOne.is_admin)
+          return res.status(403).json({ error: "User is not an Admin" });
+        const userToDel = await User.findOne({ guc_id: req.query.gucid });
+        if (!userToDel)
+          return res.status(400).json({ error: "No user with this guc id" });
+        await User.findByIdAndDelete(userToDel);
+        return res.json({ message: "User deleted!" });
       } else {
-        await User.findByIdAndDelete(req.user)
-        return res.json({ message: "User deleted!" })
+        await User.findByIdAndDelete(req.user);
+        return res.json({ message: "User deleted!" });
       }
     } catch (error) {
       // We will be handling the error later
@@ -403,7 +405,7 @@ router.put("/forgotpass", (req, res) => {
   return User.updateOne(
     { email: req.body.email },
     { $set: { resetPassLink: token } },
-    function (error, feedback) {
+    function(error, feedback) {
       if (error) return res.send(error);
       else {
         emailer.sendEmail(emailData);
@@ -422,7 +424,7 @@ router.put("/resetpass", (req, res) => {
   return User.updateOne(
     { resetPassLink },
     { $set: { password: hashedPassword, resetPassLink: "" } },
-    function (error, feedback) {
+    function(error, feedback) {
       if (error) return res.send(error);
       return res.send(feedback);
     }
