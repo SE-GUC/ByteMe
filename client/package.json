@@ -11,7 +11,8 @@
     "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettify": "prettier --write \"**/*.js\" && prettier --write \"**/*.css\" && prettier --write \"**/*.html\""
   },
   "eslintConfig": {
     "extends": "react-app"
