@@ -1,29 +1,31 @@
-const Joi = require('joi')
-
+const Joi = require("joi");
 
 module.exports = {
-    createValidation: request => {
+  createValidation: request => {
+    const createSchema = {
+      Question: Joi.string()
+        .min(3)
+        .max(500)
+        .required(),
+      Answer: Joi.string()
+        .min(3)
+        .max(500)
+        .required()
+    };
 
+    return Joi.validate(request, createSchema);
+  },
 
-        const createSchema = {
-            Question: Joi.string().min(3).max(500).required(),
-            Answer: Joi.string().min(3).max(500).required()
+  updateValidation: request => {
+    const updateSchema = {
+      Question: Joi.string()
+        .min(3)
+        .max(500),
+      Answer: Joi.string()
+        .min(3)
+        .max(500)
+    };
 
-
-        }
-
-        return Joi.validate(request, createSchema)
-    },
-
-
-    updateValidation: request => {
-        const updateSchema = {
-            Question: Joi.string().min(3).max(500),
-            Answer: Joi.string().min(3).max(500)
-
-
-        }
-
-        return Joi.validate(request, updateSchema)
-    },
-}
+    return Joi.validate(request, updateSchema);
+  }
+};

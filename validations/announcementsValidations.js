@@ -1,28 +1,26 @@
-const Joi = require('joi')
-
+const Joi = require("joi");
 
 module.exports = {
-    createValidation: request => {
+  createValidation: request => {
+    const createSchema = {
+      date: Joi.date(),
+      info: Joi.string()
+        .min(3)
+        .max(500)
+        .required()
+    };
 
-        const createSchema = {
-            date: Joi.date(),
-            info: Joi.string().min(3).max(500).required()
+    return Joi.validate(request, createSchema);
+  },
 
+  updateValidation: request => {
+    const updateSchema = {
+      date: Joi.date(),
+      info: Joi.string()
+        .min(3)
+        .max(500)
+    };
 
-        }
-
-        return Joi.validate(request, createSchema)
-    },
-
-
-    updateValidation: request => {
-        const updateSchema = {
-            date: Joi.date(),
-            info: Joi.string().min(3).max(500)
-
-
-        }
-
-        return Joi.validate(request, updateSchema)
-    },
-}
+    return Joi.validate(request, updateSchema);
+  }
+};
