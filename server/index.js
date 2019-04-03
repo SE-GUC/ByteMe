@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
-
 // Require Router Handlers
 const users = require("./routes/api/users");
 const events = require("./routes/api/events");
@@ -30,6 +29,11 @@ mongoose
   .catch(err => console.log(err));
 
 // Init middleware
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
