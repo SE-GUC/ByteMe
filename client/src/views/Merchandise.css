@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+productgroup {
+  display: flex;
+}
+h1 {
+  font-family: GothamBook;
+  text-align: center;
+}
+Product {
+  margin: 8px;
+}
+merchandise {
+  margin: 15px;
+}
