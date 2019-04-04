@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+﻿import React, { Component } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -11,7 +11,7 @@ import { Navbar } from "react-bootstrap";
 
 import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
-import Login from "./views/Login"
+//import Login from "./views/Login"
 import HeaderNavbar from "./components/HeaderNavbar";
 
 class App extends Component {
@@ -30,7 +30,6 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={withRouter(Home)} />
             <Route exact path="/home" component={withRouter(Home)} />
-            <Route exact path="/login" component={withRouter(Login)} />
             <Route exact path="/merchandise" component={withRouter(Merchandise)} />
           </Switch>
         </Router>
