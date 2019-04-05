@@ -132,6 +132,16 @@ router.get("/:gucid", async (req, res) => {
   }
 });
 
+router.get("/profile",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      res.json({ data: hideSecrets(req.user) });
+    } catch (err) {
+      console.log(error);
+    }
+  });
+
 router.get(
   "/asAdmin/:gucid",
   passport.authenticate("jwt", { session: false }),
@@ -405,7 +415,7 @@ router.put("/forgotpass", (req, res) => {
   return User.updateOne(
     { email: req.body.email },
     { $set: { resetPassLink: token } },
-    function(error, feedback) {
+    function (error, feedback) {
       if (error) return res.send(error);
       else {
         emailer.sendEmail(emailData);
@@ -424,7 +434,7 @@ router.put("/resetpass", (req, res) => {
   return User.updateOne(
     { resetPassLink },
     { $set: { password: hashedPassword, resetPassLink: "" } },
-    function(error, feedback) {
+    function (error, feedback) {
       if (error) return res.send(error);
       return res.send(feedback);
     }
