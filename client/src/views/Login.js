@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Form, Button, Alert } from "react-bootstrap"
 import API from "../utils/API";
+import Auth from "../utils/Auth";
 
-class Merchandise extends Component {
+class Login extends Component {
     constructor(props) {
         super(props);
 
@@ -13,6 +14,10 @@ class Merchandise extends Component {
             message: ""
         }
 
+        this.routeCahnge = (path) => {
+            this.props.history.push(path)
+        }
+
         this.login = () => {
             console.log(this.state)
             API.post("users/login", {
@@ -20,21 +25,12 @@ class Merchandise extends Component {
                 password: this.state.password
             })
                 .then(res => {
-                    console.log(res)
-                    if (res.data.error) {
-                        this.setState(
-                            {
-                                error: res.data.error,
-                                message: ""
-                            }
-                        )
-                    }
-                    if (res.data.data) {
-                        this.setState({
-                            message: "Logged In!",
-                            error: ""
-                        })
-                    }
+                    this.setState({
+                        message: "Logged In!",
+                        error: ""
+                    })
+                    Auth.authenticateUser(res.data)
+                    this.context.router.replace("/")
                 })
                 .catch(err => {
                     console.log(err)
@@ -89,4 +85,4 @@ class Merchandise extends Component {
     }
 }
 
-export default Merchandise;
+export default Login;
