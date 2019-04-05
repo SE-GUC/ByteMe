@@ -44,7 +44,7 @@ describe("Creating an Event", () => {
         expect(response.statusCode).toBe(401);
       });
   });
-  test("It responds with a JSON - Created successfully", () => {
+  test("It responds with a JSON - Event was created successfully", () => {
     return request(app)
       .post("/api/events/addevent")
       .send(newEvent)
@@ -170,7 +170,9 @@ describe("Adding a photo to existing event - The one just created, and getting i
         expect(response.body.data.link).toBe(photoToBeAdded.link);
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
-        expect(response.body.msg).toBe("Photo added successfully");
+        expect(response.body.msg).toBe(
+          "Photo added to this event successfully"
+        );
       });
   });
   test("Photo exists when getting photos of the event - no token", () => {

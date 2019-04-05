@@ -1,92 +1,78 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const passport = require("passport");
 const Event = require("../../models/Event");
 const validator = require("../../validations/eventValidations");
-const User = require("../../models/User").model;
 const Page = require("../../models/Page");
-
-//getting all events & finally checked
+//get all events
 router.get("/", async (req, res) => {
   const events = await Event.find();
   res.json({ data: events });
 });
-// checked  certain events & finally checked
+//get event by id
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.find({ _id: id });
+    const event = await Event.findById(id);
     if (!event) return res.json({ message: "Event does not exist" });
-
     res.json({ msg: "Event data", data: event });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
   }
 });
-// get feedbacks of certain event & checked
+// get all feedbacks of certain event by id
 router.get("/:id/viewfeedback", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.findById({ _id: id });
-    res.json({ msg: "Event feedback", data: event.feedback });
+    const event = await Event.findById(id);
+    res.json({ data: event.feedback });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
   }
 });
-
-// get photos of certain event & checked
+// get all photos of certain event by id
 router.get("/:id/viewphotos", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.findById({ _id: id });
+    const event = await Event.findById(id);
     res.json({ data: event.photos });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
   }
 });
-// Create an event && checked//
+
+// admins create event
 router.post(
   "/addevent",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // if (!req.session.user_id)
-      //   return res.json({ message: "You are not logged in" });
-
       const userOne = req.user;
-
       if (
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
         const isValidated = validator.createValidation(req.body);
         if (isValidated.error)
-          return res.json({ message: "val not satisfied" });
+          return res.json({ message: "validations not satisfied" });
         const newEvent = await Event.create(req.body);
         res.json({ msg: "Event was created successfully", data: newEvent });
       } else {
         const page = await Page.findOne({ name: req.body.creator });
-
-        if (!page)
-          return res.json({
-            message: "Only admins can create events",
-            data: req.body
-          });
-
+        if (!page) return res.json({ message: "Page not found" });
         if (
           !(userOne.mun_role == page.role_to_control) &&
           !(userOne.mun_role == req.body.creator)
         )
-          return res.json({ msg: "Event cannot not be added successfully" });
+          return res.json({ msg: "Only authorized admins can create events" });
         const isValidated = validator.createValidation(req.body);
         if (isValidated.error)
-          return res.json({ message: "val not satisfied" });
+          return res.json({ message: "validations not satisfied" });
         const newEvent = await Event.create(req.body);
-        res.json({ msg: "Event was created successfully", data: req });
+        res.json({ msg: "Event was created successfully", data: newEvent });
       }
     } catch (error) {
       // We will be handling the error later
@@ -94,70 +80,83 @@ router.post(
     }
   }
 );
-// done & checked
+// anonymously post feedback on event by id
 router.post("/:id/addfeedback", async (req, res) => {
   try {
     const id = req.params.id;
-
     const isValidated = validator.createFeedbackValidation(req.body);
-    if (isValidated.error) return res.json({ message: "no validations" });
-    const f = Event.updateOne(
+    if (isValidated.error) return res.json({ message: "Validations not met" });
+    const f = Event.update(
       { _id: id },
       { $push: { feedback: [req.body] } }
     ).exec();
-    return res.json({
-      msg: "Feedback was created successfully",
-      data: req.body
+    var count = 0;
+    var rating = 0;
+    var event = await Event.findById(id);
+    event.feedback.forEach(value => {
+      rating += value.rating;
+      count += 1;
     });
+    rating += Number(req.body.rating);
+    count += 1;
+    console.log(rating);
+    console.log(count);
+    const result = rating / count;
+    console.log(result);
+    const e = await Event.findByIdAndUpdate(
+      id,
+      { rating: result },
+      { upsert: false }
+    );
+    return res.json({ msg: "Feedback was created successfully", data: f });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
   }
 });
-
-//add photo check done
+//admins post photo to event by id
 router.post(
   "/:id/addphoto",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // if (!req.session.user_id)
-      //   return res.json({ message: "You are not logged in" });
-
       const id = req.params.id;
       const userOne = req.user;
-
       if (
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
         const isValidated = validator.photoValidation(req.body);
-        if (isValidated.error) return res.json({ msg: "vaidations error" });
-        const e = Event.updateOne(
+        if (isValidated.error) return res.json({ msg: "Validations not met" });
+        const e = Event.update(
           { _id: id },
           { $push: { photos: [req.body] } }
         ).exec();
-        return res.json({ msg: "Photo added successfully", data: req.body });
+        return res.json({ msg: "Photo added successfully", data: e });
       } else {
         const event = await Event.findById(id);
         const page = await Page.findOne({ name: event.creator });
         if (!page)
           return res.json({
-            message: "Only admins can delete this event photos"
+            message: "Only admins can post photos to this event"
           });
-
         if (
           !(userOne.mun_role == page.role_to_control) &&
           !(userOne.mun_role == event.creator)
         )
-          return res.json({ msg: "Photo cannot not be successfully" });
+          return res.json({
+            msg: "Only authorized admins can post photos to this event"
+          });
         const isValidated = validator.photoValidation(req.body);
-        if (isValidated.error) return res.json({ msg: "validations error" });
-        const e = Event.updateOne(
+        if (isValidated.error) return res.json({ msg: "Validations not met" });
+        const e = Event.update(
           { _id: id },
           { $push: { photos: [req.body] } }
         ).exec();
-        return res.json({ msg: "Photo added successfully", data: req.body });
+        return res.json({
+          msg: "Photo added to this event successfully",
+          data: e
+        });
       }
     } catch (error) {
       // We will be handling the error later
@@ -165,26 +164,20 @@ router.post(
     }
   }
 );
-///////////////////////
-
-/////////////////////// Update event done && checked
+//admin Update event by id
 router.put(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // if (!req.session.user_id)
-      //   return res.json({ message: "You are not logged in" });
-
       const id = req.params.id;
       const userOne = req.user;
-
       if (
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
         const isValidated = validator.updateValidation(req.body);
-        if (isValidated.error) return res.json({ msg: "val 1" });
+        if (isValidated.error) return res.json({ msg: "Validations not met" });
         const updatedEvent = await Event.updateOne(req.body);
         return res.json({
           msg: "Event updated successfully",
@@ -193,16 +186,16 @@ router.put(
       } else {
         const event = await Event.findById(id);
         const page = await Page.findOne({ name: event.creator });
-
-        if (!page) return res.json({ msg: "page not found" });
-
+        if (!page) return res.json({ msg: "Page not found" });
         if (
           !(userOne.mun_role == page.role_to_control) &&
           !(userOne.mun_role == event.creator)
         )
-          return res.json({ msg: "Event cannot be updated successfully" });
+          return res.json({
+            msg: "Only authorized admins can update this event"
+          });
         const isValidated = validator.updateValidation(req.body);
-        if (isValidated.error) return res.json({ msg: "val 2" });
+        if (isValidated.error) return res.json({ msg: "Validations not met" });
         const updatedEvent = await Event.updateOne(req.body);
         res.json({ msg: "Event updated successfully", data: updatedEvent });
       }
@@ -212,41 +205,36 @@ router.put(
     }
   }
 );
-////////////////////
-
-////////////////////delete event & checked
+//admins delete event by id
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // if (!req.session.user_id)
-      //   return res.json({ message: "You are not logged in" });
-
       const id = req.params.id;
-      //const id1 = req.params.id1;
       const userOne = req.user;
-
       if (
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
-        const deletedEvent = await Event.findByIdAndRemove({ _id: id });
+        const deletedEvent = await Event.findByIdAndRemove(id);
         res.json({ msg: "Event was deleted successfully", data: deletedEvent });
       } else {
         const event = await Event.findById(id);
         const page = await Page.findOne({ name: event.creator });
-
         if (!page)
-          return res.json({ message: "Only admins can delete this event " });
-
+          return res.json({
+            message: "Page not found"
+          });
         if (
           !(userOne.mun_role == page.role_to_control) &&
           !(userOne.mun_role == event.creator)
         )
-          return res.json({ msg: "event cannot not be deleted successfully" });
-        const deletedEvent = await Event.findByIdAndRemove({ _id: id });
-        res.json({ msg: "Event was deleted successfully", data: req.body });
+          return res.json({
+            msg: "Only authorized admins can delete this event"
+          });
+        const deletedEvent = await Event.findByIdAndRemove(id);
+        res.json({ msg: "Event was deleted successfully", data: deletedEvent });
       }
     } catch (error) {
       // We will be handling the error later
@@ -254,51 +242,36 @@ router.delete(
     }
   }
 );
-
-/////////////////////
-
-///////////to be checked
+//admins delete certain feedback of a certain event
 router.delete(
   "/:id/:id1/deletefeedback",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // if (!req.session.user_id)
-      //   return res.json({ message: "You are not logged in" });
-
       const id = req.params.id;
       const id1 = req.params.id1;
       const userOne = req.user;
-
       if (
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
-        Event.updateOne(
-          { _id: id },
-          { $pull: { feedback: { _id: id1 } } }
-        ).exec();
+        Event.update({ _id: id }, { $pull: { feedback: { _id: id1 } } }).exec();
         res.json({ msg: "Feedback was deleted successfully" });
       } else {
-        const event = await Event.findById({ _id: id });
+        const event = await Event.findById(id);
         const page = await Page.findOne({ name: event.creator });
-
         if (!page)
           return res.json({
-            message: "Only admins can delete this event feedback"
+            message: "Page not found"
           });
-
         if (
           !(userOne.mun_role == page.role_to_control) &&
           !(userOne.mun_role == event.creator)
         )
           return res.json({
-            msg: "Feedback cannot not be deleted successfully"
+            msg: "Only authorized admins can delete this event feedback"
           });
-        Event.updateOne(
-          { _id: id },
-          { $pull: { feedback: { _id: id1 } } }
-        ).exec();
+        Event.update({ _id: id }, { $pull: { feedback: { _id: id1 } } }).exec();
         res.json({ msg: "Feedback was deleted successfully" });
       }
     } catch (error) {
@@ -307,46 +280,36 @@ router.delete(
     }
   }
 );
-//need to check
+//admins delete certain photo of a certain event
 router.delete(
   "/:id/:id1/deletephoto",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // if (!req.session.user_id)
-      //   return res.json({ message: "You are not logged in" });
-
       const id = req.params.id;
       const id1 = req.params.id1;
       const userOne = req.user;
-
       if (
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
-        Event.updateOne(
-          { _id: id },
-          { $pull: { photos: { _id: id1 } } }
-        ).exec();
+        Event.update({ _id: id }, { $pull: { photos: { _id: id1 } } }).exec();
         return res.json({ msg: "Photo was deleted successfully" });
       } else {
-        const event = await Event.findById({ _id: id });
+        const event = await Event.findById(id);
         const page = await Page.findOne({ name: event.creator });
-
         if (!page)
           return res.json({
-            message: "Only admins can delete this event photos"
+            message: "Page not found"
           });
-
         if (
           !(userOne.mun_role == page.role_to_control) &&
           !(userOne.mun_role == event.creator)
         )
-          return res.json({ msg: "Photo cannot not be successfully" });
-        Event.updateOne(
-          { _id: id },
-          { $pull: { photos: { _id: id1 } } }
-        ).exec();
+          return res.json({
+            msg: "Only authorized admins can delete this event photo"
+          });
+        Event.update({ _id: id }, { $pull: { photos: { _id: id1 } } }).exec();
         return res.json({ msg: "Photo was deleted successfully" });
       }
     } catch (error) {
