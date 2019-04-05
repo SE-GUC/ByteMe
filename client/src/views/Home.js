@@ -3,7 +3,7 @@ import "./Home.css";
 
 class Home extends Component {
   render() {
-    return <div />;
+    return <h1>Home</h1>;
   }
 }
 

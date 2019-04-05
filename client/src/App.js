@@ -2,8 +2,7 @@
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  withRouter
+  Switch
 } from "react-router-dom";
 import "./App.css";
 import logo from "./logo.svg";
@@ -24,13 +23,13 @@ class App extends Component {
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous"
         />
-        <HeaderNavbar />
-        {/* <Merchandise /> */}
         <Router>
+          <Route path="/" component={HeaderNavbar} />
           <Switch>
-            <Route exact path="/" component={withRouter(Home)} />
-            <Route exact path="/home" component={withRouter(Home)} />
-            <Route exact path="/merchandise" component={withRouter(Merchandise)} />
+            <Route exact path="/" component={Home} />
+            <Route exact path="/home" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/merchandise" component={Merchandise} />
           </Switch>
         </Router>
         <Navbar bg="black" fixed="bottom">
