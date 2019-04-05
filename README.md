@@ -21,5 +21,5 @@ components, I've already implemented it you can import components you want to us
 - Replace the reset password link emailed with a web page that uses the token provided to graphically reset the password.
 - Merchandise page image sizes need to be consistent, margins need to be implemented between products, a nicer UI maybe better title, a motto and a frame around the component.
 - Merchandise cart can be implemented later.
-- add avg in api/events/addfeedback and adjust tests accordingly 
-- update Event schema to have rating
+- events styling and colors
+- run events tests to check if they all pass... hope so
