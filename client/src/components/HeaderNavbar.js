@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Navbar, NavDropdown, Nav } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import "../App.css";
 import API from "../utils/API";
 
@@ -35,41 +36,66 @@ class HeaderNavbar extends Component {
     render() {
         return (
             <Navbar bg="blue" variant="dark" sticky="top">
-                <Navbar.Brand href="home">GUCMUN</Navbar.Brand>
+                <Navbar.Brand to="home">GUCMUN</Navbar.Brand>
                 <Nav className="mr-auto">
-                    <Nav.Link href="home">Home</Nav.Link>
-                    <Nav.Link href="announcements">Announcements</Nav.Link>
+                    <LinkContainer to="/home">
+                        <Nav.Link>Home</Nav.Link>
+                    </LinkContainer>
+                    <LinkContainer to="/announcements">
+                        <Nav.Link>Announcements</Nav.Link>
+                    </LinkContainer>
                     <NavDropdown title="Councils" id="basic-nav-dropdown">
                         {this.state.councils.map(council => {
                             console.log(council.name)
                             return (
                                 <div>
-                                    <NavDropdown.Item href={`councils-${council.name}`}>
-                                        {council.name}
-                                    </NavDropdown.Item>
+                                    <LinkContainer to={`/councils/${council.name}`}>
+                                        <NavDropdown.Item >
+                                            {council.name}
+                                        </NavDropdown.Item>
+                                    </LinkContainer>
                                     <NavDropdown.Divider />
                                 </div>
                             );
                         })}
                     </NavDropdown>
-                    <Nav.Link href="events">Events</Nav.Link>
-                    <Nav.Link href="library">Library</Nav.Link>
-                    <Nav.Link href="merchandise">Merchandise</Nav.Link>
-                    <Nav.Link href="faq">FAQ</Nav.Link>
+                    <LinkContainer to="events">
+                        <Nav.Link >Events</Nav.Link>
+                    </LinkContainer>
+                    <LinkContainer to="/library">
+                        <Nav.Link>Library</Nav.Link>
+                    </LinkContainer>
+
+                    <LinkContainer to="/merchandise">
+                        <Nav.Link >Merchandise</Nav.Link>
+                    </LinkContainer>
+
+                    <LinkContainer to="/faq">
+                        <Nav.Link>FAQ</Nav.Link>
+                    </LinkContainer>
+
                 </Nav>
 
                 {
                     this.state.isLogged ?
                         (
                             <Nav>
-                                <Nav.Link href="profile">Profile</Nav.Link>
-                                <Nav.Link onClick={this.logout}>Logout</Nav.Link> {/*why are href not working here?*/}
+                                <LinkContainer to="profile">
+                                    <Nav.Link>Profile</Nav.Link>
+                                </LinkContainer>
+                                <LinkContainer to="home">
+                                    <Nav.Link onClick={this.logout}>Logout</Nav.Link>
+                                </LinkContainer>
                             </Nav>
                         ) :
                         (
                             <Nav>
-                                <Nav.Link href="register">Register</Nav.Link>
-                                <Nav.Link onClick={this.login}>Login</Nav.Link>
+                                <LinkContainer to="register">
+                                    <Nav.Link>Register</Nav.Link>
+                                </LinkContainer>
+                                <LinkContainer to="Login">
+                                <Nav.Link>Login</Nav.Link>
+                                </LinkContainer>
                             </Nav>
                         )
                 }
