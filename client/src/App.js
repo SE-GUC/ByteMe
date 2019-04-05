@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+﻿import React, { Component } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -10,7 +10,7 @@ import { Navbar } from "react-bootstrap";
 
 import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
-import Login from "./views/Login"
+//import Login from "./views/Login"
 import HeaderNavbar from "./components/HeaderNavbar";
 
 class App extends Component {
