@@ -1,16 +1,13 @@
 ﻿import React, { Component } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import logo from "./logo.svg";
 import { Navbar } from "react-bootstrap";
 
 import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
-//import Login from "./views/Login"
+import Login from "./views/Login";
+import Events from "./views/Events";
 import HeaderNavbar from "./components/HeaderNavbar";
 
 class App extends Component {
@@ -30,6 +27,7 @@ class App extends Component {
             <Route exact path="/home" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/merchandise" component={Merchandise} />
+            <Route exact path="/events" component={Events} />
           </Switch>
         </Router>
         <Navbar bg="black" fixed="bottom">
