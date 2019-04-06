@@ -11,6 +11,21 @@ const emailer = require("../../emailer");
 const hideSecrets = require("../../models/User").hideSecrets;
 
 router.get("/", (req, res) => res.json({ data: "Users Route Online" }));
+router.get("/role/:role", async (req, res) => {
+  try {
+    const role = req.params.role;
+    const users_with_roles = await User.find({ mun_role: role });
+    if (users_with_roles.length === 0)
+      return res.json({ message: "No users assigned to this role" });
+    res.json({
+      msg: "Users assigned to this role",
+      data: users_with_roles
+    });
+  } catch (error) {
+    // We will be handling the error later
+    console.log(error);
+  }
+});
 
 router.post("/register", async (req, res) => {
   const isValidated = validator.createValidation(req.body);
@@ -115,7 +130,8 @@ router.post(
     }
   }
 );
-router.get("/profile",
+router.get(
+  "/profile",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
@@ -123,7 +139,8 @@ router.get("/profile",
     } catch (err) {
       console.log(error);
     }
-  });
+  }
+);
 
 router.get("/:gucid", async (req, res) => {
   try {
@@ -140,8 +157,6 @@ router.get("/:gucid", async (req, res) => {
     console.log(error);
   }
 });
-
-
 
 router.get(
   "/asAdmin/:gucid",
@@ -416,7 +431,7 @@ router.put("/forgotpass", (req, res) => {
   return User.updateOne(
     { email: req.body.email },
     { $set: { resetPassLink: token } },
-    function (error, feedback) {
+    function(error, feedback) {
       if (error) return res.send(error);
       else {
         emailer.sendEmail(emailData);
@@ -435,7 +450,7 @@ router.put("/resetpass", (req, res) => {
   return User.updateOne(
     { resetPassLink },
     { $set: { password: hashedPassword, resetPassLink: "" } },
-    function (error, feedback) {
+    function(error, feedback) {
       if (error) return res.send(error);
       return res.send(feedback);
     }
