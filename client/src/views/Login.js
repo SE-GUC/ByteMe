@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Form, Button, Alert } from "react-bootstrap"
+import { Link } from "react-router-dom"
 import API from "../utils/API";
 import Auth from "../utils/Auth";
+import NavLink from "react-bootstrap/NavLink";
 
 class Login extends Component {
     constructor(props) {
@@ -19,7 +21,6 @@ class Login extends Component {
         }
 
         this.login = () => {
-            console.log(this.state)
             API.post("users/login", {
                 email: this.state.email,
                 password: this.state.password
@@ -29,8 +30,8 @@ class Login extends Component {
                         message: "Logged In!",
                         error: ""
                     })
-                    Auth.authenticateUser(res.data)
-                    this.context.router.replace("/")
+                    Auth.authenticateUser(res.data.data)
+                    this.props.login();
                 })
                 .catch(err => {
                     console.log(err)
@@ -61,7 +62,7 @@ class Login extends Component {
                     : (
                         this.state.message ?
                             <Alert variant="success">
-                                {this.state.message}
+                                {this.state.message} <Link to="/profile" class="alert-link">Go To Profile.</Link>
                             </Alert>
                             : <div></div>
                     )}
