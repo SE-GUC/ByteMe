@@ -3,7 +3,6 @@ import { Navbar, NavDropdown, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import "../App.css";
 import API from "../utils/API";
-import Auth from "../utils/Auth"
 
 class HeaderNavbar extends Component {
 
@@ -11,19 +10,7 @@ class HeaderNavbar extends Component {
         super(props)
 
         this.state = {
-            isLogged: false,
-            user: undefined,
             councils: []
-        }
-
-        this.login = () => {
-            var token = Auth.getToken();
-            API.get()
-            this.setState({ isLogged: true })
-        }
-
-        this.logout = () => {
-            this.setState({ isLogged: false })
         }
     }
 
@@ -56,9 +43,7 @@ class HeaderNavbar extends Component {
                             return (
                                 <div>
                                     <LinkContainer to={`/councils/${council.name}`}>
-                                        <NavDropdown.Item >
-                                            {council.name}
-                                        </NavDropdown.Item>
+                                        <NavDropdown.Item >{council.name}</NavDropdown.Item>
                                     </LinkContainer>
                                     <NavDropdown.Divider />
                                 </div>
@@ -85,16 +70,19 @@ class HeaderNavbar extends Component {
                 </Nav>
 
                 {
-                    this.state.isLogged ?
+                    this.props.isLoggedIn ?
                         (
                             <Nav>
 
                                 <LinkContainer to="profile">
-                                    <Nav.Link>Profile</Nav.Link>
+                                    <Nav.Link>
+                                        {(this.props.user.first_name + " " + this.props.user.last_name)
+                                            .split(' ').map(i => i[0].toUpperCase() + i.substring(1).toLowerCase()).join(' ') /*toTitleCase *kinda */}
+                                    </Nav.Link>
                                 </LinkContainer>
 
                                 <LinkContainer to="home">
-                                    <Nav.Link onClick={this.logout}>Logout</Nav.Link>
+                                    <Nav.Link onClick={this.props.logout}>Logout</Nav.Link>
                                 </LinkContainer>
 
                             </Nav>

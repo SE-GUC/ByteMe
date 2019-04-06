@@ -115,6 +115,15 @@ router.post(
     }
   }
 );
+router.get("/profile",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      res.json({ data: hideSecrets(req.user) });
+    } catch (err) {
+      console.log(error);
+    }
+  });
 
 router.get("/:gucid", async (req, res) => {
   try {
@@ -132,15 +141,7 @@ router.get("/:gucid", async (req, res) => {
   }
 });
 
-router.get("/profile",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    try {
-      res.json({ data: hideSecrets(req.user) });
-    } catch (err) {
-      console.log(error);
-    }
-  });
+
 
 router.get(
   "/asAdmin/:gucid",
