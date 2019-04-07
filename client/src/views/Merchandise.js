@@ -18,9 +18,9 @@ class Merchandise extends Component {
   render() {
     return (
       <div>
-        <merchandise>
-          <h1>PRODUCTS</h1>
-          <productgroup>
+        <h1 style={{ margin: "15px" }}>GUCMUN SWAG</h1>
+        <div className="merchandise">
+          <div className="product-group">
             {this.state.products.map(product => (
               <Product
                 name={product.name}
@@ -29,8 +29,8 @@ class Merchandise extends Component {
                 price={product.price}
               />
             ))}
-          </productgroup>
-        </merchandise>
+          </div>
+        </div>
       </div>
     );
   }

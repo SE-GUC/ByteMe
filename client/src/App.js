@@ -80,7 +80,7 @@ class App extends Component {
             <Route exact path="/events" component={Events} />
           </Switch>
         </Router>
-        <Navbar bg="black" fixed="bottom">
+        <Navbar bg="black">
           <Navbar.Brand href="/home" className="mr-auto">
             <img
               src={logo}

@@ -14,7 +14,7 @@ class Home extends Component {
   }
   render() {
     return (
-      <Timeline lineColor={"#ffd700"} collapsible>
+      <Timeline lineColor={"#ffd700"} collapsible className="home">
         {this.state.events.map(event => (
           <EventTimeline
             id={event.id}
