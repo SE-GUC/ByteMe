@@ -121,10 +121,7 @@ class App extends Component {
           />
           <Route exact path="/merchandise" component={Merchandise} />
           <Route exact path="/events" component={Events} />
-          <Route
-            path="/profile/:gucid?"
-            render={props => <UserProfile user={this.state.user} {...props} />}
-          />
+          <Route path="/profile/:gucid?" render={props => (<UserProfile user={this.state.user} login={this.login} {...props} />)} />
         </Router>
         <Navbar bg="black" fixed="bottom">
           <Navbar.Brand href="/home" className="mr-auto">
