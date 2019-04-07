@@ -5,12 +5,12 @@
   font-style: normal;
 }
 
-  form {    
-    font-family: GothamBook;
-    font-size: 130%;
-    text-align: center;
-    margin: 5%;
-  }
-  label{
-    font-style: italic
-  }
+form {    
+  font-family: GothamBook;
+  font-size: 130%;
+  text-align: center;
+  margin: 5%;
+}
+label{
+  font-style: italic
+}
