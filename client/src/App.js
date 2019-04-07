@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import logo from "./logo.svg";
 import { Navbar } from "react-bootstrap";
-
+import Pages from "./views/Pages";
 import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
 import Login from "./views/Login";
@@ -14,7 +14,7 @@ import Club from "./views/Club";
 import Contact from "./views/Contact";
 import AboutUs from "./views/AboutUs";
 import UserProfile from "./views/UserProfile";
-
+import PortalLibrary from "./views/PortalLibrary";
 import Mailing_list from "./views/Mailing_list";
 import HeaderNavbar from "./components/HeaderNavbar";
 
@@ -27,7 +27,8 @@ class App extends Component {
 
     this.state = {
       isLoggedIn: false,
-      user: undefined
+      user: undefined,
+      councils: []
     };
 
     this.login = () => {
@@ -59,6 +60,12 @@ class App extends Component {
     if (Auth.isUserAuthenticated()) this.login();
   }
 
+  async componentDidMount() {
+    API.get("/page").then(res => {
+      this.setState({ councils: res.data.data });
+    });
+  }
+
   render() {
     return (
       <div id="default-div">
@@ -85,6 +92,11 @@ class App extends Component {
           <Route exact path="/aboutus" component={AboutUs} />
           <Route exact path="/faq" component={FAQs} />
           <Route exact path="/announcements" component={Announcements} />
+          {this.state.councils.map(council => {
+            return (
+              <Route exact path={`/pages/${council._id}`} component={Pages} />
+            );
+          })}
           <Route exact path="/clubs" component={Club} />
           <Route exact path="/ContactUs" component={Contact} />
           <Route
@@ -94,6 +106,7 @@ class App extends Component {
           />
           <Route exact path="/merchandise" component={Merchandise} />
           <Route exact path="/events" component={Events} />
+          <Route exact path="/library" component={PortalLibrary} />
           <Route exact path="/mailing_list" component={Mailing_list} />
           <Route
             path="/profile/:gucid?"
