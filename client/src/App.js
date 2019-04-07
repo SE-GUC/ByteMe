@@ -8,7 +8,7 @@ import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
 import Login from "./views/Login";
 import Events from "./views/Events";
-import Events from "./views/FAQs";
+import FAQs from "./views/FAQs";
 
 import HeaderNavbar from "./components/HeaderNavbar";
 
