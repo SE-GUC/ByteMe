@@ -80,24 +80,48 @@ class HeaderNavbar extends Component {
 
                 </Nav>
 
-                {
-                    this.props.isLoggedIn ?
-                        (
-                            <Nav>
+                {this.props.isLoggedIn ? (
+           <Nav>
 
-                                <LinkContainer to="/profile">
-                                    <Nav.Link>
-                                        {(this.props.user.first_name + " " + this.props.user.last_name)
-                                            .split(' ').map(i => i[0].toUpperCase() + i.substring(1).toLowerCase()).join(' ') /*toTitleCase *kinda */}
-                                    </Nav.Link>
-                                </LinkContainer>
+           { 
+               (this.props.user.awg_admin === "mun") || (this.props.user.mun_role === "secretary_office") ?
 
-                                <LinkContainer to="/home">
-                                    <Nav.Link onClick={this.props.logout}>Logout</Nav.Link>
-                                </LinkContainer>
+           (
+               <Nav>
+            <LinkContainer to="/mailing_list">
+              <Nav.Link >Subscribers</Nav.Link>
+           </LinkContainer> 
+           
+           <LinkContainer to="profile">
+               <Nav.Link>
+                   {(this.props.user.first_name + " " + this.props.user.last_name)
+                       .split(' ').map(i => i[0].toUpperCase() + i.substring(1).toLowerCase()).join(' ') /*toTitleCase *kinda */}
+               </Nav.Link>
+           </LinkContainer>
+           
+           <LinkContainer to="home">
+               <Nav.Link onClick={this.props.logout}>Logout</Nav.Link>
+           </LinkContainer> 
+           </Nav>
+       
+           
+           ) : (
+               <Nav>
+           <LinkContainer to="profile">
+               <Nav.Link>
+                   {(this.props.user.first_name + " " + this.props.user.last_name)
+                       .split(' ').map(i => i[0].toUpperCase() + i.substring(1).toLowerCase()).join(' ') /*toTitleCase *kinda */}
+               </Nav.Link>
+           </LinkContainer>
 
-                            </Nav>
-                        ) :
+           <LinkContainer to="home">
+               <Nav.Link onClick={this.props.logout}>Logout</Nav.Link>
+           </LinkContainer>
+           </Nav>)
+            
+       } 
+       </Nav>
+        ):
                         (
                             <Nav>
 
