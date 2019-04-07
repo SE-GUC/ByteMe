@@ -7,18 +7,7 @@ import Collapsible from "react-collapsible";
 
 class EventTimeline extends Component {
   render() {
-    const {
-      id,
-      title,
-      brief,
-      location,
-      dateTime,
-      description,
-      photos,
-      feedback,
-      creator,
-      rating
-    } = this.props;
+    const { title, dateTime } = this.props;
 
     return (
       <TimelineItem

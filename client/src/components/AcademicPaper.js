@@ -4,12 +4,8 @@ import { Card } from "react-bootstrap";
 // import "./Event.css";
 
 class AcademicPaper extends Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
   render() {
-    const { name, date, link, year } = this.props;
+    const { name, link, year } = this.props;
 
     return (
       <Card className="text-center" border="primary" style={{ width: "18rem" }}>
