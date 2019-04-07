@@ -6,7 +6,38 @@ const validator = require("../../validations/eventValidations");
 const Page = require("../../models/Page");
 //get all events
 router.get("/", async (req, res) => {
-  const events = await Event.find();
+  const events = await Event.find().sort({ dateTime: -1 });
+  var d = new Date();
+  events.map(async e => {
+    try {
+      if (e.dateTime - d < 0) {
+        const x = await Event.findByIdAndUpdate(
+          e.id,
+          { comingSoon: "false" },
+          { upsert: false }
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  res.json({ data: events });
+});
+
+router.get("/comingsoon", async (req, res) => {
+  const events = await Event.find({
+    dateTime: { $gt: new Date() }
+  }).sort({ dateTime: -1 });
+  res.json({ data: events });
+});
+
+router.get("/month", async (req, res) => {
+  var d = new Date();
+  d.setDate(d.getDate() - 30);
+  const events = await Event.find({
+    dateTime: { $lt: new Date(), $gt: d }
+  }).sort({ dateTime: -1 });
   res.json({ data: events });
 });
 //get event by id
@@ -25,7 +56,7 @@ router.get("/:id", async (req, res) => {
 router.get("/:id/viewfeedback", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.findById(id);
+    const event = await Event.findById({ _id: id });
     res.json({ data: event.feedback });
   } catch (error) {
     // We will be handling the error later
@@ -36,7 +67,7 @@ router.get("/:id/viewfeedback", async (req, res) => {
 router.get("/:id/viewphotos", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.findById(id);
+    const event = await Event.findById({ _id: id });
     res.json({ data: event.photos });
   } catch (error) {
     // We will be handling the error later
@@ -86,13 +117,17 @@ router.post("/:id/addfeedback", async (req, res) => {
     const id = req.params.id;
     const isValidated = validator.createFeedbackValidation(req.body);
     if (isValidated.error) return res.json({ message: "Validations not met" });
-    const f = Event.update(
+    var event = await Event.findById(id);
+    if (event.comingSoon === true) {
+      return res.json({ message: "This event is still coming soon" });
+    }
+    const f = Event.updateOne(
       { _id: id },
       { $push: { feedback: [req.body] } }
     ).exec();
     var count = 0;
     var rating = 0;
-    var event = await Event.findById(id);
+
     event.feedback.forEach(value => {
       rating += value.rating;
       count += 1;
@@ -128,11 +163,12 @@ router.post(
       ) {
         const isValidated = validator.photoValidation(req.body);
         if (isValidated.error) return res.json({ msg: "Validations not met" });
-        const e = Event.update(
+        const e = await Event.updateOne(
           { _id: id },
           { $push: { photos: [req.body] } }
         ).exec();
-        return res.json({ msg: "Photo added successfully", data: e });
+        const x = await Event.findById(id);
+        return res.json({ msg: "Photo added successfully", data: x });
       } else {
         const event = await Event.findById(id);
         const page = await Page.findOne({ name: event.creator });
@@ -149,7 +185,7 @@ router.post(
           });
         const isValidated = validator.photoValidation(req.body);
         if (isValidated.error) return res.json({ msg: "Validations not met" });
-        const e = Event.update(
+        const e = await Event.updateOne(
           { _id: id },
           { $push: { photos: [req.body] } }
         ).exec();
@@ -217,7 +253,7 @@ router.delete(
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
-        const deletedEvent = await Event.findByIdAndRemove(id);
+        const deletedEvent = await Event.findByIdAndRemove({ _id: id });
         res.json({ msg: "Event was deleted successfully", data: deletedEvent });
       } else {
         const event = await Event.findById(id);
@@ -233,7 +269,7 @@ router.delete(
           return res.json({
             msg: "Only authorized admins can delete this event"
           });
-        const deletedEvent = await Event.findByIdAndRemove(id);
+        const deletedEvent = await Event.findByIdAndRemove({ _id: id });
         res.json({ msg: "Event was deleted successfully", data: deletedEvent });
       }
     } catch (error) {
@@ -255,7 +291,10 @@ router.delete(
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
-        Event.update({ _id: id }, { $pull: { feedback: { _id: id1 } } }).exec();
+        Event.updateOne(
+          { _id: id },
+          { $pull: { feedback: { _id: id1 } } }
+        ).exec();
         res.json({ msg: "Feedback was deleted successfully" });
       } else {
         const event = await Event.findById(id);
@@ -271,7 +310,10 @@ router.delete(
           return res.json({
             msg: "Only authorized admins can delete this event feedback"
           });
-        Event.update({ _id: id }, { $pull: { feedback: { _id: id1 } } }).exec();
+        Event.updateOne(
+          { _id: id },
+          { $pull: { feedback: { _id: id1 } } }
+        ).exec();
         res.json({ msg: "Feedback was deleted successfully" });
       }
     } catch (error) {
@@ -293,7 +335,10 @@ router.delete(
         userOne.awg_admin === "mun" ||
         userOne.mun_role === "secretary_office"
       ) {
-        Event.update({ _id: id }, { $pull: { photos: { _id: id1 } } }).exec();
+        Event.updateOne(
+          { _id: id },
+          { $pull: { photos: { _id: id1 } } }
+        ).exec();
         return res.json({ msg: "Photo was deleted successfully" });
       } else {
         const event = await Event.findById(id);
@@ -309,7 +354,10 @@ router.delete(
           return res.json({
             msg: "Only authorized admins can delete this event photo"
           });
-        Event.update({ _id: id }, { $pull: { photos: { _id: id1 } } }).exec();
+        Event.updateOne(
+          { _id: id },
+          { $pull: { photos: { _id: id1 } } }
+        ).exec();
         return res.json({ msg: "Photo was deleted successfully" });
       }
     } catch (error) {

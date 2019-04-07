@@ -24,7 +24,8 @@ class Events extends Component {
           <CardDeck>
             {this.state.events.map(event => (
               <Event
-                id={event.id}
+                id={event._id}
+                comingSoon={event.comingSoon}
                 title={event.title}
                 brief={event.brief}
                 location={event.location}

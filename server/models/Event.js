@@ -31,6 +31,7 @@ const EventSchema = new Schema({
   photos: [
     {
       link: { type: String, unique: false, required: false }
+      //default
     }
   ],
 
@@ -51,6 +52,12 @@ const EventSchema = new Schema({
     type: Number,
     unique: false,
     required: false
+  },
+
+  comingSoon: {
+    type: Boolean,
+    required: false,
+    default: true
   }
 });
 EventSchema.index({

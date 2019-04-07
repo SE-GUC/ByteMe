@@ -11,14 +11,6 @@ import {
   Carousel
 } from "react-bootstrap";
 import "./Event.css";
-// import "../App.css";
-// import {
-//   BrowserRouter as Router,
-//   Route,
-//   Switch,
-//   withRouter
-// } from "react-router-dom";
-// import API from "../utils/API";
 
 class Event extends Component {
   constructor(props, context) {
@@ -40,9 +32,18 @@ class Event extends Component {
     this.setState({ show: true });
   }
 
+  // comingsoonOrRating(props) {
+  //   const badge = props.comingSoon;
+  //   if (badge) {
+  //     return <Badge variant="success">Coming Soon</Badge>;
+  //   }
+  //   return <Badge variant="success">{props.rating} stars</Badge>;
+  // }
+
   render() {
     const {
       id,
+      comingSoon,
       title,
       brief,
       location,
@@ -76,6 +77,7 @@ class Event extends Component {
           <Card.Title className="mb-2 text-muted">{brief}</Card.Title>
           <Card.Subtitle>
             <Badge variant="success">{rating} stars</Badge>
+            {/* <comingsoonOrRating badge={this.props.comingSoon} /> */}
           </Card.Subtitle>
           <Card.Text>{description}</Card.Text>
         </Card.Body>
@@ -102,6 +104,10 @@ class Event extends Component {
             <p>{dateTime}</p>
             <h4>Creator</h4>
             <p>{creator}</p>
+            <h4>Event Feedback</h4>
+            {feedback.map(f => (
+              <p>{f.content}</p>
+            ))}
             <h4>Rate Event</h4>
             <p>
               <ButtonGroup className="mr-2" aria-label="First group">
@@ -128,27 +134,17 @@ class Event extends Component {
             <Button variant="secondary" onClick={this.handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={this.handleClose}>
-              Go to event page
-            </Button>
+            {/* <Button href={`/events/${_id}`}>Go to event page</Button> */}
           </Modal.Footer>
         </Modal>
       </Card>
     );
   }
-  //   async componentDidMount() {
-  //     try {
-  //       API.get(`events/${this.props.id}/viewphotos`).then(res => {
-  //         this.setState({ events: res.data.data, isLoading: false });
-  //       });
-  //     } catch (e) {
-  //       console.log(`😱 Axios request failed: ${e}`);
-  //     }
-  //   }
 }
 
 Event.propTypes = {
   id: PropTypes.string,
+  comingSoon: PropTypes.bool,
   title: PropTypes.string,
   brief: PropTypes.string,
   location: PropTypes.string,

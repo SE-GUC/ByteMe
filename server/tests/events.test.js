@@ -64,7 +64,7 @@ describe("getting a specific Event - The one that's just been created", () => {
       .get("/api/events/" + createdEventID)
       .then(response => {
         expect(response.statusCode).toBe(200);
-        expect(response.body.data[0].name).toBe(newEvent.name);
+        expect(response.body.data.title).toEqual(newEvent.title);
       });
   });
 });
@@ -135,15 +135,13 @@ describe("Updating an event", () => {
       .get("/api/events/" + createdEventID)
       .then(response => {
         expect(response.statusCode).toBe(200);
-        expect(response.body.data[0]._id).toBe(createdEventID);
-        expect(response.body.data[0].title).toBe(newEventUpdate.title);
-        expect(response.body.data[0].brief).toBe(newEventUpdate.brief);
-        expect(response.body.data[0].location).toBe(newEventUpdate.location);
-        expect(response.body.data[0].dateTime).toBe(newEventUpdate.dateTime);
-        expect(response.body.data[0].description).toBe(
-          newEventUpdate.description
-        );
-        expect(response.body.data[0].creator).toBe(newEventUpdate.creator);
+        expect(response.body.data._id).toBe(createdEventID);
+        expect(response.body.data.title).toBe(newEventUpdate.title);
+        expect(response.body.data.brief).toBe(newEventUpdate.brief);
+        expect(response.body.data.location).toBe(newEventUpdate.location);
+        expect(response.body.data.dateTime).toBe(newEventUpdate.dateTime);
+        expect(response.body.data.description).toBe(newEventUpdate.description);
+        expect(response.body.data.creator).toBe(newEventUpdate.creator);
       });
   });
 });
@@ -167,12 +165,10 @@ describe("Adding a photo to existing event - The one just created, and getting i
       .send(photoToBeAdded)
       .set("Authorization", `${token}`)
       .then(response => {
-        expect(response.body.data.link).toBe(photoToBeAdded.link);
+        expect(response.body.data.photos[0].link).toBe(photoToBeAdded.link);
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");
-        expect(response.body.msg).toBe(
-          "Photo added to this event successfully"
-        );
+        expect(response.body.msg).toBe("Photo added successfully");
       });
   });
   test("Photo exists when getting photos of the event - no token", () => {
@@ -184,6 +180,7 @@ describe("Adding a photo to existing event - The one just created, and getting i
         expect(response.type).toBe("application/json");
         expect(response.body.data[0].link).toBe(photoToBeAdded.link);
         photoAddedID = response.body.data[0]._id;
+        console.log(response.body.data);
       });
   });
   test("Deleting photo should require authorization", () => {
