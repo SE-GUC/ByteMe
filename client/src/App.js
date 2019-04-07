@@ -10,7 +10,9 @@ import Login from "./views/Login";
 import Events from "./views/Events";
 import FAQs from "./views/FAQs";
 import Announcements from "./views/Announcements";
-
+import Club from "./views/Club";
+import Contact from "./views/Contact";
+import AboutUs from "./views/AboutUs";
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import API from "./utils/API";
@@ -73,6 +75,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/home" component={Home} />
+            <Route path='/aboutus' component={AboutUs} />
             <Route
               exact
               path="/login"
@@ -82,6 +85,8 @@ class App extends Component {
             <Route exact path="/events" component={Events} />
             <Route exact path="/faq" component={FAQs} />
             <Route exact path="/announcements" component={Announcements} />
+            <Route exact path='/clubs' component={Club} />
+            <Route exact path='/ContactUs' component={Contact} />
           </Switch>
         </Router>
         <Navbar bg="black" fixed="bottom">
