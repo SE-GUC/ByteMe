@@ -5,6 +5,7 @@ import "../App.css";
 import API from "../utils/API";
 
 class HeaderNavbar extends Component {
+
   constructor(props) {
     super(props);
 
@@ -104,6 +105,7 @@ class HeaderNavbar extends Component {
       </Navbar>
     );
   }
+
 }
 
 export default HeaderNavbar;

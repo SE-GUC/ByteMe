@@ -6,6 +6,7 @@ import { Alert } from "react-bootstrap"
 import User from "../components/User"
 
 import API from "../utils/API";
+import Auth from "../utils/Auth";
 
 const queryString = require('query-string')
 
@@ -14,7 +15,7 @@ class UserProfile extends Component {
         super(props)
         this.state = {
             user: props.user,
-            err: ""
+            err: "",
         }
     }
 
@@ -24,26 +25,32 @@ class UserProfile extends Component {
         history: PropTypes.object.isRequired
     }
 
-    async componentDidMount() {
-        this.state = {
-            user: this.props.user,
+    async componentWillReceiveProps(props) {
+        this.setState({
+            user: props.user,
             err: ""
-        }
+        })
+
         console.log(`UserProfile.props.location.search = ${this.props.location.search}`)
         console.log(`UserProfile.state.user = ${this.state.user}`)
         const parsed = queryString.parse(this.props.location.search)
 
         if (parsed.gucid) {
             if (this.state.user && this.state.user.is_admin) {
-                API.get(`/users/asAdmin/${parsed.gucid}`)
+                const token = Auth.getToken();
+                API.get(`/users/asAdmin/${parsed.gucid}`, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
                     .then(res => {
                         this.setState({ user: res.data.data, err: "" })
                     })
                     .catch(err => {
                         if (err.response)
-                            this.setState({ err: err.response.error })
+                            this.setState({ err: err.response.error, user: undefined })
                         else
-                            this.setState({ err: err.message })
+                            this.setState({ err: err.message, user: undefined })
                     })
             } else {
                 API.get(`/users/${parsed.gucid}`)
@@ -52,12 +59,16 @@ class UserProfile extends Component {
                     })
                     .catch(err => {
                         if (err.response)
-                            this.setState({ err: err.response.data.error ? err.response.data.error : err.response.data.message })
+                            this.setState({
+                                err: err.response.data.error ? err.response.data.error : err.response.data.message,
+                                user: undefined
+                            })
                         else
-                            this.setState({ err: err.message })
+                            this.setState({ err: err.message, user: undefined })
                     })
             }
         }
+
     }
 
     render() {
@@ -67,7 +78,7 @@ class UserProfile extends Component {
                 <User user={this.state.user} /> :
                 this.state.err !== "" ?
                     <Alert variant="danger"> {this.state.err} </Alert> :
-                    <Alert variant="danger"> Oops! Looks like something went wrong. </Alert>
+                    <></>
         );
     }
 }
