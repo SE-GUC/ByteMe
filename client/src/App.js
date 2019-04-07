@@ -8,6 +8,7 @@ import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
 import Login from "./views/Login";
 import Events from "./views/Events";
+import FAQs from "./views/FAQs";
 
 import HeaderNavbar from "./components/HeaderNavbar";
 
@@ -78,6 +79,7 @@ class App extends Component {
             />
             <Route exact path="/merchandise" component={Merchandise} />
             <Route exact path="/events" component={Events} />
+            <Route exact path="/faq" component={FAQs} />
           </Switch>
         </Router>
         <Navbar bg="black" fixed="bottom">
