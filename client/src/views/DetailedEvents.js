@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import Event from "../components/Event";
-import "./Events.css";
+import DetailedEvent from "../components/DetailedEvent";
+import "./DetailedEvents.css";
 import API from "../utils/API";
 import { CardDeck } from "react-bootstrap";
 
 // First we create our class
-class Events extends Component {
+class DetailedEvents extends Component {
   // Then we add our constructor which receives our props
   constructor(props) {
     super(props);
@@ -23,7 +23,7 @@ class Events extends Component {
           <h1>Events</h1>
           <CardDeck>
             {this.state.events.map(event => (
-              <Event
+              <DetailedEvent
                 _id={event._id}
                 comingSoon={event.comingSoon}
                 title={event.title}
@@ -44,7 +44,9 @@ class Events extends Component {
   }
   async componentDidMount() {
     try {
-      API.get("events").then(res => {
+      var pathArray = this.props.location.pathname.split("/");
+      const secondLevelLocation = pathArray[2];
+      API.get(`events/${secondLevelLocation}`).then(res => {
         this.setState({ events: res.data.data, isLoading: false });
       });
     } catch (e) {
@@ -53,4 +55,4 @@ class Events extends Component {
   }
 }
 
-export default Events;
+export default DetailedEvents;
