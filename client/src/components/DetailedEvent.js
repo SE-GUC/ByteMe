@@ -3,46 +3,42 @@ import PropTypes from "prop-types";
 import {
   Card,
   Button,
-  Badge,
-  Modal,
   ButtonGroup,
   InputGroup,
   FormControl,
-  Carousel
+  Carousel,
+  CardDeck,
+  Badge
 } from "react-bootstrap";
-import "./Event.css";
+import "./DetailedEvent.css";
+// import "../App.css";
+// import {
+//   BrowserRouter as Router,
+//   Route,
+//   Switch,
+//   withRouter
+// } from "react-router-dom";
+// import API from "../utils/API";
 
-class Event extends Component {
+class DetailedEvent extends Component {
   constructor(props, context) {
     super(props, context);
-
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
 
     this.state = {
       show: false
     };
   }
 
-  handleClose() {
-    this.setState({ show: false });
+  comingsoonOrRating(props) {
+    const badge = props.comingSoon;
+    if (badge) {
+      return <Badge variant="success">Coming Soon</Badge>;
+    }
+    return <Badge variant="success">{props.rating} stars</Badge>;
   }
-
-  handleShow() {
-    this.setState({ show: true });
-  }
-
-  // comingsoonOrRating(props) {
-  //   const badge = props.comingSoon;
-  //   if (badge) {
-  //     return <Badge variant="success">Coming Soon</Badge>;
-  //   }
-  //   return <Badge variant="success">{props.rating} stars</Badge>;
-  // }
 
   render() {
     const {
-      _id,
       comingSoon,
       title,
       brief,
@@ -56,14 +52,7 @@ class Event extends Component {
     } = this.props;
 
     return (
-      <Card
-        className="text-center"
-        //bg="warning"
-        text="white"
-        style={{ width: "18rem", "background-color": "#003255" }}
-      >
-        <Card.Header>{title}</Card.Header>
-
+      <CardDeck>
         <Carousel>
           {photos.map(p => (
             <Carousel.Item>
@@ -71,29 +60,14 @@ class Event extends Component {
             </Carousel.Item>
           ))}
         </Carousel>
-
-        <Card.Body>
-          <Card.Title className="mb-2 text-muted">{brief}</Card.Title>
-          <Card.Subtitle>
-            <Badge style={{ color: "#ffd700" }}>{rating} stars</Badge>
-          </Card.Subtitle>
-          <Card.Text>{description}</Card.Text>
-        </Card.Body>
-        <Card.Footer>
-          <Button
-            variant="primary"
-            onClick={this.handleShow}
-            className="event-button"
-          >
-            View details
-          </Button>
-        </Card.Footer>
-
-        <Modal show={this.state.show} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>{title}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+        <Card
+          className="text-center"
+          bg="warning"
+          text="black"
+          border="primary"
+          style={{ width: "18rem" }}
+        >
+          <Card.Body>
             <h4>Description</h4>
             <p>{description}</p>
             <h4>Location</h4>
@@ -102,10 +76,6 @@ class Event extends Component {
             <p>{dateTime}</p>
             <h4>Creator</h4>
             <p>{creator}</p>
-            <h4>Event Feedback</h4>
-            {feedback.map(f => (
-              <p>{f.content}</p>
-            ))}
             <h4>Rate Event</h4>
             <p>
               <ButtonGroup className="mr-2" aria-label="First group">
@@ -127,21 +97,14 @@ class Event extends Component {
                 <Button variant="outline-secondary">Submit</Button>
               </InputGroup.Append>
             </InputGroup>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Close
-            </Button>
-            <Button href={`/events/${_id}`}>Go to event page</Button>
-          </Modal.Footer>
-        </Modal>
-      </Card>
+          </Card.Body>
+        </Card>
+      </CardDeck>
     );
   }
 }
 
 Event.propTypes = {
-  _id: PropTypes.string,
   comingSoon: PropTypes.bool,
   title: PropTypes.string,
   brief: PropTypes.string,
@@ -155,4 +118,4 @@ Event.propTypes = {
   isLoading: PropTypes.bool
 };
 
-export default Event;
+export default DetailedEvent;
