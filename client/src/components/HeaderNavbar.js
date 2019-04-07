@@ -26,7 +26,7 @@ class HeaderNavbar extends Component {
         return (
             <Navbar bg="blue" variant="dark" sticky="top">
 
-                <Navbar.Brand to="home">GUCMUN</Navbar.Brand>
+                <Navbar.Brand to="/home">GUCMUN</Navbar.Brand>
 
                 <Nav className="mr-auto">
 
@@ -42,19 +42,21 @@ class HeaderNavbar extends Component {
                     </LinkContainer>
 
                     <NavDropdown title="Councils" id="basic-nav-dropdown">
-                        {this.state.councils.map(council => {
+                        {this.state.councils.map((council, index) => {
                             return (
                                 <div>
                                     <LinkContainer to={`/councils/${council.name}`}>
                                         <NavDropdown.Item >{council.name}</NavDropdown.Item>
                                     </LinkContainer>
-                                    <NavDropdown.Divider />
+                                    {index !== this.state.councils.length - 1 ?
+                                        (<NavDropdown.Divider />) :
+                                        (<div></div>)}
                                 </div>
                             );
                         })}
                     </NavDropdown>
 
-                    <LinkContainer to="events">
+                    <LinkContainer to="/events">
                         <Nav.Link >Events</Nav.Link>
                     </LinkContainer>
 
@@ -83,14 +85,14 @@ class HeaderNavbar extends Component {
                         (
                             <Nav>
 
-                                <LinkContainer to="profile">
+                                <LinkContainer to="/profile">
                                     <Nav.Link>
                                         {(this.props.user.first_name + " " + this.props.user.last_name)
                                             .split(' ').map(i => i[0].toUpperCase() + i.substring(1).toLowerCase()).join(' ') /*toTitleCase *kinda */}
                                     </Nav.Link>
                                 </LinkContainer>
 
-                                <LinkContainer to="home">
+                                <LinkContainer to="/home">
                                     <Nav.Link onClick={this.props.logout}>Logout</Nav.Link>
                                 </LinkContainer>
 
@@ -99,11 +101,11 @@ class HeaderNavbar extends Component {
                         (
                             <Nav>
 
-                                <LinkContainer to="register">
+                                <LinkContainer to="/register">
                                     <Nav.Link>Register</Nav.Link>
                                 </LinkContainer>
 
-                                <LinkContainer to="Login">
+                                <LinkContainer to="/login">
                                     <Nav.Link>Login</Nav.Link>
                                 </LinkContainer>
 

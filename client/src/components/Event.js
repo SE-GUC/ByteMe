@@ -58,10 +58,9 @@ class Event extends Component {
     return (
       <Card
         className="text-center"
-        bg="warning"
+        //bg="warning"
         text="white"
-        border="primary"
-        style={{ width: "18rem" }}
+        style={{ width: "18rem", "background-color": "#003255"}}
       >
         <Card.Header>{title}</Card.Header>
 
@@ -76,8 +75,7 @@ class Event extends Component {
         <Card.Body>
           <Card.Title className="mb-2 text-muted">{brief}</Card.Title>
           <Card.Subtitle>
-            <Badge variant="success">{rating} stars</Badge>
-            {/* <comingsoonOrRating badge={this.props.comingSoon} /> */}
+          <Badge style={{ color: "#ffd700" }}>{rating} stars</Badge>
           </Card.Subtitle>
           <Card.Text>{description}</Card.Text>
         </Card.Body>

@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+  form {    
+    font-family: GothamBook;
+    font-size: 130%;
+    text-align: center;
+    margin: 5%;
+  }
+  label{
+    font-style: italic
+  }
