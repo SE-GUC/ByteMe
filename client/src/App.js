@@ -9,11 +9,13 @@ import Merchandise from "./views/Merchandise";
 import Login from "./views/Login";
 import Events from "./views/Events";
 import FAQs from "./views/FAQs";
+import Announcements from "./views/Announcements";
 
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import API from "./utils/API";
 import Auth from "./utils/Auth";
+import Announcements from "./views/Announcements";
 
 class App extends Component {
   constructor(props) {
@@ -80,6 +82,7 @@ class App extends Component {
             <Route exact path="/merchandise" component={Merchandise} />
             <Route exact path="/events" component={Events} />
             <Route exact path="/faq" component={FAQs} />
+            <Route exact path="/announcements" component={Announcements} />
           </Switch>
         </Router>
         <Navbar bg="black" fixed="bottom">
