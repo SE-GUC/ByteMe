@@ -52,9 +52,11 @@ class App extends Component {
         user: undefined,
         isLoggedIn: false
       });
+      Auth.deauthenticateUser()
     };
 
-    if (Auth.isUserAuthenticated) this.login();
+    console.log("Login Check")
+    if (Auth.isUserAuthenticated()) this.login();
   }
 
   render() {
