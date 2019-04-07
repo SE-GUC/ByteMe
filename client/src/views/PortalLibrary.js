@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AcademicPaper from "../components/AcademicPaper";
 // import "./Events.css";
 import API from "../utils/API";
-import { CardDeck } from "react-bootstrap";
+//import { CardDeck } from "react-bootstrap";
 
 // First we create our class
 class PortalLibrary extends Component {

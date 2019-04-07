@@ -43,7 +43,6 @@ class Event extends Component {
   render() {
     const {
       _id,
-      comingSoon,
       title,
       brief,
       location,

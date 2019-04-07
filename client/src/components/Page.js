@@ -5,7 +5,7 @@ import "./Page.css";
 
 class Page extends Component {
   render() {
-    const { name, role_to_control, description, members } = this.props;
+    const { name, description } = this.props;
 
     return (
       <Card className="by">

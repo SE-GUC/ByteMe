@@ -38,18 +38,7 @@ class DetailedEvent extends Component {
   }
 
   render() {
-    const {
-      comingSoon,
-      title,
-      brief,
-      location,
-      dateTime,
-      description,
-      photos,
-      feedback,
-      creator,
-      rating
-    } = this.props;
+    const { location, dateTime, description, photos, creator } = this.props;
 
     return (
       <CardDeck>

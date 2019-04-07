@@ -1,5 +1,5 @@
 ﻿import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import logo from "./logo.svg";
 import { Navbar } from "react-bootstrap";
@@ -38,7 +38,6 @@ class App extends Component {
 
     this.login = () => {
       var token = Auth.getToken();
-      console.log(`token = ${token}`);
       API.get("/users/profile", {
         headers: {
           Authorization: token
@@ -47,7 +46,6 @@ class App extends Component {
         .then(res => {
           this.setState({ user: res.data.data });
           this.setState({ isLoggedIn: true });
-          console.log(`App.state.user ${this.state.user}`);
         })
         .catch(err => {
           console.log(err);

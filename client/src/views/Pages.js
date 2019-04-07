@@ -6,7 +6,7 @@ import "./Events.css";
 import Member from "../components/Member";
 //import "./Member.css";
 import API from "../utils/API";
-import { Card, Button, ButtonGroup, Badge, CardDeck } from "react-bootstrap";
+import { Button, ButtonGroup, CardDeck } from "react-bootstrap";
 
 // First we create our class
 class Pages extends Component {
