@@ -92,42 +92,44 @@ class App extends Component {
               />
             )}
           />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/home" component={Home} />
-          {this.state.councils.map(council => {
-            return (
-              <Route exact path={`/pages/${council._id}`} component={Pages} />
-            );
-          })}
-          {this.state.events.map(event => {
-            return (
-              <Route
-                exact
-                path={`/events/${event._id}`}
-                component={DetailedEvents}
-              />
-            );
-          })}
-          <Route exact path="/library" component={PortalLibrary} />
-          <Route exact path="/aboutus" component={AboutUs} />
-          <Route exact path="/faq" component={FAQs} />
-          <Route exact path="/announcements" component={Announcements} />
-          <Route exact path="/clubs" component={Club} />
-          <Route exact path="/ContactUs" component={Contact} />
-          <Route
-            exact
-            path="/login"
-            render={props => <Login login={this.login} {...props} />}
-          />
-          <Route exact path="/merchandise" component={Merchandise} />
-          <Route exact path="/events" component={Events} />
+          <div className="content-div">
+            <Route exact path="/" component={Home} />
+            <Route exact path="/home" component={Home} />
+            {this.state.councils.map(council => {
+              return (
+                <Route exact path={`/pages/${council._id}`} component={Pages} />
+              );
+            })}
+            {this.state.events.map(event => {
+              return (
+                <Route
+                  exact
+                  path={`/events/${event._id}`}
+                  component={DetailedEvents}
+                />
+              );
+            })}
+            <Route exact path="/library" component={PortalLibrary} />
+            <Route exact path="/aboutus" component={AboutUs} />
+            <Route exact path="/faq" component={FAQs} />
+            <Route exact path="/announcements" component={Announcements} />
+            <Route exact path="/clubs" component={Club} />
+            <Route exact path="/ContactUs" component={Contact} />
+            <Route
+              exact
+              path="/login"
+              render={props => <Login login={this.login} {...props} />}
+            />
+            <Route exact path="/merchandise" component={Merchandise} />
+            <Route exact path="/events" component={Events} />
 
-          <Route
-            path="/profile/:gucid?"
-            render={props => <UserProfile user={this.state.user} {...props} />}
-          />
-          <Route path="/profile/:gucid?" render={props => (<UserProfile user={this.state.user} login={this.login} {...props} />)} />
-
+            <Route
+              path="/profile/:gucid?"
+              render={props => (
+                <UserProfile user={this.state.user} {...props} />
+              )}
+            />
+          </div>
         </Router>
         <Navbar bg="black">
           <Navbar.Brand href="/home" className="mr-auto">
