@@ -20,7 +20,7 @@ class User extends Component {
         return (
 
             <Container className="user" >
-                <Row>
+                <Row className="user-row">
                     <Media>
                         <img
                             width={128}
@@ -35,27 +35,27 @@ class User extends Component {
                         </Media.Body>
                     </Media>
                 </Row>
-                <Row>
-                    <Col className="header" xs={2}>EMAIL:</Col>
-                    <Col className="other">{email}</Col>
+                <Row className="user-row">
+                    <Col className="user-header" xs={2}>EMAIL:</Col>
+                    <Col className="user-other">{email}</Col>
                 </Row>
-                <Row>
-                    <Col className="header" xs={2}>BIRTH DATE:</Col>
-                    <Col className="other">{birth_date.toString().split("T")[0]}</Col>
+                <Row className="user-row">
+                    <Col className="user-header" xs={2}>BIRTH DATE:</Col>
+                    <Col className="user-other">{birth_date.toString().split("T")[0]}</Col>
                 </Row>
-                <Row>
-                    <Col className="header" xs={2}>GUC ID:</Col>
-                    <Col className="other">{guc_id}</Col>
+                <Row className="user-row">
+                    <Col className="user-header" xs={2}>GUC ID:</Col>
+                    <Col className="user-other">{guc_id}</Col>
                 </Row>
-                <Row>
-                    <Col className="header" xs={2}>EMAIL:</Col>
-                    <Col className="other">{email}</Col>
+                <Row className="user-row">
+                    <Col className="user-header" xs={2}>EMAIL:</Col>
+                    <Col className="user-other">{email}</Col>
                 </Row>
                 {
                     mun_role !== "none" ? (
-                        <Row>
-                            <Col className="header" xs={2}>ROLE:</Col>
-                            <Col className="other">{email}</Col>
+                        <Row className="user-row">
+                            <Col className="user-header" xs={2}>ROLE:</Col>
+                            <Col className="user-other">{email}</Col>
                         </Row>
                     ) :
                         <></>

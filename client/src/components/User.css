@@ -9,17 +9,17 @@
     font-family: "GothamBook";
     margin: 4%;
 }
-.row{
+.user-row{
     padding: 0.7%;
 }
-.header{
+.user-header{
     text-align: left;
     font-weight: bold;
     font-size: 115%;
     color: #003255;
     background: #ffffff;
 }
-.other{  
+.user-other{  
     background: #003255;
     color: #ffffff;
     padding: 0.5%
