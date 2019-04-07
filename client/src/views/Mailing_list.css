@@ -4,15 +4,13 @@
   font-weight: normal;
   font-style: normal;
 }
-
-
-.login-form {    
-  font-family: GothamBook;
-  font-size: 130%;
-  text-align: center;
-  margin: 5%;
+.mmm {
+  display: flex;
 }
-
-.login-label{
-  font-style: italic
+h1 {
+  font-family: GothamBook;
+  text-align: center;
+}
+Mailing {
+  margin: 8px;
 }

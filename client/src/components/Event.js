@@ -131,6 +131,7 @@ class Event extends Component {
             <Button variant="secondary" onClick={this.handleClose}>
               Close
             </Button>
+
             <Button href={`/events/${_id}`}>Go to event page</Button>
           </Modal.Footer>
         </Modal>

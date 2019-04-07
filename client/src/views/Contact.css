@@ -4,6 +4,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 * {box-sizing: border-box;}
 
 .App {
@@ -12,6 +13,7 @@
 }
 p {
   text-align: center;
+
   font-weight: 500;
 }
 
@@ -56,4 +58,5 @@ input[type=submit]:hover {
   border: 1px solid red;
   padding: 7px;
   font-weight: bold;
+
 }

@@ -32,7 +32,6 @@ class UserProfile extends Component {
     });
 
     const parsed = queryString.parse(this.props.location.search);
-
     if (parsed.gucid) {
       if (this.state.user && this.state.user.is_admin) {
         const token = Auth.getToken();
