@@ -50,7 +50,7 @@ class HeaderNavbar extends Component {
                                     </LinkContainer>
                                     {index !== this.state.councils.length - 1 ?
                                         (<NavDropdown.Divider />) :
-                                        (<div></div>)}
+                                        (<></>)}
                                 </div>
                             );
                         })}
