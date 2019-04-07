@@ -15,7 +15,6 @@ import HeaderNavbar from "./components/HeaderNavbar";
 
 import API from "./utils/API";
 import Auth from "./utils/Auth";
-import Announcements from "./views/Announcements";
 
 class App extends Component {
   constructor(props) {
