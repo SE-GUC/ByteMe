@@ -18,8 +18,10 @@ components, I've already implemented it you can import components you want to us
 
 ###### Please add/edit this list as you see fit.
 
+- Move announcements, FAQs and AWG pages to seperate site (AWG Platform)
 - Replace the reset password link emailed with a web page that uses the token provided to graphically reset the password.
-- Merchandise page image sizes need to be consistent, margins need to be implemented between products, a nicer UI maybe better title, a motto and a frame around the component.
 - Merchandise cart can be implemented later.
-- events styling and colors
-- run events tests to check if they all pass... hope so
+- Register page needs to be implemented.
+- Viewing user profiles while logged out needs to be fixed.
+- Title margins and sizing needs to become consistent.
+
