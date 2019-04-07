@@ -15,6 +15,7 @@ import Contact from "./views/Contact";
 import AboutUs from "./views/AboutUs";
 import UserProfile from "./views/UserProfile";
 
+import Mailing_list from "./views/Mailing_list";
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import API from "./utils/API";
@@ -77,6 +78,7 @@ class App extends Component {
           <Route exact path="/login" render={props => (<Login login={this.login} {...props} />)} />
           <Route exact path="/merchandise" component={Merchandise} />
           <Route exact path="/events" component={Events} />
+          <Route exact path='/mailing_list' component={Mailing_list} />
           <Route path="/profile/:gucid?" render={props => (<UserProfile user={this.state.user} login={this.login} {...props} />)} />
         </Router>
         <Navbar bg="black" fixed="bottom">

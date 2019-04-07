@@ -27,7 +27,6 @@ class AboutUs extends Component {
             We see ourselves as representatives of the United Nations, and do
             our best to help in development in different fields.{' '}
           </p>
-        </body>
         <h1>Our Achievements</h1>
         <div className='slide-container'>
           <Slide {...properties}>
@@ -55,8 +54,11 @@ class AboutUs extends Component {
                 <span className='ddd'>Slide 3</span>
               </div>
             </div>
+            
           </Slide>
         </div>
+        
+        </body>
       </div>
     )
   }
