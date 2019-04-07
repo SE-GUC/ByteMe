@@ -33,6 +33,9 @@ class HeaderNavbar extends Component {
                     <LinkContainer to="/home">
                         <Nav.Link>Home</Nav.Link>
                     </LinkContainer>
+                    <LinkContainer to="/aboutus">
+                        <Nav.Link >AboutUs</Nav.Link>
+                    </LinkContainer>
 
                     <LinkContainer to="/announcements">
                         <Nav.Link>Announcements</Nav.Link>
@@ -65,6 +68,12 @@ class HeaderNavbar extends Component {
 
                     <LinkContainer to="/faq">
                         <Nav.Link>FAQ</Nav.Link>
+                    </LinkContainer>
+                    <LinkContainer to="/clubs">
+                        <Nav.Link >AWGs</Nav.Link>
+                    </LinkContainer>
+                    <LinkContainer to="/ContactUs">
+                        <Nav.Link >ContactUs</Nav.Link>
                     </LinkContainer>
 
                 </Nav>
