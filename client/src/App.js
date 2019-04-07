@@ -16,36 +16,36 @@ import Auth from "./utils/Auth";
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       isLoggedIn: false,
       user: undefined
-    }
+    };
 
     this.login = () => {
       var token = Auth.getToken();
-      console.log(`token = ${token}`)
+      console.log(`token = ${token}`);
       API.get("/users/profile", {
         headers: {
           Authorization: token
         }
       })
         .then(res => {
-          this.setState({ user: (res.data.data) })
-          this.setState({ isLoggedIn: true })
-          console.log(`App.state.user ${this.state.user}`)
+          this.setState({ user: res.data.data });
+          this.setState({ isLoggedIn: true });
+          console.log(`App.state.user ${this.state.user}`);
         })
         .catch(err => {
-          console.log(err)
-        })
-    }
+          console.log(err);
+        });
+    };
     this.logout = () => {
       this.setState({
         user: undefined,
         isLoggedIn: false
-      })
-    }
+      });
+    };
   }
   render() {
     return (
@@ -57,11 +57,25 @@ class App extends Component {
           crossorigin="anonymous"
         />
         <Router>
-          < Route path="/" render={props => (<HeaderNavbar isLoggedIn={this.state.isLoggedIn} user={this.state.user} logout={this.logout} {...props} />)} />
+          <Route
+            path="/"
+            render={props => (
+              <HeaderNavbar
+                isLoggedIn={this.state.isLoggedIn}
+                user={this.state.user}
+                logout={this.logout}
+                {...props}
+              />
+            )}
+          />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/home" component={Home} />
-            <Route exact path="/login" render={props => (<Login login={this.login} {...props} />)} />
+            <Route
+              exact
+              path="/login"
+              render={props => <Login login={this.login} {...props} />}
+            />
             <Route exact path="/merchandise" component={Merchandise} />
             <Route exact path="/events" component={Events} />
           </Switch>
