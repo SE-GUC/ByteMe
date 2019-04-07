@@ -56,9 +56,10 @@ class App extends Component {
         user: undefined,
         isLoggedIn: false
       });
+      Auth.deauthenticateUser()
     };
 
-    if (Auth.isUserAuthenticated) this.login();
+    if (Auth.isUserAuthenticated()) this.login();
   }
 
   async componentDidMount() {
