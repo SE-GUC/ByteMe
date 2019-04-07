@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { Form, Button, Alert } from "react-bootstrap"
 import { Link } from "react-router-dom"
+
 import API from "../utils/API";
 import Auth from "../utils/Auth";
-import NavLink from "react-bootstrap/NavLink";
+
+import "../App.css";
+import "./Login.css";
 
 class Login extends Component {
     constructor(props) {
@@ -54,7 +57,7 @@ class Login extends Component {
     }
     render() {
         return (
-            <div>
+            <div >
                 {this.state.error ?
                     <Alert variant="danger">
                         {this.state.error}
@@ -66,9 +69,9 @@ class Login extends Component {
                             </Alert>
                             : <div></div>
                     )}
-                < Form >
+                < Form class="bg-blue">
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>Email Address</Form.Label>
                         <Form.Control type="email" placeholder="Enter email" onChange={this.changeEmail} />
                     </Form.Group>
 

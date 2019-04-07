@@ -1,0 +1,84 @@
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.title {
+  font-family: GothamBook;
+  text-align: center;
+  color: blue;
+}
+
+.text {
+  font-family: GothamLight;
+  text-align: center;
+  color: blue;
+}
+.members {
+  font-family: GothamLight;
+  border: solid;
+  background-color: blue;
+}
+
+.events {
+  font-family: GothamLight;
+  border: solid;
+  background-color: blue;
+}
+
+.buttons {
+  position: relative;
+  margin-left: 680px;
+  margin-top: 300px;
+}
+
+.card {
+  background: #efefef;
+  position: relative;
+  text-decoration-color: blue;
+  height: 30px;
+
+  margin-left: 660px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.img {
+  height: 1400%;
+}
+
+.header {
+  background: white;
+  position: relative;
+  margin-left: 10px;
+  margin-top: 400px;
+}
+
+.deck {
+  background: #efefef;
+  position: relative;
+  text-decoration-color: blue;
+  height: 30px;
+
+  margin-top: 100px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.deck2 {
+  background: #efefef;
+  position: relative;
+  text-decoration-color: blue;
+  height: 30px;
+
+  margin-top: 100px;
+}
+
+h1 {
+  font-family: GothamBook;
+  text-align: center;
+}

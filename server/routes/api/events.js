@@ -44,7 +44,7 @@ router.get("/month", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.findById(id);
+    const event = await Event.find({ _id: id });
     if (!event) return res.json({ message: "Event does not exist" });
     res.json({ msg: "Event data", data: event });
   } catch (error) {
