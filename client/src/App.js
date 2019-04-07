@@ -129,7 +129,7 @@ class App extends Component {
           <Route path="/profile/:gucid?" render={props => (<UserProfile user={this.state.user} login={this.login} {...props} />)} />
 
         </Router>
-        <Navbar bg="black" fixed="bottom">
+        <Navbar bg="black">
           <Navbar.Brand href="/home" className="mr-auto">
             <img
               src={logo}

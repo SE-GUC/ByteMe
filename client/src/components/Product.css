@@ -1,6 +1,58 @@
+@font-face {
+  font-family: "GothamMedium";
+  src: url("../fonts/GothamMedium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamLight";
+  src: url("../fonts/GothamLight.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamBlack";
+  src: url("../fonts/GothamBlack.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "CenturyGothic";
+  src: url("../fonts/CenturyGothic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 .product-name {
   text-align: center;
+  font-family: GothamMedium;
 }
 .product-button {
   float: right;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-bottom: 15px;
+  margin-right: 15px;
+  font-family: GothamBlack;
+  background-color: #ffffff;
+}
+
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:active,
+.btn-secondary:visited {
+  background-color: #003255 !important;
+}
+
+.product-description {
+  font-family: CenturyGothic;
+}
+.card-img-top {
+  height: 50%;
+}
+.card {
+  border: 1px solid #ffd700;
+}
+.product-price {
+  font-family: GothamLight;
 }

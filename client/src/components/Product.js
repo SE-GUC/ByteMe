@@ -8,13 +8,15 @@ class Product extends Component {
     const { name, description, pic_ref, price } = this.props;
 
     return (
-      <Card style={{ width: "18rem" }}>
+      <Card style={{ width: "18rem", margin: "10px" }}>
         <Card.Img variant="top" src={pic_ref} />
-        <Card.Body>
+        <Card.Body className="product-body">
           <Card.Title className="product-name">{name}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">{price} EGP</Card.Subtitle>
-          <Card.Text>{description}</Card.Text>
-          <Button variant="primary" className="product-button">
+          <Card.Subtitle className="mb-2 text-muted product-price">
+            {price} EGP
+          </Card.Subtitle>
+          <Card.Text className="product-description">{description}</Card.Text>
+          <Button variant="secondary" className="product-button">
             Add to Cart
           </Button>
         </Card.Body>
