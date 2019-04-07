@@ -69,14 +69,14 @@ class Login extends Component {
                             </Alert>
                             : <div></div>
                     )}
-                < Form class="bg-blue">
+                < Form className="login-form">
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email Address</Form.Label>
+                        <Form.Label className="login-label">Email Address</Form.Label>
                         <Form.Control type="email" placeholder="Enter email" onChange={this.changeEmail} />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label className="login-label">Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" onChange={this.changePassword} />
                     </Form.Group>
 
@@ -84,7 +84,7 @@ class Login extends Component {
                         Login
                 </Button>
                 </Form >
-            </div>
+            </div >
         );
     }
 }
