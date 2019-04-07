@@ -8,7 +8,8 @@ class Page extends Component {
     const { name, role_to_control, description, members } = this.props;
 
     return (
-      <Card className="card">
+      <Card className="by">
+
         <Card.Img
           className="img"
           src="https://www.solidbackgrounds.com/images/1920x1080/1920x1080-yellow-solid-color-background.jpg"

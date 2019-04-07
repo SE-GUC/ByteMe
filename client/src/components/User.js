@@ -7,11 +7,19 @@ import "../App.css";
 class User extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
-            user: this.props.user
+            user: props.user,
+            err: ""
         }
     }
+
+    async componentWillReceiveProps(props) {
+        this.setState({
+            user: props.user,
+            err: ""
+        })
+    }
+
 
     render() {
         console.log(this.state.user)
@@ -20,6 +28,7 @@ class User extends Component {
         return (
 
             <Container className="user" >
+
                 <Row className="user-row">
                     <Media>
                         <img
@@ -35,6 +44,7 @@ class User extends Component {
                         </Media.Body>
                     </Media>
                 </Row>
+
                 <Row className="user-row">
                     <Col className="user-header" xs={2}>EMAIL:</Col>
                     <Col className="user-other">{email}</Col>

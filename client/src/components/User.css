@@ -9,6 +9,7 @@
     font-family: "GothamBook";
     margin: 4%;
 }
+
 .user-row{
     padding: 0.7%;
 }
@@ -19,6 +20,7 @@
     color: #003255;
     background: #ffffff;
 }
+
 .user-other{  
     background: #003255;
     color: #ffffff;

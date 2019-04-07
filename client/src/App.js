@@ -3,16 +3,18 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import logo from "./logo.svg";
 import { Navbar } from "react-bootstrap";
-
+import Pages from "./views/Pages";
 import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
 import Login from "./views/Login";
 import Events from "./views/Events";
+
 import DetailedEvents from "./views/DetailedEvents";
 import FAQs from "./views/FAQs";
 import Announcements from "./views/Announcements";
 import Club from "./views/Club";
 import Contact from "./views/Contact";
+
 import Pages from "./views/Pages";
 import PortalLibrary from "./views/PortalLibrary";
 import AboutUs from "./views/AboutUs";
@@ -30,6 +32,7 @@ class App extends Component {
     this.state = {
       isLoggedIn: false,
       user: undefined,
+
       councils: [],
       events: []
     };
@@ -56,6 +59,7 @@ class App extends Component {
         user: undefined,
         isLoggedIn: false
       });
+
       Auth.deauthenticateUser()
     };
 
@@ -66,6 +70,7 @@ class App extends Component {
     API.get("/page").then(res => {
       this.setState({ councils: res.data.data });
     });
+
 
     API.get("/events").then(res => {
       this.setState({ events: res.data.data });
@@ -93,6 +98,7 @@ class App extends Component {
               />
             )}
           />
+
           <div className="content-div">
             <Route exact path="/" component={Home} />
             <Route exact path="/home" component={Home} />

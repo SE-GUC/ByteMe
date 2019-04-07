@@ -69,6 +69,7 @@ class Login extends Component {
                             </Alert>
                             : <div></div>
                     )}
+
                 < Form className="login-form">
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label className="login-label">Email Address</Form.Label>
