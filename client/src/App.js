@@ -54,6 +54,7 @@ class App extends Component {
       Auth.deauthenticateUser()
     };
 
+    console.log("Login Check")
     if (Auth.isUserAuthenticated()) this.login();
   }
 

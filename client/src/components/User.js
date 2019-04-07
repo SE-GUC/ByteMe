@@ -7,10 +7,17 @@ import "../App.css";
 class User extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
-            user: this.props.user
+            user: props.user,
+            err: ""
         }
+    }
+
+    async componentWillReceiveProps(props) {
+        this.setState({
+            user: props.user,
+            err: ""
+        })
     }
 
     render() {
