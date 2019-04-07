@@ -25,9 +25,21 @@ router.get("/:id", async (request, response) => {
 router.get("/:id/events", async (req, res) => {
   try {
     const id = req.params.id;
-    var page = await Page.find({ id });
+    var page = await Page.findById(id);
     const events = await Event.find({ creator: page.name });
     res.json({ data: events });
+  } catch (error) {
+    // We will be handling the error later
+    console.log(error);
+  }
+});
+
+router.get("/:id/my_members", async (req, res) => {
+  try {
+    const id = req.params.id;
+    var page = await Page.findById(id);
+    const members = await User.find({ mun_role: page.name });
+    res.json({ data: members });
   } catch (error) {
     // We will be handling the error later
     console.log(error);
