@@ -15,7 +15,6 @@ import Announcements from "./views/Announcements";
 import Club from "./views/Club";
 import Contact from "./views/Contact";
 
-import Pages from "./views/Pages";
 import PortalLibrary from "./views/PortalLibrary";
 import AboutUs from "./views/AboutUs";
 import UserProfile from "./views/UserProfile";
