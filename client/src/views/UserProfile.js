@@ -38,14 +38,14 @@ class UserProfile extends Component {
         if (parsed.gucid) {
             if (this.state.user && this.state.user.is_admin) {
                 const token = Auth.getToken();
-                console.log("an admin")
+
                 API.get(`/users/asAdmin/${parsed.gucid}`, {
                     headers: {
                         Authorization: token
                     }
                 })
                     .then(res => {
-                        console.log("res")
+
                         this.setState({ user: res.data.data, err: "" })
                     })
                     .catch(err => {
@@ -55,7 +55,7 @@ class UserProfile extends Component {
                             this.setState({ err: err.message, user: undefined })
                     })
             } else {
-                console.log("not an admin")
+
                 API.get(`/users/${parsed.gucid}`)
                     .then(res => {
                         this.setState({ user: res.data.data, err: "" })

@@ -5,12 +5,14 @@
   font-style: normal;
 }
 
-form {    
+
+.login-form {    
   font-family: GothamBook;
   font-size: 130%;
   text-align: center;
   margin: 5%;
 }
-label{
+
+.login-label{
   font-style: italic
 }

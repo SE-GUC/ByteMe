@@ -18,6 +18,7 @@
 }
 
 .by {
+
   background: #efefef;
   position: relative;
   text-decoration-color: yellow;
@@ -29,13 +30,4 @@
   margin-right: auto;
 }
 
-.img {
-  height: 1400%;
-}
 
-.header {
-  background: white;
-  position: relative;
-  margin-left: 10px;
-  margin-top: 400px;
-}

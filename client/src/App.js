@@ -8,14 +8,18 @@ import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
 import Login from "./views/Login";
 import Events from "./views/Events";
+
+import DetailedEvents from "./views/DetailedEvents";
 import FAQs from "./views/FAQs";
 import Announcements from "./views/Announcements";
 import Club from "./views/Club";
 import Contact from "./views/Contact";
+
+import Pages from "./views/Pages";
+import PortalLibrary from "./views/PortalLibrary";
 import AboutUs from "./views/AboutUs";
 import UserProfile from "./views/UserProfile";
-import PortalLibrary from "./views/PortalLibrary";
-import Mailing_list from "./views/Mailing_list";
+
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import API from "./utils/API";
@@ -28,7 +32,9 @@ class App extends Component {
     this.state = {
       isLoggedIn: false,
       user: undefined,
-      councils: []
+
+      councils: [],
+      events: []
     };
 
     this.login = () => {
@@ -53,16 +59,21 @@ class App extends Component {
         user: undefined,
         isLoggedIn: false
       });
-      Auth.deauthenticateUser();
+
+      Auth.deauthenticateUser()
     };
 
-    console.log("Login Check");
     if (Auth.isUserAuthenticated()) this.login();
   }
 
   async componentDidMount() {
     API.get("/page").then(res => {
       this.setState({ councils: res.data.data });
+    });
+
+
+    API.get("/events").then(res => {
+      this.setState({ events: res.data.data });
     });
   }
 
@@ -87,37 +98,45 @@ class App extends Component {
               />
             )}
           />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/home" component={Home} />
-          <Route exact path="/aboutus" component={AboutUs} />
-          <Route exact path="/faq" component={FAQs} />
-          <Route exact path="/announcements" component={Announcements} />
-          {this.state.councils.map(council => {
-            return (
-              <Route exact path={`/pages/${council._id}`} component={Pages} />
-            );
-          })}
-          <Route exact path="/clubs" component={Club} />
-          <Route exact path="/ContactUs" component={Contact} />
-          <Route
-            exact
-            path="/login"
-            render={props => <Login login={this.login} {...props} />}
-          />
-          <Route exact path="/merchandise" component={Merchandise} />
-          <Route exact path="/events" component={Events} />
-          <Route exact path="/library" component={PortalLibrary} />
-          <Route exact path="/mailing_list" component={Mailing_list} />
-          <Route
-            path="/profile/:gucid?"
-            render={props => (
-              <UserProfile
-                user={this.state.user}
-                login={this.login}
-                {...props}
-              />
-            )}
-          />
+
+          <div className="content-div">
+            <Route exact path="/" component={Home} />
+            <Route exact path="/home" component={Home} />
+            {this.state.councils.map(council => {
+              return (
+                <Route exact path={`/pages/${council._id}`} component={Pages} />
+              );
+            })}
+            {this.state.events.map(event => {
+              return (
+                <Route
+                  exact
+                  path={`/events/${event._id}`}
+                  component={DetailedEvents}
+                />
+              );
+            })}
+            <Route exact path="/library" component={PortalLibrary} />
+            <Route exact path="/aboutus" component={AboutUs} />
+            <Route exact path="/faq" component={FAQs} />
+            <Route exact path="/announcements" component={Announcements} />
+            <Route exact path="/clubs" component={Club} />
+            <Route exact path="/ContactUs" component={Contact} />
+            <Route
+              exact
+              path="/login"
+              render={props => <Login login={this.login} {...props} />}
+            />
+            <Route exact path="/merchandise" component={Merchandise} />
+            <Route exact path="/events" component={Events} />
+
+            <Route
+              path="/profile/:gucid?"
+              render={props => (
+                <UserProfile user={this.state.user} {...props} />
+              )}
+            />
+          </div>
         </Router>
         <Navbar bg="black">
           <Navbar.Brand href="/home" className="mr-auto">

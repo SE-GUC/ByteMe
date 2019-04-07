@@ -29,7 +29,8 @@ class HeaderNavbar extends Component {
             <Nav.Link>Home</Nav.Link>
           </LinkContainer>
           <LinkContainer to="/aboutus">
-            <Nav.Link>AboutUs</Nav.Link>
+
+            <Nav.Link>About Us</Nav.Link>
           </LinkContainer>
 
           <LinkContainer to="/announcements">
@@ -71,7 +72,8 @@ class HeaderNavbar extends Component {
             <Nav.Link>AWGs</Nav.Link>
           </LinkContainer>
           <LinkContainer to="/ContactUs">
-            <Nav.Link>ContactUs</Nav.Link>
+
+            <Nav.Link>Contact Us</Nav.Link>
           </LinkContainer>
         </Nav>
 
