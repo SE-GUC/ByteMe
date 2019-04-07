@@ -8,6 +8,7 @@ import Home from "./views/Home";
 import Merchandise from "./views/Merchandise";
 import Login from "./views/Login";
 import Events from "./views/Events";
+import UserProfile from "./views/UserProfile";
 
 import HeaderNavbar from "./components/HeaderNavbar";
 
@@ -46,10 +47,13 @@ class App extends Component {
         isLoggedIn: false
       })
     }
+
+    if (Auth.isUserAuthenticated) this.login();
   }
+
   render() {
     return (
-      <div>
+      <div id="default-div">
         <link
           rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -58,13 +62,12 @@ class App extends Component {
         />
         <Router>
           < Route path="/" render={props => (<HeaderNavbar isLoggedIn={this.state.isLoggedIn} user={this.state.user} logout={this.logout} {...props} />)} />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/home" component={Home} />
-            <Route exact path="/login" render={props => (<Login login={this.login} {...props} />)} />
-            <Route exact path="/merchandise" component={Merchandise} />
-            <Route exact path="/events" component={Events} />
-          </Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/home" component={Home} />
+          <Route exact path="/login" render={props => (<Login login={this.login} {...props} />)} />
+          <Route exact path="/merchandise" component={Merchandise} />
+          <Route exact path="/events" component={Events} />
+          <Route path="/profile/:gucid?" render={props => (<UserProfile user={this.state.user} {...props} />)} />
         </Router>
         <Navbar bg="black" fixed="bottom">
           <Navbar.Brand href="/home" className="mr-auto">
