@@ -1,28 +1,29 @@
-﻿import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import "./App.css";
-import logo from "./logo.svg";
+﻿import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { Component } from "react";
 import { Navbar } from "react-bootstrap";
-import Pages from "./views/Pages";
-import Home from "./views/Home";
-import Merchandise from "./views/Merchandise";
-import Login from "./views/Login";
-import Events from "./views/Events";
+
+import logo from "./logo.svg";
+import "./App.css";
 
 import DetailedEvents from "./views/DetailedEvents";
-import FAQs from "./views/FAQs";
-import Announcements from "./views/Announcements";
-import Club from "./views/Club";
-import Contact from "./views/Contact";
-
 import PortalLibrary from "./views/PortalLibrary";
-import AboutUs from "./views/AboutUs";
+import Announcements from "./views/Announcements";
 import UserProfile from "./views/UserProfile";
+import Merchandise from "./views/Merchandise";
+import Register from "./views/Register";
+import AboutUs from "./views/AboutUs";
+import Contact from "./views/Contact";
+import Events from "./views/Events";
+import Pages from "./views/Pages";
+import Login from "./views/Login";
+import Home from "./views/Home";
+import FAQs from "./views/FAQs";
+import Club from "./views/Club";
 
 import HeaderNavbar from "./components/HeaderNavbar";
 
-import API from "./utils/API";
 import Auth from "./utils/Auth";
+import API from "./utils/API";
 
 class App extends Component {
   constructor(props) {
@@ -124,6 +125,7 @@ class App extends Component {
               path="/login"
               render={props => <Login login={this.login} {...props} />}
             />
+            <Route exact path="/register" component={Register} />
             <Route exact path="/merchandise" component={Merchandise} />
             <Route exact path="/events" component={Events} />
 

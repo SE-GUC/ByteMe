@@ -159,9 +159,9 @@ describe("Profile viewing", () => {
     });
   });
   describe("logged in", () => {
-    var token;
-    var token2;
-    var token3;
+    var token; //public admin
+    var token2;//private user two
+    var token3;//public user one
     beforeAll(done => {
       request(app)
         .post("/api/users/login")
@@ -198,6 +198,21 @@ describe("Profile viewing", () => {
           done();
         });
     });
+    test("view profile while logged out", () => {
+      return request(app)
+        .get("/api/users/profile")
+        .then(res => {
+          expect(res.status).toEqual(401);
+        })
+    })
+    test("view profile while logged in", () => {
+      return request(app)
+        .get("/api/users/profile")
+        .set("Authorization", `${token2}`)
+        .then(res => {
+          expect(res.body.data.guc_id).toEqual("00-0002");
+        })
+    })
     test("view public user that is not me", () => {
       return request(app)
         .get("/api/users/asAdmin/00-0001")
@@ -660,6 +675,39 @@ describe("Delete profile", async () => {
   });
 });
 
+describe("User find with role", async () => {
+  beforeAll(async done => {
+    await User.findOneAndUpdate({ guc_id: "00-0001" }, { mun_role: "specialjestrole" })
+    done();
+  })
+  afterAll(async done => {
+    await User.findOneAndUpdate({ guc_id: "00-0001" }, { mun_role: "none" })
+    done();
+  })
+  test("Searching for role: 'none'", async () => {
+    return request(app)
+      .get("/api/users/role/none")
+      .then(res => {
+        expect(res.body.error).toEqual("You can't look for this role!")
+        expect(res.status).toEqual(400)
+      })
+  })
+  test("Searching for role that has no users", async () => {
+    return request(app)
+      .get("/api/users/role/zzzzzz")
+      .then(res => {
+        expect(res.body.message).toEqual("No users assigned to this role")
+      })
+  })
+  test("Searching for test role", async () => {
+    return request(app)
+      .get("/api/users/role/specialjestrole")
+      .then(res => {
+        expect(res.body.data[0].guc_id).toEqual("00-0001")
+      })
+  })
+})
+
 describe("User Search", () => {
   test("bad request", () => {
     return request(app)
@@ -692,7 +740,7 @@ describe("User Search", () => {
       .then(res => {
         var flag =
           res.body.message ==
-            "No relevant data. Try searching with another keyword" ||
+          "No relevant data. Try searching with another keyword" ||
           (res.body.users && res.body.users.length === 0);
         return expect(flag).toEqual(true);
       });

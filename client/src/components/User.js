@@ -67,10 +67,7 @@ class User extends Component {
                     <Col className="user-header" xs={2}>GUC ID:</Col>
                     <Col className="user-other">{guc_id}</Col>
                 </Row>
-                <Row className="user-row">
-                    <Col className="user-header" xs={2}>EMAIL:</Col>
-                    <Col className="user-other">{email}</Col>
-                </Row>
+
                 {mun_role !== "none" ? (
                     <Row className="user-row">
                         <Col className="user-header" xs={2}>ROLE:</Col>
