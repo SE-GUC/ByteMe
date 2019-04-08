@@ -13,6 +13,12 @@ class User extends Component {
         };
     }
 
+    async componentWillReceiveProps(props) {
+        this.state = {
+            user: this.props.user
+        };
+    }
+
     render() {
         const {
             email,
@@ -50,35 +56,29 @@ class User extends Component {
                     </Media>
                 </Row>
                 <Row className="user-row">
-                    <Col className="user-header" xs={2}>
-                        EMAIL:
-          </Col>
+                    <Col className="user-header" xs={2}>EMAIL:</Col>
                     <Col className="user-other">{email}</Col>
                 </Row>
                 <Row className="user-row">
-                    <Col className="user-header" xs={2}>
-                        BIRTH DATE:
-          </Col>
+                    <Col className="user-header" xs={2}>BIRTH DATE:</Col>
                     <Col className="user-other">{birth_date.toString().split("T")[0]}</Col>
                 </Row>
                 <Row className="user-row">
-                    <Col className="user-header" xs={2}>
-                        GUC ID:
-          </Col>
+                    <Col className="user-header" xs={2}>GUC ID:</Col>
                     <Col className="user-other">{guc_id}</Col>
                 </Row>
                 <Row className="user-row">
-                    <Col className="user-header" xs={2}>
-                        EMAIL:
-          </Col>
+                    <Col className="user-header" xs={2}>EMAIL:</Col>
                     <Col className="user-other">{email}</Col>
                 </Row>
                 {mun_role !== "none" ? (
                     <Row className="user-row">
-                        <Col className="user-header" xs={2}>
-                            ROLE:
-            </Col>
-                        <Col className="user-other">{email}</Col>
+                        <Col className="user-header" xs={2}>ROLE:</Col>
+                        <Col className="user-other">{
+                            mun_role.replace("_", " ").split(" ")
+                                .map(i => i[0].toUpperCase() + i.substring(1).toLowerCase())
+                                .join(" ")}
+                        </Col>
                     </Row>
                 ) : (
                         <></>
