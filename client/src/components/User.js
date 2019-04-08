@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Media } from "react-bootstrap";
+import { Container, Row, Col, Media, Form } from "react-bootstrap";
 
 import "./User.css";
 import "../App.css";
@@ -9,14 +9,26 @@ class User extends Component {
         super(props);
 
         this.state = {
-            user: this.props.user
+            user: this.props.user,
+            isEditing: false
         };
+
+        this.save = () => {
+            //save the edits made then
+            this.props.save();
+        }
     }
 
     async componentWillReceiveProps(props) {
-        this.state = {
-            user: this.props.user
-        };
+        this.setState({
+            user: props.user,
+            isEditing: props.isEditing
+        });
+
+        console.log(props)
+        if (props.requestSave) {
+            this.save();
+        }
     }
 
     render() {
@@ -46,18 +58,22 @@ class User extends Component {
                             alt="Generic placeholder"
                         />
                         <Media.Body>
-                            <h5>
+                            <h4>
                                 {(first_name + " " + last_name)
                                     .split(" ")
                                     .map(i => i[0].toUpperCase() + i.substring(1).toLowerCase())
                                     .join(" ")}
-                            </h5>
+                            </h4>
                         </Media.Body>
                     </Media>
                 </Row>
                 <Row className="user-row">
                     <Col className="user-header" xs={2}>EMAIL:</Col>
-                    <Col className="user-other">{email}</Col>
+                    <Col className="user-other">
+                        {this.state.isEditing ?
+                            <Form.Control style={{ border: '0', padding: '0', margin: '0', color: 'white' }} plaintext type="email" placeholder="Email" onChange={this.change} />
+                            : email}
+                    </Col>
                 </Row>
                 <Row className="user-row">
                     <Col className="user-header" xs={2}>BIRTH DATE:</Col>
@@ -77,9 +93,13 @@ class User extends Component {
                                 .join(" ")}
                         </Col>
                     </Row>
-                ) : (
-                        <></>
-                    )}
+                ) :
+                    <></>
+                }
+
+                {
+
+                }
             </Container>
         );
     }

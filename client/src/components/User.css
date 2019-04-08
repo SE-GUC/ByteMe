@@ -7,12 +7,13 @@
 
 .user{
     font-family: "GothamBook";
-    margin: 4%;
+    margin: 3%;
 }
 
 .user-row{
     padding: 0.7%;
 }
+
 .user-header{
     text-align: left;
     font-weight: bold;

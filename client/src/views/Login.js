@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button, Alert, Col, FormGroup } from "react-bootstrap"
+import { Form, Button, Alert, Col } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 import API from "../utils/API";
