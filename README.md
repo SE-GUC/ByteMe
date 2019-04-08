@@ -23,6 +23,5 @@ components, I've already implemented it you can import components you want to us
 - Replace the reset password link emailed with a web page that uses the token provided to graphically reset the password.
 - Merchandise cart can be implemented later.
 - Register page needs to be implemented.
-- Viewing user profiles while logged out needs to be fixed.
 - Title margins and sizing needs to become consistent.
 - Academic Library should be seperated by year.[OMAR]
