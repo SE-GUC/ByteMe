@@ -22,6 +22,5 @@ components, I've already implemented it you can import components you want to us
 - Move announcements, FAQs and AWG pages to seperate site (AWG Platform)
 - Replace the reset password link emailed with a web page that uses the token provided to graphically reset the password.
 - Merchandise cart can be implemented later.
-- Register page needs to be implemented.
 - Title margins and sizing needs to become consistent.
 - Academic Library should be seperated by year.[OMAR]
