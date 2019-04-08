@@ -67,19 +67,26 @@ class Login extends Component {
                             <Alert variant="success">
                                 {this.state.message} <Link to="/profile" class="alert-link">Go To Profile.</Link>
                             </Alert>
-                            : <div></div>
-                    )}
+                            : <></>
+                    )
+                }
 
                 < Form className="login-form">
-                    <Form.Row>
-                        <Col xl="1"><Form.Label className="login-label">Email</Form.Label></Col>
-                        <Col><Form.Control type="email" placeholder="Enter email" onChange={this.changeEmail} /></Col>
-                    </Form.Row>
+
+
+                    <Form.Group>
+
+                        <Form.Row>
+                            <Col xs="1"><Form.Label className="login-label">Email</Form.Label></Col>
+                            <Col><Form.Control placeholder="Enter email" onChange={this.changeEmail} /></Col>
+                        </Form.Row>
+                    </Form.Group>
                     <Form.Group>
                         <Form.Row>
-                            <Col xl="1"><Form.Label className="login-label">Password</Form.Label></Col>
+                            <Col xs="1"><Form.Label className="login-label">Password</Form.Label></Col>
                             <Col><Form.Control type="password" placeholder="Password" onChange={this.changePassword} /></Col>
                         </Form.Row>
+
                     </Form.Group>
                     <Form.Group>
                         <Form.Row>
