@@ -675,7 +675,7 @@ describe("Delete profile", async () => {
   });
 });
 
-describe.only("User Search", () => {
+describe("User Search", () => {
   test("bad request", () => {
     return request(app)
       .post("/api/search")
