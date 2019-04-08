@@ -28,6 +28,9 @@ class UserProfile extends Component {
   async componentWillReceiveProps(props) {
     const parsed = queryString.parse(this.props.location.search);
     if (parsed.gucid) {
+      this.setState({
+        user: undefined
+      })
       if (this.props.user && this.props.user.is_admin) {
         const token = Auth.getToken();
         API.get(`/users/asAdmin/${parsed.gucid}`, {
