@@ -26,14 +26,12 @@ class UserProfile extends Component {
   };
 
   async componentWillReceiveProps(props) {
-    this.setState({
-      user: props.user,
-      err: ""
-    });
-
     const parsed = queryString.parse(this.props.location.search);
     if (parsed.gucid) {
-      if (this.state.user && this.state.user.is_admin) {
+      this.setState({
+        user: undefined
+      })
+      if (this.props.user && this.props.user.is_admin) {
         const token = Auth.getToken();
         API.get(`/users/asAdmin/${parsed.gucid}`, {
           headers: {
@@ -41,7 +39,9 @@ class UserProfile extends Component {
           }
         })
           .then(res => {
+            console.log("here")
             this.setState({ user: res.data.data, err: "" });
+            console.log(this.state.user)
           })
           .catch(err => {
             if (err.response)
@@ -64,17 +64,22 @@ class UserProfile extends Component {
             else this.setState({ err: err.message, user: undefined });
           });
       }
+    } else {
+      this.setState({
+        user: props.user,
+        err: ""
+      });
     }
   }
 
   render() {
-    return this.state.user ? (
-      <User user={this.state.user} />
-    ) : this.state.err !== "" ? (
+    return this.state.err !== "" ? (
       <Alert variant="danger"> {this.state.err} </Alert>
+    ) : this.state.user ? (
+      <User user={this.state.user} />
     ) : (
-      <></>
-    );
+          <></>
+        );
   }
 }
 

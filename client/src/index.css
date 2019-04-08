@@ -15,7 +15,17 @@ body {
   width: 100%;
   margin: 0;
 }
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/*Website wide styling here*/
+@font-face {
+  font-family: "GothamBook";
+  src: url("./fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
