@@ -14,12 +14,13 @@ router.get("/", (req, res) => res.json({ data: "Users Route Online" }));
 router.get("/role/:role", async (req, res) => {
   try {
     const role = req.params.role;
+    if (role === "none") return res.status("400").json({ error: "You can't look for this role!" })
     const users_with_roles = await User.find({ mun_role: role });
     if (users_with_roles.length === 0)
       return res.json({ message: "No users assigned to this role" });
     res.json({
       msg: "Users assigned to this role",
-      data: users_with_roles
+      data: users_with_roles.map(user => { return hideSecrets(user) })
     });
   } catch (error) {
     // We will be handling the error later
@@ -270,7 +271,7 @@ router.put(
     }
   }
 );
-//checked
+
 router.put(
   "/forefit_awgAdmin",
   passport.authenticate("jwt", { session: false }),
@@ -431,7 +432,7 @@ router.put("/forgotpass", (req, res) => {
   return User.updateOne(
     { email: req.body.email },
     { $set: { resetPassLink: token } },
-    function(error, feedback) {
+    function (error, feedback) {
       if (error) return res.send(error);
       else {
         emailer.sendEmail(emailData);
@@ -450,7 +451,7 @@ router.put("/resetpass", (req, res) => {
   return User.updateOne(
     { resetPassLink },
     { $set: { password: hashedPassword, resetPassLink: "" } },
-    function(error, feedback) {
+    function (error, feedback) {
       if (error) return res.send(error);
       return res.send(feedback);
     }
