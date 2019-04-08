@@ -675,6 +675,39 @@ describe("Delete profile", async () => {
   });
 });
 
+describe("User find with role", async () => {
+  beforeAll(async done => {
+    await User.findOneAndUpdate({ guc_id: "00-0001" }, { mun_role: "specialjestrole" })
+    done();
+  })
+  afterAll(async done => {
+    await User.findOneAndUpdate({ guc_id: "00-0001" }, { mun_role: "none" })
+    done();
+  })
+  test("Searching for role: 'none'", async () => {
+    return request(app)
+      .get("/api/users/role/none")
+      .then(res => {
+        expect(res.body.error).toEqual("You can't look for this role!")
+        expect(res.status).toEqual(400)
+      })
+  })
+  test("Searching for role that has no users", async () => {
+    return request(app)
+      .get("/api/users/role/zzzzzz")
+      .then(res => {
+        expect(res.body.message).toEqual("No users assigned to this role")
+      })
+  })
+  test("Searching for test role", async () => {
+    return request(app)
+      .get("/api/users/role/specialjestrole")
+      .then(res => {
+        expect(res.body.data[0].guc_id).toEqual("00-0001")
+      })
+  })
+})
+
 describe("User Search", () => {
   test("bad request", () => {
     return request(app)
