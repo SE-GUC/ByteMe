@@ -9,10 +9,10 @@
 .login-form {    
   font-family: GothamBook;
   font-size: 130%;
-  text-align: center;
   margin: 5%;
 }
 
 .login-label{
-  font-style: italic
+  font-size: 80%;
+  color: gray
 }

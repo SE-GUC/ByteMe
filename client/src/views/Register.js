@@ -151,8 +151,7 @@ class Register extends Component {
                         </Form.Row>
                     </Form.Group>
                     <Form.Row>
-                        <Col>
-                        </Col>
+                        <Col></Col>
                         <Col xs="2">
                             <Form.Check className="register-check" label="Keep Me Private" type="checkbox" onChange={this.changePrivate} />
                         </Col>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button, Alert } from "react-bootstrap"
+import { Form, Button, Alert, Col, FormGroup } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 import API from "../utils/API";
@@ -71,20 +71,26 @@ class Login extends Component {
                     )}
 
                 < Form className="login-form">
-                    <Form.Group controlId="formBasicEmail">
-                        <Form.Label className="login-label">Email Address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" onChange={this.changeEmail} />
+                    <Form.Row>
+                        <Col xl="1"><Form.Label className="login-label">Email</Form.Label></Col>
+                        <Col><Form.Control type="email" placeholder="Enter email" onChange={this.changeEmail} /></Col>
+                    </Form.Row>
+                    <Form.Group>
+                        <Form.Row>
+                            <Col xl="1"><Form.Label className="login-label">Password</Form.Label></Col>
+                            <Col><Form.Control type="password" placeholder="Password" onChange={this.changePassword} /></Col>
+                        </Form.Row>
                     </Form.Group>
-
-                    <Form.Group controlId="formBasicPassword">
-                        <Form.Label className="login-label">Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" onChange={this.changePassword} />
-                    </Form.Group>
-
-                    <Button variant="primary" onClick={this.login}>
-                        Login
-                </Button>
-                </Form >
+                    <Form.Group>
+                        <Form.Row>
+                            <Col>
+                            </Col>
+                            <Col><Button variant="primary" onClick={this.login}>
+                                Login
+                        </Button></Col>
+                        </Form.Row>
+                    </Form.Group >
+                </Form>
             </div >
         );
     }
