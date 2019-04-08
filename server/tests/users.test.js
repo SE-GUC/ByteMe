@@ -159,9 +159,9 @@ describe("Profile viewing", () => {
     });
   });
   describe("logged in", () => {
-    var token;
-    var token2;
-    var token3;
+    var token; //public admin
+    var token2;//private user two
+    var token3;//public user one
     beforeAll(done => {
       request(app)
         .post("/api/users/login")
@@ -198,6 +198,21 @@ describe("Profile viewing", () => {
           done();
         });
     });
+    test("view profile while logged out", () => {
+      return request(app)
+        .get("/api/users/profile")
+        .then(res => {
+          expect(res.status).toEqual(401);
+        })
+    })
+    test("view profile while logged in", () => {
+      return request(app)
+        .get("/api/users/profile")
+        .set("Authorization", `${token2}`)
+        .then(res => {
+          expect(res.body.data.guc_id).toEqual("00-0002");
+        })
+    })
     test("view public user that is not me", () => {
       return request(app)
         .get("/api/users/asAdmin/00-0001")
@@ -692,7 +707,7 @@ describe("User Search", () => {
       .then(res => {
         var flag =
           res.body.message ==
-            "No relevant data. Try searching with another keyword" ||
+          "No relevant data. Try searching with another keyword" ||
           (res.body.users && res.body.users.length === 0);
         return expect(flag).toEqual(true);
       });
