@@ -35,11 +35,14 @@ router.post("/", async (req, res) => {
       { score: { $meta: "textScore" } }
     ).sort({ score: { $meta: "textScore" } });
 
-    var users_responded_to_keyword_filtered = [];
-    users_responded_to_keyword.forEach(user => {
-      if (!user.is_private)
-        users_responded_to_keyword_filtered.push(hideSecrets(user));
-    });
+    const users_responded_to_keyword_filtered = users_responded_to_keyword
+      .filter(user => {
+        return !user.is_private
+      })
+      .map(user => {
+        return hideSecrets(user)
+      })
+
     if (
       clubs_responded_to_keyword.length === 0 &&
       events_responded_to_keyword.length === 0 &&
