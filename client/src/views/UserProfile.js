@@ -4,6 +4,8 @@ import { withRouter } from "react-router";
 import { Alert } from "react-bootstrap";
 
 import User from "../components/User";
+import MiniUser from "../components/MiniUser";
+
 
 import API from "../utils/API";
 import Auth from "../utils/Auth";
@@ -51,6 +53,7 @@ class UserProfile extends Component {
       } else {
         API.get(`/users/${parsed.gucid}`)
           .then(res => {
+            console.log(res.data)
             this.setState({ user: res.data.data, err: "" });
           })
           .catch(err => {
