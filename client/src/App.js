@@ -46,9 +46,12 @@ class App extends Component {
       })
         .then(res => {
           this.setState({
-            user: res.data.data,
+            user: res.data.data
+          })
+          this.setState({
             isLoggedIn: true
-          });
+          })
+          //for some reason combining these into one setState ruins private user???????????????????
         })
 
     };

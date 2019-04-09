@@ -33,7 +33,6 @@ class User extends Component {
         if (props.requestUser) {
             this.props.setUser(this.state.editedUser);
         }
-
         this.setState({
             user: props.user,
             isEditing: props.isEditing,
