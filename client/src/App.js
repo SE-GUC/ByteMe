@@ -45,13 +45,14 @@ class App extends Component {
         }
       })
         .then(res => {
-          this.setState({ user: res.data.data });
-          this.setState({ isLoggedIn: true });
+          this.setState({
+            user: res.data.data,
+            isLoggedIn: true
+          });
         })
-        .catch(err => {
-          console.log(err);
-        });
+
     };
+
     this.logout = () => {
       this.setState({
         user: undefined,
@@ -132,7 +133,7 @@ class App extends Component {
             <Route
               path="/profile/:gucid?"
               render={props => (
-                <UserProfile user={this.state.user} {...props} />
+                <UserProfile user={this.state.user} login={this.login} {...props} />
               )}
             />
           </div>

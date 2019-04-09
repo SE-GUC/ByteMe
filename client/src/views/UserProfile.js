@@ -19,19 +19,49 @@ class UserProfile extends Component {
       user: props.user,
       err: "",
       isEditing: false,
-      requestSave: false
+      editingErr: "",
+      requestUser: false
     };
 
     this.edit = () => {
       this.setState({ isEditing: true })
     }
 
-    this.requestSave = () => {
-      this.setState({ requestSave: true })
+    this.requestUser = () => {
+      this.setState({ requestUser: true })
     }
 
-    this.save = () => {
-      this.setState({ requestSave: false, isEditing: false })
+    this.save = (editedUser) => {
+      this.setState({ requestUser: false })
+      if (editedUser.password === editedUser.confirm_password) {
+        delete editedUser.confirm_password
+
+        const token = Auth.getToken();
+        API.put(`users/${this.props.location.search}`,
+          editedUser,
+          {
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(res => {
+            this.setState({ requestUser: false, isEditing: false, editingErr: "" })
+            this.props.login()
+          })
+          .catch(err => {
+            console.log(err.response)
+            if (err.response.data)
+              this.setState({ editingErr: err.response.data.error })
+            else
+              this.setState({ editingErr: err.message })
+          })
+      } else {
+        this.setState({ editingErr: "Passwords Don't Match" })
+      }
+    }
+
+    this.cancel = () => {
+      this.setState({ requestUser: false, isEditing: false, editingErr: "" })
     }
 
     this.delete = () => {
@@ -96,12 +126,25 @@ class UserProfile extends Component {
     ) : this.state.user ? (
       ((this.props.user && (this.props.user.is_admin || this.props.user.guc_id === this.state.user.guc_id)) ?
         <>
-          <User user={this.state.user} isEditing={this.state.isEditing} requestSave={this.state.requestSave} save={this.save} />
+          {this.state.editingErr !== "" ?
+            <Alert variant="danger">
+              {this.state.editingErr}
+            </Alert>
+            : <></>}
+          <User user={this.state.user} isEditing={this.state.isEditing} requestUser={this.state.requestUser} setUser={this.save} />
+
           <Form.Row className="profile-row">
             <Col></Col>
-            <Col xs="1" className="profile-col">{this.state.isEditing ? <Button block variant="outline-warning" onClick={this.requestSave}>Save</Button> : <Button block variant="outline-warning" onClick={this.edit}>Edit</Button>}</Col>
+            {this.state.isEditing ? <Col xs="1" className="profile-col"><Button block variant="outline-warning" onClick={this.cancel}>Cancel</Button></Col> : <></>}
+            <Col xs="1" className="profile-col">{this.state.isEditing ? <Button block variant="outline-warning" onClick={this.requestUser}>Save</Button> : <Button block variant="outline-warning" onClick={this.edit}>Edit</Button>}</Col>
             <Col xs="1" className="profile-col"><Button block variant="outline-danger" onClick={this.delete}>Delete</Button></Col>
           </Form.Row>
+
+          {this.state.isEditing ?
+            <Alert variant="warning">
+              Only edit fields you want changed! Fields left empty will stay as they are.
+            </Alert>
+            : <></>}
 
         </> :
         <User user={this.state.user} />
