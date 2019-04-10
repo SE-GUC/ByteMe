@@ -141,6 +141,7 @@ class App extends Component {
                 <UserProfile
                   user={this.state.user}
                   login={this.login}
+                  logout={this.logout}
                   {...props}
                 />
               )}

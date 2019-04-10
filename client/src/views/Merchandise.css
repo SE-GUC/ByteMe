@@ -31,3 +31,12 @@ Product {
   border-radius: 50px !important;
   text-align: center;
 }
+.product-picture-picker {
+  width: 128px;
+  height: 128px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 8px;
+  margin-top: -8px;
+}

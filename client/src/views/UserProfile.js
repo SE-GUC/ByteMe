@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import { Alert, Button, Form, Col } from "react-bootstrap";
 
 import User from "../components/User";
+import MiniUser from "../components/MiniUser";
 
 import API from "../utils/API";
 import Auth from "../utils/Auth";
@@ -54,7 +55,14 @@ class UserProfile extends Component {
             console.log(err.response);
             if (err.response.data)
               this.setState({ editingErr: err.response.data.error });
-            else this.setState({ editingErr: err.message });
+            else {
+              if (err.response.status === 413)
+                this.setState({
+                  editingErr:
+                    "That image is too large, try an image that is below 5MB"
+                });
+              else this.setState({ editingErr: err.message });
+            }
           });
       } else {
         this.setState({ editingErr: "Passwords Don't Match" });
@@ -66,7 +74,39 @@ class UserProfile extends Component {
     };
 
     this.delete = () => {
-      //display warning then delete user
+      const prompts = [
+        `Deleting ${
+          this.props.location.search === "" ? "your" : "this"
+        } profile is permanent. There is no going back!`,
+        `This means  ${
+          this.props.location.search === "" ? "leaving" : "removing"
+        } forever!`,
+        "Are you absolutely 100% certain you wan't this?"
+      ];
+      const randInt = Math.floor(Math.random() * prompts.length);
+      console.log(randInt);
+      if (window.confirm(prompts[randInt])) {
+        const token = Auth.getToken();
+        API.delete(`users/${this.props.location.search}`, {
+          headers: {
+            Authorization: token
+          }
+        })
+          .then(res => {
+            if (this.props.location.search === "") {
+              this.props.logout();
+              //redirect to home
+            } else {
+              this.setState({ err: "Profile Deleted" });
+            }
+          })
+          .catch(err => {
+            console.log(err.response);
+            if (err.response.data)
+              this.setState({ editingErr: err.response.data.error });
+            else this.setState({ editingErr: err.message });
+          });
+      }
     };
   }
 
@@ -93,17 +133,18 @@ class UserProfile extends Component {
             this.setState({ user: res.data.data, err: "" });
           })
           .catch(err => {
-            if (err.response)
-              this.setState({ err: err.response.error, user: undefined });
+            if (err.response.data)
+              this.setState({ err: err.response.data.error, user: undefined });
             else this.setState({ err: err.message, user: undefined });
           });
       } else {
         API.get(`/users/${parsed.gucid}`)
           .then(res => {
+            console.log(res.data);
             this.setState({ user: res.data.data, err: "" });
           })
           .catch(err => {
-            if (err.response)
+            if (err.response.data)
               this.setState({
                 err: err.response.data.error
                   ? err.response.data.error

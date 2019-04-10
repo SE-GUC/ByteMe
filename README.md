@@ -24,3 +24,7 @@ components, I've already implemented it you can import components you want to us
 - Merchandise cart can be implemented later.
 - Title margins and sizing needs to become consistent.
 - Academic Library should be seperated by year.[OMAR]
+- AWG platform home page
+- Online google sheets for registration.
+- Fix backend email case-sensitive issue
+
