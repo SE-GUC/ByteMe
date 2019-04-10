@@ -4,9 +4,6 @@ import { Container, Row, Col, Media, Form } from "react-bootstrap";
 import "./User.css";
 import "../App.css";
 
-import Auth from "../utils/Auth";
-import API from "../utils/API";
-
 class User extends Component {
     constructor(props) {
         super(props);

@@ -65,7 +65,37 @@ class UserProfile extends Component {
     }
 
     this.delete = () => {
-      //display warning then delete user
+      const prompts = [
+        `Deleting ${this.props.location.search === "" ? "your" : "this"} profile is permanent. There is no going back!`,
+        `This means  ${this.props.location.search === "" ? "leaving" : "removing"} forever!`,
+        'Are you absolutely 100% certain you wan\'t this?'
+      ]
+      const randInt = (Math.floor(Math.random() * prompts.length));
+      console.log(randInt)
+      if (window.confirm(prompts[randInt])) {
+        const token = Auth.getToken();
+        API.delete(`users/${this.props.location.search}`,
+          {
+            headers: {
+              Authorization: token
+            }
+          })
+          .then(res => {
+            if (this.props.location.search === "") {
+              this.props.logout()
+              //redirect to home
+            } else {
+              this.setState({ err: "Profile Deleted" })
+            }
+          })
+          .catch(err => {
+            console.log(err.response)
+            if (err.response.data)
+              this.setState({ editingErr: err.response.data.error })
+            else
+              this.setState({ editingErr: err.message })
+          })
+      }
     }
   }
 
@@ -92,8 +122,8 @@ class UserProfile extends Component {
             this.setState({ user: res.data.data, err: "" });
           })
           .catch(err => {
-            if (err.response)
-              this.setState({ err: err.response.error, user: undefined });
+            if (err.response.data)
+              this.setState({ err: err.response.data.error, user: undefined });
             else this.setState({ err: err.message, user: undefined });
           });
       } else {
@@ -102,7 +132,7 @@ class UserProfile extends Component {
             this.setState({ user: res.data.data, err: "" });
           })
           .catch(err => {
-            if (err.response)
+            if (err.response.data)
               this.setState({
                 err: err.response.data.error
                   ? err.response.data.error
@@ -121,7 +151,7 @@ class UserProfile extends Component {
   }
 
   render() {
-    return this.state.err !== "" ? (
+    return (this.state.err !== "") ? (
       <Alert variant="danger"> {this.state.err} </Alert>
     ) : this.state.user ? (
       ((this.props.user && (this.props.user.is_admin || this.props.user.guc_id === this.state.user.guc_id)) ?

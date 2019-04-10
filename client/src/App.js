@@ -136,7 +136,7 @@ class App extends Component {
             <Route
               path="/profile/:gucid?"
               render={props => (
-                <UserProfile user={this.state.user} login={this.login} {...props} />
+                <UserProfile user={this.state.user} login={this.login} logout={this.logout} {...props} />
               )}
             />
           </div>
