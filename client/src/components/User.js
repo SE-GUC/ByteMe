@@ -5,6 +5,10 @@ import Dropzone from "react-dropzone";
 import "./User.css";
 import "../App.css";
 
+import defImage from "../images/default-profile-picture.jpg";
+import uplImage from "../images/upload-icon.png";
+
+
 class User extends Component {
   constructor(props) {
     super(props);
@@ -54,39 +58,87 @@ class User extends Component {
     });
   }
 
-  render() {
-    const defImageLink =
-      "https://www.watsonmartin.com/wp-content/uploads/2016/03/default-profile-picture.jpg";
-    const {
-      email,
-      first_name,
-      last_name,
-      birth_date,
-      guc_id,
-      mun_role,
-      picture_ref
-    } = this.state.user;
+    render() {
+        const {
+            email,
+            first_name,
+            last_name,
+            birth_date,
+            guc_id,
+            mun_role,
+            picture_ref
+        } = this.state.user;
 
-    return (
-      <Container className="user">
-        <Row className="user-row">
-          <Media>
-            {this.state.isEditing ? (
-              <Dropzone
-                onDrop={acceptedFiles => this.getBase64(acceptedFiles[0])}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div className="user-dropzone-div" {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      <img
-                        width={128}
-                        height={128}
-                        className="mr-3"
-                        src={
-                          this.state.editedUser.picture_ref
-                            ? this.state.editedUser.picture_ref
-                            : "https://2.bp.blogspot.com/-2pUEov3AKFM/WAgBheupB6I/AAAAAAAA8GA/19L8_kh1IIghXbbtUy1VIouMcUP8AUhiwCLcB/s1600/upload-1118929_960_720.png"
+        return (
+
+
+            <Container className="user">
+
+                <Row className="user-row">
+                    <Media>
+                        {this.state.isEditing ?
+                            <Dropzone onDrop={acceptedFiles => this.getBase64(acceptedFiles[0])}>
+                                {({ getRootProps, getInputProps }) => (
+                                    <section>
+                                        <div className="user-dropzone-div" {...getRootProps()}>
+                                            <input {...getInputProps()} />
+                                            <img
+                                                width={128}
+                                                height={128}
+                                                className="mr-3"
+                                                src={this.state.editedUser.picture_ref ?
+                                                    this.state.editedUser.picture_ref
+                                                    : uplImage
+                                                }
+                                                alt="Display Pic"
+                                            />
+                                        </div>
+                                    </section>
+                                )}
+                            </Dropzone> :
+                            <img
+                                width={128}
+                                height={128}
+                                className="mr-3"
+                                src={
+                                    picture_ref
+                                        ? picture_ref
+                                        : defImage
+                                }
+                                alt="Display Pic"
+                            />}
+                        <Media.Body>
+                            {this.state.isEditing ?
+                                <h4>
+                                    <Form.Control name="first_name" style={{ border: '0', padding: '0', paddingLeft: '6%', margin: '0' }} plaintext type="text" placeholder="First name" onChange={this.change} />
+                                    <Form.Control name="last_name" style={{ border: '0', padding: '0', paddingLeft: '6%', margin: '0' }} plaintext type="text" placeholder="Last name" onChange={this.change} />
+                                </h4>
+                                :
+                                <h4>
+                                    {(first_name + " " + last_name)
+                                        .split(" ")
+                                        .map(i => i[0].toUpperCase() + i.substring(1).toLowerCase())
+                                        .join(" ")}
+                                </h4>
+                            }
+                        </Media.Body>
+                    </Media>
+                </Row>
+                <Row className="user-row">
+                    <Col className="user-header" xs={2}>EMAIL:</Col>
+                    <Col className="user-other">
+                        {this.state.isEditing ?
+                            <Form.Control name="email" style={{ border: '0', padding: '0', margin: '0', color: 'white' }} plaintext type="email" placeholder="Email" onChange={this.change} />
+                            : email
+                        }
+                    </Col>
+                </Row>
+                <Row className="user-row">
+                    <Col className="user-header" xs={2}>BIRTH DATE:</Col>
+                    <Col className="user-other">
+                        {this.state.isEditing ?
+                            <Form.Control name="birth_date" style={{ border: '0', padding: '0', margin: '0', color: 'white' }} plaintext type="date" placeholder="Birth date" onChange={this.change} />
+                            : birth_date.toString().split("T")[0]
                         }
                         alt="Display Pic"
                       />

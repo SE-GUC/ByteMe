@@ -4,7 +4,6 @@ import { withRouter } from "react-router";
 import { Alert, Button, Form, Col } from "react-bootstrap";
 
 import User from "../components/User";
-import MiniUser from "../components/MiniUser";
 
 import API from "../utils/API";
 import Auth from "../utils/Auth";
