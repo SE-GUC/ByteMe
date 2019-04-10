@@ -59,7 +59,16 @@
 .product-delete-button {
   width: fit-content;
   position: absolute;
-  right: 0;
+  right: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.product-edit-button {
+  width: fit-content;
+  position: absolute;
+  left: 5px;
+  margin-top: 5px;
   border-radius: 50px !important;
   text-align: center;
 }

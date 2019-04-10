@@ -19,8 +19,7 @@ router.get("/:id", async (req, res) => {
 
     res.json({ msg: "Club data", data: club });
   } catch (error) {
-    // We will be handling the error later
-    console.log(error);
+    return res.json({ msg: error });
   }
 });
 
@@ -41,8 +40,7 @@ router.post(
       const newClub = await Club.create(req.body);
       res.json({ msg: "Club was created successfully", data: newClub });
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -52,21 +50,18 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // if (!req.session.user_id)  return  res.json({ msg: "not logged in"});
-
       const userOne = req.user;
       if (!userOne.is_admin) return res.json({ msg: "admins only" });
       const id = req.params.id;
-      const club = await Club.find({ _id: id });
+      const club = await Club.findOne({ _id: id });
       if (!club) return res.json({ message: "Club does not exist" });
       const isValidated = validator.updateValidation(req.body);
       if (isValidated.error)
         return res.json({ message: "validations are not satisfied" });
-      const updatedClub = await Club.updateOne(req.body);
-      res.json({ msg: "Club updated successfully", data: updatedClub });
+      await Club.findByIdAndUpdate(club, req.body);
+      res.json({ msg: "Club updated successfully" });
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -85,8 +80,7 @@ router.delete(
       const deletedClub = await Club.findByIdAndRemove(id);
       res.json({ msg: "Club was deleted successfully", data: deletedClub });
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );

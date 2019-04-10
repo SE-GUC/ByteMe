@@ -13,8 +13,8 @@ class Merchandise extends Component {
   constructor(props) {
     super(props);
     this.updateProducts = this.updateProducts.bind(this);
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.handleCreateShow = this.handleCreateShow.bind(this);
+    this.handleCreateClose = this.handleCreateClose.bind(this);
     this.change = this.change.bind(this);
     this.pictureUploader = this.pictureUploader.bind(this);
 
@@ -38,7 +38,7 @@ class Merchandise extends Component {
             <Button
               variant="warning"
               className="product-create-button"
-              onClick={this.handleShow}
+              onClick={this.handleCreateShow}
             >
               <img src={iconAdd} />
             </Button>
@@ -54,9 +54,10 @@ class Merchandise extends Component {
             ))}
           </div>
         </div>
+        {/* CREATE MODAL */}
         <Modal
           show={this.state.showAddProductWindow}
-          onHide={this.handleClose}
+          onHide={this.handleCreateClose}
           centered
         >
           <Modal.Header closeButton>
@@ -118,7 +119,7 @@ class Merchandise extends Component {
             </InputGroup>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
+            <Button variant="secondary" onClick={this.handleCreateClose}>
               Close
             </Button>
             <Button
@@ -144,10 +145,10 @@ class Merchandise extends Component {
       console.log(`😱 Axios request failed: ${e}`);
     }
   }
-  handleClose() {
+  handleCreateClose() {
     this.setState({ showAddProductWindow: false });
   }
-  handleShow() {
+  handleCreateShow() {
     this.setState({ showAddProductWindow: true });
   }
   change = event => {
@@ -163,7 +164,6 @@ class Merchandise extends Component {
       const newProduct = this.state.newProduct;
       newProduct.pic_ref = reader.result;
       this.setState({ newProduct: newProduct });
-      console.log(newProduct);
     };
     reader.onerror = error => {
       console.log("Error uploading image: ", error);
@@ -176,7 +176,7 @@ class Merchandise extends Component {
         Authorization: `${token}`
       };
       API.post(`products`, newProduct, { headers }).then(res => {
-        this.handleClose();
+        this.handleCreateClose();
         this.updateProducts();
       });
     } catch (e) {
