@@ -56,47 +56,14 @@ class Register extends Component {
             }
         }
 
-        this.changePassword = event => {
-            this.setState({
-                password: event.target.value
-            })
+        this.change = event => {
+            const newState = {
+            }
+            const name = event.target.name;
+            newState[name] = name === "is_private" ? event.target.checked : event.target.value
+            this.setState(newState)
         }
-        this.changePasswordConfirm = event => {
-            this.setState({
-                passwordConfirm: event.target.value
-            })
-        }
-        this.changeEmail = event => {
-            this.setState({
-                email: event.target.value
-            })
-        }
-        this.changeFirstName = event => {
-            this.setState({
-                first_name: event.target.value
-            })
-        }
-        this.changeLastName = event => {
-            this.setState({
-                last_name: event.target.value
-            })
-        }
-        this.changeGUCID = event => {
-            this.setState({
-                guc_id: event.target.value
-            })
-            console.log(event.target.value)
-        }
-        this.changeBirthDate = event => {
-            this.setState({
-                birth_date: event.target.value
-            })
-        }
-        this.changePrivate = event => {
-            this.setState({
-                is_private: event.target.checked
-            })
-        }
+
     }
     render() {
         return (
@@ -116,29 +83,29 @@ class Register extends Component {
                 < Form className="register-form">
                     <Form.Row >
                         <Col>
-                            <Form.Control type="email" placeholder="Email" onChange={this.changeEmail} />
+                            <Form.Control type="email" placeholder="Email" name="email" onChange={this.change} />
                         </Col>
                     </Form.Row>
 
                     <Form.Row >
                         <Col>
-                            <Form.Control type="text" placeholder="First Name" onChange={this.changeFirstName} />
+                            <Form.Control type="text" placeholder="First Name" name="first_name" onChange={this.change} />
                         </Col>
                         <Col>
-                            <Form.Control type="text" placeholder="Last Name" onChange={this.changeLastName} />
+                            <Form.Control type="text" placeholder="Last Name" name="last_name" onChange={this.change} />
                         </Col>
                     </Form.Row>
 
                     <Form.Group>
-                        <Form.Control type="password" placeholder="Password" onChange={this.changePassword} />
+                        <Form.Control type="password" placeholder="Password" name="password" onChange={this.change} />
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Control type="password" placeholder="Confirm Password" onChange={this.changePasswordConfirm} />
+                        <Form.Control type="password" placeholder="Confirm Password" name="passwordConfirm" onChange={this.change} />
                     </Form.Group>
 
                     <Form.Group >
-                        <Form.Control type="text" placeholder="GUC ID /00-0000/" onChange={this.changeGUCID} />
+                        <Form.Control type="text" placeholder="GUC ID /00-0000/" name="guc_id" onChange={this.change} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Row >
@@ -146,14 +113,14 @@ class Register extends Component {
                                 <Form.Label className="register-label">Date of Birth</Form.Label>
                             </Col>
                             <Col>
-                                <Form.Control className="register-label" type="date" onChange={this.changeBirthDate} />
+                                <Form.Control className="register-label" type="date" name="birth_date" onChange={this.change} />
                             </Col>
                         </Form.Row>
                     </Form.Group>
                     <Form.Row>
                         <Col></Col>
                         <Col xs="2">
-                            <Form.Check className="register-check" label="Keep Me Private" type="checkbox" onChange={this.changePrivate} />
+                            <Form.Check className="register-check" label="Keep Me Private" type="checkbox" name="is_private" onChange={this.change} />
                         </Col>
                         <Col xs="0">
                             <Button variant="primary" onClick={this.register}>Register</Button>
