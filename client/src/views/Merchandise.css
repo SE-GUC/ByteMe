@@ -23,3 +23,20 @@ Product {
   /* border: 2px solid #ffd700; */
   border: 2px solid #003255;
 }
+.product-create-button {
+  width: fit-content;
+  position: absolute;
+  right: 45px;
+  margin-top: 10px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.product-picture-picker {
+  width: 128px;
+  height: 128px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 8px;
+  margin-top: -8px;
+}

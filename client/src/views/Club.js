@@ -1,21 +1,21 @@
-import React, { Component } from 'react'
-import AWG from '../components/AWG'
-import './Club.css'
-import API from '../utils/API'
+import React, { Component } from "react";
+import AWG from "../components/AWG";
+import "./Club.css";
+import API from "../utils/API";
 
 // First we create our class
 class Club extends Component {
   // Then we add our constructor which receives our props
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     // Next we establish our state
     this.state = {
       isLoading: true,
       clubs: []
-    }
+    };
   }
   // The render function, where we actually tell the browser what it should show
-  render () {
+  render() {
     return (
       <div>
         <club>
@@ -32,17 +32,17 @@ class Club extends Component {
           </clubgroup>
         </club>
       </div>
-    )
+    );
   }
-  async componentDidMount () {
+  async componentDidMount() {
     try {
-      API.get('clubs').then(res => {
-        this.setState({ clubs: res.data.data, isLoading: false })
-      })
+      API.get("clubs").then(res => {
+        this.setState({ clubs: res.data.data, isLoading: false });
+      });
     } catch (e) {
-      console.log(`😱 Axios request failed: ${e}`)
+      console.log(`😱 Axios request failed: ${e}`);
     }
   }
 }
 
-export default Club
+export default Club;

@@ -48,11 +48,27 @@
   font-family: CenturyGothic;
 }
 .card-img-top {
-  height: 50%;
+  height: 18rem;
 }
 .card {
   border: 1px solid #ffd700;
 }
 .product-price {
   font-family: GothamLight;
+}
+.product-delete-button {
+  width: fit-content;
+  position: absolute;
+  right: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.product-edit-button {
+  width: fit-content;
+  position: absolute;
+  left: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
 }

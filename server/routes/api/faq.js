@@ -33,7 +33,7 @@ router.post(
       const newFAQ = await FAQ.create(req.body);
       res.json({ msg: "FAQ was created successfully", data: newFAQ });
     } catch (error) {
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -49,16 +49,15 @@ router.put(
       if (!userOne.is_admin)
         return res.json({ message: "Only admins can update FAQ" });
       const id = req.params.id;
-      const faq = await FAQ.find({ id });
+      const faq = await FAQ.findOne({ _id: id });
       if (!faq) return res.json({ message: "FAQ not found" });
       const isValidated = validator.updateValidation(req.body);
       if (isValidated.error)
         return res.json({ message: "Validations not met" });
-      const updatedFAQ = await FAQ.updateOne(req.body);
+      await Product.findByIdAndUpdate(faq, req.body);
       res.json({ msg: "FAQ updated successfully" });
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -77,8 +76,7 @@ router.delete(
       const deletedFAQ = await FAQ.findByIdAndRemove(id);
       res.json({ msg: "FAQ was deleted successfully", data: deletedFAQ });
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );

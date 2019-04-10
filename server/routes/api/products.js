@@ -33,7 +33,7 @@ router.post(
       const newProduct = await Product.create(req.body);
       res.json({ msg: "Product was created successfully", data: newProduct });
     } catch (error) {
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -53,12 +53,12 @@ router.put(
         return res.json({ message: "Only admins can update products" });
 
       const id = req.params.id;
-      const product = await Product.find({ id });
+      const product = await Product.findOne({ _id: id });
       if (!product) return res.json({ message: "Product does not exist" });
-      const updateProduct = await Product.updateOne(req.body);
+      await Product.findByIdAndUpdate(product, req.body);
       res.json({ msg: "Product updated successfully" });
     } catch (error) {
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -84,7 +84,7 @@ router.delete(
         data: deletedProduct
       });
     } catch (error) {
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );

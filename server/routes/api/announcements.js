@@ -35,7 +35,7 @@ router.post(
         data: newAnnouncements
       });
     } catch (error) {
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -50,17 +50,16 @@ router.put(
 
       if (!userOne.is_admin) return res.json({ msg: "Only admins can update" });
       const id = req.params.id;
-      const announcements = await Announcements.find({ id });
+      const announcements = await Announcements.findOne({ _id: id });
       if (!announcements)
         return res.json({ msg: "Announcement doesnot exist" });
       const isValidated = validator.updateValidation(req.body);
       if (isValidated.error)
         return res.json({ msg: "Validations are not met" });
-      const updateAnnouncements = await Announcements.updateOne(req.body);
+      await Announcements.findByIdAndUpdate(announcements, req.body);
       res.json({ msg: "Announcement updated successfully" });
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -81,8 +80,7 @@ router.delete(
         data: deletedAnnouncements
       });
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
