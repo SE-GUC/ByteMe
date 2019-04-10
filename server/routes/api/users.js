@@ -14,13 +14,16 @@ router.get("/", (req, res) => res.json({ data: "Users Route Online" }));
 router.get("/role/:role", async (req, res) => {
   try {
     const role = req.params.role;
-    if (role === "none") return res.status("400").json({ error: "You can't look for this role!" })
+    if (role === "none")
+      return res.status("400").json({ error: "You can't look for this role!" });
     const users_with_roles = await User.find({ mun_role: role });
     if (users_with_roles.length === 0)
       return res.json({ message: "No users assigned to this role" });
     res.json({
       msg: "Users assigned to this role",
-      data: users_with_roles.map(user => { return hideSecrets(user) })
+      data: users_with_roles.map(user => {
+        return hideSecrets(user);
+      })
     });
   } catch (error) {
     console.log(error);
@@ -306,7 +309,9 @@ router.put(
               .status(400)
               .send({ error: isValidated.error.details[0].message });
 
-          const email = req.body.email ? req.body.email.toLowerCase() : req.body.email;
+          const email = req.body.email
+            ? req.body.email.toLowerCase()
+            : req.body.email;
 
           const userWithEmail = await User.findOne({ email });
           if (userWithEmail)
@@ -344,7 +349,9 @@ router.put(
             .status(400)
             .send({ error: isValidated.error.details[0].message });
 
-        const email = req.body.email ? req.body.email.toLowerCase() : req.body.email;
+        const email = req.body.email
+          ? req.body.email.toLowerCase()
+          : req.body.email;
 
         const userWithEmail = await User.findOne({ email });
         if (userWithEmail)
@@ -423,7 +430,7 @@ router.put("/forgotpass", (req, res) => {
   return User.updateOne(
     { email: req.body.email.toLowerCase() },
     { $set: { resetPassLink: token } },
-    function (error, feedback) {
+    function(error, feedback) {
       if (error) return res.send(error);
       else {
         emailer.sendEmail(emailData);
@@ -442,7 +449,7 @@ router.put("/resetpass", (req, res) => {
   return User.updateOne(
     { resetPassLink },
     { $set: { password: hashedPassword, resetPassLink: "" } },
-    function (error, feedback) {
+    function(error, feedback) {
       if (error) return res.send(error);
       return res.send(feedback);
     }

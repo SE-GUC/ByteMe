@@ -37,11 +37,11 @@ router.post("/", async (req, res) => {
 
     const users_responded_to_keyword_filtered = users_responded_to_keyword
       .filter(user => {
-        return !user.is_private
+        return !user.is_private;
       })
       .map(user => {
-        return hideSecrets(user)
-      })
+        return hideSecrets(user);
+      });
 
     if (
       clubs_responded_to_keyword.length === 0 &&
