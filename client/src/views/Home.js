@@ -16,6 +16,8 @@ class Home extends Component {
   render() {
     return (
       <div>
+
+        <SearchBar />
         <Timeline lineColor={"#ffd700"} collapsible className="home">
           {this.state.events.map(event => (
             <EventTimeline
@@ -33,7 +35,6 @@ class Home extends Component {
           ))}
         </Timeline>
 
-        <SearchBar />
       </div>
     );
   }
