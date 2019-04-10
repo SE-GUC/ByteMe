@@ -9,7 +9,6 @@ import Auth from "../utils/Auth";
 class Product extends Component {
   constructor(props, context) {
     super(props, context);
-    this.deleteProduct = this.deleteProduct.bind(this);
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.state = {
@@ -54,7 +53,7 @@ class Product extends Component {
             <Button variant="secondary" onClick={this.handleClose}>
               Close
             </Button>
-            <Button variant="danger" onClick={this.deleteProduct}>
+            <Button variant="danger" onClick={() => this.deleteProduct(id)}>
               I know what i'm doing
             </Button>
           </Modal.Footer>
@@ -68,15 +67,15 @@ class Product extends Component {
   handleShow() {
     this.setState({ showDeleteConfirmation: true });
   }
-  deleteProduct() {
-    console.log("in");
+  deleteProduct(id) {
     try {
       const token = Auth.getToken();
       const headers = {
-        Authorization: `Bearer ${token}`
+        Authorization: `${token}`
       };
-      API.delete(`products/${this.id}`, { headers }).then(res => {
-        console.log("deleted");
+      API.delete(`products/${id}`, { headers }).then(res => {
+        this.handleClose();
+        this.props.updateProducts();
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);

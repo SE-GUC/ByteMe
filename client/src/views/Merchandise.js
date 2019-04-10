@@ -8,6 +8,7 @@ class Merchandise extends Component {
   // Then we add our constructor which receives our props
   constructor(props) {
     super(props);
+    this.updateProducts = this.updateProducts.bind(this);
     // Next we establish our state
     this.state = {
       isLoading: true,
@@ -30,6 +31,7 @@ class Merchandise extends Component {
                 pic_ref={product.pic_ref}
                 description={product.description}
                 price={product.price}
+                updateProducts={this.updateProducts}
               />
             ))}
           </div>
@@ -38,6 +40,9 @@ class Merchandise extends Component {
     );
   }
   async componentDidMount() {
+    this.updateProducts();
+  }
+  updateProducts() {
     try {
       API.get("products").then(res => {
         this.setState({ products: res.data.data, isLoading: false });
