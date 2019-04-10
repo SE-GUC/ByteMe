@@ -16,6 +16,7 @@
     "react-scripts": "2.1.8",
     "react-slideshow-image": "^1.1.5",
     "react-tree-graph": "^4.0.0",
+    "toasted-notes": "^2.1.5",
     "vertical-timeline-component-for-react": "^1.0.6"
   },
   "scripts": {

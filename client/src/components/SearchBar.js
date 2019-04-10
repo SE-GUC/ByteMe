@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, InputGroup, FormControl, CardDeck } from "react-bootstrap";
-import SearchResults from "./searchResults"
+import SearchResults from "./searchResults";
 import API from "../utils/API";
 
 class SearchBar extends Component {
@@ -21,20 +21,18 @@ class SearchBar extends Component {
       });
       try {
         setTimeout(() => {
-          API.post("search", { searchkey: this.state.searchkey })
-            .then(res => {
-              this.setState({
-                searchResults_clubs: res.data.clubs,
-                searchResults_events: res.data.events,
-                searchResults_announcementss: res.data.announcements,
-                searchResults_users: res.data.users
-              });
-            })
+          API.post("search", { searchkey: this.state.searchkey }).then(res => {
+            this.setState({
+              searchResults_clubs: res.data.clubs,
+              searchResults_events: res.data.events,
+              searchResults_announcementss: res.data.announcements,
+              searchResults_users: res.data.users
+            });
+          });
         }, 1000);
       } catch (e) {
         console.log(`😱 Axios request failed: ${e}`);
       }
-
     };
   }
 
@@ -45,16 +43,16 @@ class SearchBar extends Component {
           placeholder="What are you looking for?"
           onChange={this.changeSearchKey}
         />
-        {
-          this.state.searchkey === "" ?
-            <></>
-            : <SearchResults
-              clubs={this.state.searchResults_clubs}
-              events={this.state.searchResults_events}
-              announcements={this.state.searchResults_announcementss}
-              users={this.state.searchResults_users}
-            />
-        }
+        {this.state.searchkey === "" ? (
+          <></>
+        ) : (
+          <SearchResults
+            clubs={this.state.searchResults_clubs}
+            events={this.state.searchResults_events}
+            announcements={this.state.searchResults_announcementss}
+            users={this.state.searchResults_users}
+          />
+        )}
       </div>
     );
   }

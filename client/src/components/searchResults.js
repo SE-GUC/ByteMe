@@ -5,6 +5,7 @@ import Event from "./Event";
 import AWG from "./AWG";
 import Announcement from "./Announcement";
 import User from "./User";
+import toaster from "toasted-notes";
 
 class SearchResults extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class SearchResults extends Component {
       clubs: {},
       events: {},
       announcements: {}
-    }
+    };
   }
 
   async componentWillReceiveProps(props) {
@@ -24,41 +25,53 @@ class SearchResults extends Component {
 
   render() {
     const { clubs, events, announcements, users } = this.state;
-    console.log(users)
+    console.log(users);
     try {
       return (
         <div>
-          {users && users.constructor === Array ?
+          {users && users.constructor === Array ? (
             users.map(user => {
-              return <User user={user} />
+              return toaster.notify(<User user={user} />, {
+                duration: 2000
+              });
             })
-            : <></>}
-          {events && events.constructor == Array ?
+          ) : (
+            <></>
+          )}
+          {events && events.constructor == Array ? (
             events.map(event => {
-              return <Event
-                _id={event._id}
-                comingSoon={event.comingSoon}
-                title={event.title}
-                brief={event.brief}
-                location={event.location}
-                dateTime={event.dateTime}
-                description={event.description}
-                photos={event.photos}
-                feedback={event.feedback}
-                creator={event.creator}
-                rating={event.rating}
-              />
+              return toaster.notify(
+                <Event
+                  _id={event._id}
+                  comingSoon={event.comingSoon}
+                  title={event.title}
+                  brief={event.brief}
+                  location={event.location}
+                  dateTime={event.dateTime}
+                  description={event.description}
+                  photos={event.photos}
+                  feedback={event.feedback}
+                  creator={event.creator}
+                  rating={event.rating}
+                />,
+                {
+                  duration: 2000
+                }
+              );
             })
-            : <></>}
+          ) : (
+            <></>
+          )}
 
-          {//format enta ba2a bera7tak we esta3mel miniUser 3ashan gamed
+          {
+            //format enta ba2a bera7tak we esta3mel miniUser 3ashan gamed
           }
         </div>
-      )
+      );
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-    return (<></>)
+    return <></>;
   }
 }
 /*
@@ -92,9 +105,6 @@ class SearchResults extends Component {
             <Announcement date={a.date} info={a.info} />
           ))}
           */
-
-
-
 
 // </CardDeck>
 
