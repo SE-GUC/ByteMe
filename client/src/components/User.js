@@ -5,6 +5,10 @@ import Dropzone from "react-dropzone"
 import "./User.css";
 import "../App.css";
 
+import defImage from "../images/default-profile-picture.jpg";
+import uplImage from "../images/upload-icon.png";
+
+
 class User extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +59,6 @@ class User extends Component {
     }
 
     render() {
-        const defImageLink = "https://www.watsonmartin.com/wp-content/uploads/2016/03/default-profile-picture.jpg"
         const {
             email,
             first_name,
@@ -85,7 +88,7 @@ class User extends Component {
                                                 className="mr-3"
                                                 src={this.state.editedUser.picture_ref ?
                                                     this.state.editedUser.picture_ref
-                                                    : "https://2.bp.blogspot.com/-2pUEov3AKFM/WAgBheupB6I/AAAAAAAA8GA/19L8_kh1IIghXbbtUy1VIouMcUP8AUhiwCLcB/s1600/upload-1118929_960_720.png"
+                                                    : uplImage
                                                 }
                                                 alt="Display Pic"
                                             />
@@ -100,7 +103,7 @@ class User extends Component {
                                 src={
                                     picture_ref
                                         ? picture_ref
-                                        : defImageLink
+                                        : defImage
                                 }
                                 alt="Display Pic"
                             />}
