@@ -55,7 +55,6 @@ class SearchBar extends Component {
               users={this.state.searchResults_users}
             />
         }
-        <h1>{this.state.searchkey}</h1>
       </div>
     );
   }
