@@ -75,12 +75,12 @@ class UserProfile extends Component {
     this.delete = () => {
       const prompts = [
         `Deleting ${
-          this.props.location.search === "" ? "your" : "this"
+        this.props.location.search === "" ? "your" : "this"
         } profile is permanent. There is no going back!`,
-        `This means  ${
-          this.props.location.search === "" ? "leaving" : "removing"
+        `This means ${
+        this.props.location.search === "" ? "leaving" : "removing"
         } forever!`,
-        "Are you absolutely 100% certain you wan't this?"
+        "Are you absolutely 100% certain you want this?"
       ];
       const randInt = Math.floor(Math.random() * prompts.length);
       console.log(randInt);
@@ -166,69 +166,69 @@ class UserProfile extends Component {
       <Alert variant="danger"> {this.state.err} </Alert>
     ) : this.state.user ? (
       this.props.user &&
-      (this.props.user.is_admin ||
-        this.props.user.guc_id === this.state.user.guc_id) ? (
-        <>
-          {this.state.editingErr !== "" ? (
-            <Alert variant="danger">{this.state.editingErr}</Alert>
-          ) : (
-            <></>
-          )}
-          <User
-            user={this.state.user}
-            isEditing={this.state.isEditing}
-            requestUser={this.state.requestUser}
-            setUser={this.save}
-          />
-
-          <Form.Row className="profile-row">
-            <Col />
-            {this.state.isEditing ? (
-              <Col xs="1" className="profile-col">
-                <Button block variant="outline-warning" onClick={this.cancel}>
-                  Cancel
-                </Button>
-              </Col>
+        (this.props.user.is_admin ||
+          this.props.user.guc_id === this.state.user.guc_id) ? (
+          <>
+            {this.state.editingErr !== "" ? (
+              <Alert variant="danger">{this.state.editingErr}</Alert>
             ) : (
-              <></>
-            )}
-            <Col xs="1" className="profile-col">
-              {this.state.isEditing ? (
-                <Button
-                  block
-                  variant="outline-warning"
-                  onClick={this.requestUser}
-                >
-                  Save
-                </Button>
-              ) : (
-                <Button block variant="outline-warning" onClick={this.edit}>
-                  Edit
-                </Button>
+                <></>
               )}
-            </Col>
-            <Col xs="1" className="profile-col">
-              <Button block variant="outline-danger" onClick={this.delete}>
-                Delete
-              </Button>
-            </Col>
-          </Form.Row>
+            <User
+              user={this.state.user}
+              isEditing={this.state.isEditing}
+              requestUser={this.state.requestUser}
+              setUser={this.save}
+            />
 
-          {this.state.isEditing ? (
-            <Alert variant="warning">
-              Only edit fields you want changed! Fields left empty will stay as
-              they are.
+            <Form.Row className="profile-row">
+              <Col />
+              {this.state.isEditing ? (
+                <Col xs="1" className="profile-col">
+                  <Button block variant="outline-warning" onClick={this.cancel}>
+                    Cancel
+                </Button>
+                </Col>
+              ) : (
+                  <></>
+                )}
+              <Col xs="1" className="profile-col">
+                {this.state.isEditing ? (
+                  <Button
+                    block
+                    variant="outline-warning"
+                    onClick={this.requestUser}
+                  >
+                    Save
+                </Button>
+                ) : (
+                    <Button block variant="outline-warning" onClick={this.edit}>
+                      Edit
+                </Button>
+                  )}
+              </Col>
+              <Col xs="1" className="profile-col">
+                <Button block variant="outline-danger" onClick={this.delete}>
+                  Delete
+              </Button>
+              </Col>
+            </Form.Row>
+
+            {this.state.isEditing ? (
+              <Alert variant="warning">
+                Only edit fields you want changed! Fields left empty will stay as
+                they are.
             </Alert>
-          ) : (
-            <></>
-          )}
-        </>
-      ) : (
-        <User user={this.state.user} />
-      )
+            ) : (
+                <></>
+              )}
+          </>
+        ) : (
+          <User user={this.state.user} />
+        )
     ) : (
-      <></>
-    );
+          <></>
+        );
   }
 }
 
