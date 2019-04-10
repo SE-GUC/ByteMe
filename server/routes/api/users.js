@@ -23,7 +23,6 @@ router.get("/role/:role", async (req, res) => {
       data: users_with_roles.map(user => { return hideSecrets(user) })
     });
   } catch (error) {
-    // We will be handling the error later
     console.log(error);
   }
 });
@@ -35,7 +34,7 @@ router.post("/register", async (req, res) => {
       .status(400)
       .send({ error: isValidated.error.details[0].message });
 
-  const {
+  var {
     email,
     first_name,
     last_name,
@@ -48,6 +47,8 @@ router.post("/register", async (req, res) => {
     mun_role,
     awg_admin
   } = req.body;
+
+  email = email.toLowerCase();
 
   var user = await User.findOne({ email });
   if (user)
@@ -89,7 +90,7 @@ router.post("/login", async (req, res) => {
         .status(400)
         .send({ error: isValidated.error.details[0].message });
 
-    const email = req.body.email;
+    const email = req.body.email.toLowerCase();
     const password = req.body.password;
 
     const userWithEmail = await User.findOne({ email });
@@ -112,7 +113,6 @@ router.post("/login", async (req, res) => {
       }
     });
   } catch (error) {
-    // We will be handling the error later
     console.log(error);
   }
 });
@@ -122,11 +122,8 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // req.batee5 = 'maamad'
-      //req.logOut();
       return res.json({ message: "logout successful" });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -207,7 +204,6 @@ router.put(
       const updatedUser = await User.findOne({ guc_id: req.body.guc_id });
       return res.json({ message: "updated!", user: updatedUser });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -248,7 +244,6 @@ router.put(
       const updatedUser = await User.findOne({ guc_id: req.body.guc_id });
       return res.json({ message: "updated!", user: updatedUser });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -266,7 +261,6 @@ router.put(
       );
       return res.json({ message: "you are no longer an admin!" });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -284,7 +278,6 @@ router.put(
       );
       return res.json({ message: "you are no longer an admin!" });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -313,7 +306,7 @@ router.put(
               .status(400)
               .send({ error: isValidated.error.details[0].message });
 
-          const email = req.body.email;
+          const email = req.body.email ? req.body.email.toLowerCase() : req.body.email;
 
           const userWithEmail = await User.findOne({ email });
           if (userWithEmail)
@@ -340,7 +333,6 @@ router.put(
             "updated user": userAfterUpdate
           });
         } catch (error) {
-          // We will be handling the error later
           console.log(error);
         }
       } else {
@@ -352,7 +344,7 @@ router.put(
             .status(400)
             .send({ error: isValidated.error.details[0].message });
 
-        const email = req.body.email;
+        const email = req.body.email ? req.body.email.toLowerCase() : req.body.email;
 
         const userWithEmail = await User.findOne({ email });
         if (userWithEmail)
@@ -380,7 +372,6 @@ router.put(
         });
       }
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -430,7 +421,7 @@ router.put("/forgotpass", (req, res) => {
     html: `<p>Please use the following link to reset your password:</p><p>localhost:3000/api/users/resetpass/${token}</p>`
   };
   return User.updateOne(
-    { email: req.body.email },
+    { email: req.body.email.toLowerCase() },
     { $set: { resetPassLink: token } },
     function (error, feedback) {
       if (error) return res.send(error);
