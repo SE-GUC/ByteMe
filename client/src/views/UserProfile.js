@@ -52,8 +52,12 @@ class UserProfile extends Component {
             console.log(err.response)
             if (err.response.data)
               this.setState({ editingErr: err.response.data.error })
-            else
-              this.setState({ editingErr: err.message })
+            else {
+              if (err.response.status === 413)
+                this.setState({ editingErr: "That image is too large, try an image that is below 5MB" })
+              else
+                this.setState({ editingErr: err.message })
+            }
           })
       } else {
         this.setState({ editingErr: "Passwords Don't Match" })

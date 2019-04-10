@@ -27,3 +27,8 @@
     color: #ffffff;
     padding: 0.5%
 }
+
+.user-dropzone-div{
+    width: 128px;
+    height: 128px;
+}
