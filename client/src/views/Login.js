@@ -63,13 +63,13 @@ class Login extends Component {
         ) : this.state.message ? (
           <Alert variant="success">
             {this.state.message}{" "}
-            <Link to="/profile" class="alert-link">
+            <Link to="/profile" className="alert-link">
               Go To Profile.
             </Link>
           </Alert>
         ) : (
-          <></>
-        )}
+              <></>
+            )}
 
         <Form className="login-form">
           <Form.Group>
