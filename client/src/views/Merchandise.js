@@ -2,7 +2,13 @@ import React, { Component } from "react";
 import Product from "../components/Product";
 import "./Merchandise.css";
 import API from "../utils/API";
-import { Button, Modal, InputGroup, FormControl } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  InputGroup,
+  FormControl,
+  Spinner
+} from "react-bootstrap";
 import iconAdd from "../icons/plus.svg";
 import uploaderDefaultImage from "../images/upload-icon.png";
 import Dropzone from "react-dropzone";
@@ -138,7 +144,11 @@ class Merchandise extends Component {
               variant="success"
               onClick={() => this.createProduct(this.state.newProduct)}
             >
-              Add product
+              {this.state.isLoading ? (
+                <Spinner animation="border" />
+              ) : (
+                "Add Product"
+              )}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -161,6 +171,7 @@ class Merchandise extends Component {
   }
   updateProducts() {
     try {
+      this.setState({ isLoading: true });
       API.get("products").then(res => {
         this.setState({ products: res.data.data, isLoading: false });
       });
@@ -193,14 +204,16 @@ class Merchandise extends Component {
     };
   };
   createProduct(newProduct) {
+    this.setState({ isLoading: true });
     try {
       const token = Auth.getToken();
       const headers = {
         Authorization: `${token}`
       };
       API.post(`products`, newProduct, { headers }).then(res => {
-        this.handleCreateClose();
         this.updateProducts();
+        this.setState({ isLoading: false });
+        this.handleCreateClose();
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);

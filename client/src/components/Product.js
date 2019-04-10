@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Card, Button, Modal, InputGroup, FormControl } from "react-bootstrap";
+import {
+  Card,
+  Button,
+  Modal,
+  InputGroup,
+  FormControl,
+  Spinner
+} from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import "./Product.css";
 import iconDelete from "../icons/x.svg";
@@ -18,6 +25,7 @@ class Product extends Component {
     this.handleEditShow = this.handleEditShow.bind(this);
     this.handleEditClose = this.handleEditClose.bind(this);
     this.state = {
+      isLoading: false,
       showDeleteConfirmation: false,
       showEditWindow: false,
       editedProduct: {},
@@ -80,7 +88,11 @@ class Product extends Component {
               Close
             </Button>
             <Button variant="danger" onClick={() => this.deleteProduct(id)}>
-              I know what i'm doing
+              {this.state.isLoading ? (
+                <Spinner animation="border" />
+              ) : (
+                "I know what i'm doing"
+              )}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -160,7 +172,11 @@ class Product extends Component {
               variant="success"
               onClick={() => this.editProduct(id, this.state.editedProduct)}
             >
-              Save Changes
+              {this.state.isLoading ? (
+                <Spinner animation="border" />
+              ) : (
+                "Save Changes"
+              )}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -175,13 +191,15 @@ class Product extends Component {
   }
   deleteProduct(id) {
     try {
+      this.setState({ isLoading: true });
       const token = Auth.getToken();
       const headers = {
         Authorization: `${token}`
       };
       API.delete(`products/${id}`, { headers }).then(res => {
-        this.handleDeleteClose();
         this.props.updateProducts();
+        this.setState({ isLoading: false });
+        this.handleDeleteClose();
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -213,13 +231,15 @@ class Product extends Component {
   };
   editProduct(id, editedProduct) {
     try {
+      this.setState({ isLoading: true });
       const token = Auth.getToken();
       const headers = {
         Authorization: `${token}`
       };
       API.put(`products/${id}`, editedProduct, { headers }).then(res => {
-        this.handleEditClose();
         this.props.updateProducts();
+        this.setState({ isLoading: false });
+        this.handleEditClose();
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);

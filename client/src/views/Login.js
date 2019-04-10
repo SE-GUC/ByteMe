@@ -68,8 +68,8 @@ class Login extends Component {
             </Link>
           </Alert>
         ) : (
-              <></>
-            )}
+          <></>
+        )}
 
         <Form className="login-form">
           <Form.Group>
