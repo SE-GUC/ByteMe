@@ -28,13 +28,13 @@
   padding: 0.5%;
 }
 
-.user-dropzone-div{
-    width: 128px;
-    height: 128px;
+.user-dropzone-div {
+  width: 128px;
+  height: 128px;
 }
 
-.miniuser-mail{
-    color: #6f6f6f;
-    font-size: 80%;
-    font-style: italic;
+.miniuser-mail {
+  color: #6f6f6f;
+  font-size: 80%;
+  font-style: italic;
 }

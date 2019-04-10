@@ -5,6 +5,8 @@ import Dropzone from "react-dropzone";
 import "./Product.css";
 import iconDelete from "../icons/x.svg";
 import iconEdit from "../icons/pencil.svg";
+import uploaderDefaultImage from "../images/upload-icon.png";
+import productDefaultImage from "../images/product-icon.png";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 
@@ -18,7 +20,8 @@ class Product extends Component {
     this.state = {
       showDeleteConfirmation: false,
       showEditWindow: false,
-      editedProduct: {}
+      editedProduct: {},
+      canEdit: props.canEdit
     };
   }
   render() {
@@ -26,21 +29,31 @@ class Product extends Component {
     return (
       <div>
         <Card style={{ width: "18rem", margin: "10px", height: "30rem" }}>
-          <Button
-            variant="info"
-            className="product-edit-button"
-            onClick={this.handleEditShow}
-          >
-            <img src={iconEdit} />
-          </Button>
-          <Button
-            variant="danger"
-            className="product-delete-button"
-            onClick={this.handleDeleteShow}
-          >
-            <img src={iconDelete} />
-          </Button>
-          <Card.Img variant="top" src={pic_ref} />
+          {this.state.canEdit ? (
+            <>
+              <Button
+                variant="info"
+                className="product-edit-button"
+                onClick={this.handleEditShow}
+              >
+                <img src={iconEdit} alt="Edit product" />
+              </Button>
+              <Button
+                variant="danger"
+                className="product-delete-button"
+                onClick={this.handleDeleteShow}
+              >
+                <img src={iconDelete} alt="Delete product" />
+              </Button>
+            </>
+          ) : (
+            <></>
+          )}
+
+          <Card.Img
+            variant="top"
+            src={pic_ref !== "false" ? pic_ref : productDefaultImage}
+          />
           <Card.Body className="product-body">
             <Card.Title className="product-name">{name}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted product-price">
@@ -92,11 +105,11 @@ class Product extends Component {
                     <img
                       className="product-picture-picker"
                       src={
-                        pic_ref
-                          ? pic_ref
-                          : "https://2.bp.blogspot.com/-2pUEov3AKFM/WAgBheupB6I/AAAAAAAA8GA/19L8_kh1IIghXbbtUy1VIouMcUP8AUhiwCLcB/s1600/upload-1118929_960_720.png"
+                        this.state.editedProduct.pic_ref
+                          ? this.state.editedProduct.pic_ref
+                          : uploaderDefaultImage
                       }
-                      alt="Product picture"
+                      alt="Product"
                     />
                   </div>
                 </section>
@@ -116,6 +129,7 @@ class Product extends Component {
             <InputGroup className="mb-3">
               <FormControl
                 name="price"
+                type="Number"
                 onChange={this.change}
                 placeholder="Product Price"
                 aria-label="Product Price"
@@ -210,6 +224,9 @@ class Product extends Component {
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
+  }
+  async componentWillReceiveProps(props) {
+    this.setState({ canEdit: props.canEdit });
   }
 }
 

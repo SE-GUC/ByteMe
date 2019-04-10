@@ -4,12 +4,11 @@ import "./Merchandise.css";
 import API from "../utils/API";
 import { Button, Modal, InputGroup, FormControl } from "react-bootstrap";
 import iconAdd from "../icons/plus.svg";
+import uploaderDefaultImage from "../images/upload-icon.png";
 import Dropzone from "react-dropzone";
 import Auth from "../utils/Auth";
 
-// First we create our class
 class Merchandise extends Component {
-  // Then we add our constructor which receives our props
   constructor(props) {
     super(props);
     this.updateProducts = this.updateProducts.bind(this);
@@ -18,30 +17,41 @@ class Merchandise extends Component {
     this.change = this.change.bind(this);
     this.pictureUploader = this.pictureUploader.bind(this);
 
-    // Next we establish our state
     this.state = {
       isLoading: true,
       products: [],
       user: props.user,
-      isEditing: false,
+      canEdit: false,
       showAddProductWindow: false,
       newProduct: {}
     };
+    if (this.state.user) {
+      if (
+        this.state.user.is_admin ||
+        this.state.user.mun_role === "secretary_office"
+      ) {
+        this.state.canEdit = true;
+      }
+    }
   }
-  // The render function, where we actually tell the browser what it should show
   render() {
     return (
       <div>
         <h1 style={{ margin: "15px" }}>GUCMUN SWAG</h1>
         <div className="merchandise">
           <div className="product-group">
-            <Button
-              variant="warning"
-              className="product-create-button"
-              onClick={this.handleCreateShow}
-            >
-              <img src={iconAdd} />
-            </Button>
+            {this.state.canEdit ? (
+              <Button
+                variant="warning"
+                className="product-create-button"
+                onClick={this.handleCreateShow}
+              >
+                <img src={iconAdd} alt="Create new Product" />
+              </Button>
+            ) : (
+              <></>
+            )}
+
             {this.state.products.map(product => (
               <Product
                 id={product._id}
@@ -50,6 +60,7 @@ class Merchandise extends Component {
                 description={product.description}
                 price={product.price}
                 updateProducts={this.updateProducts}
+                canEdit={this.state.canEdit}
               />
             ))}
           </div>
@@ -77,9 +88,9 @@ class Merchandise extends Component {
                       src={
                         this.state.newProduct.pic_ref
                           ? this.state.newProduct.pic_ref
-                          : "https://2.bp.blogspot.com/-2pUEov3AKFM/WAgBheupB6I/AAAAAAAA8GA/19L8_kh1IIghXbbtUy1VIouMcUP8AUhiwCLcB/s1600/upload-1118929_960_720.png"
+                          : uploaderDefaultImage
                       }
-                      alt="Product picture"
+                      alt="Product"
                     />
                   </div>
                 </section>
@@ -98,6 +109,7 @@ class Merchandise extends Component {
             <InputGroup className="mb-3">
               <FormControl
                 name="price"
+                type="Number"
                 onChange={this.change}
                 placeholder="Product Price"
                 aria-label="Product Price"
@@ -135,6 +147,17 @@ class Merchandise extends Component {
   }
   async componentDidMount() {
     this.updateProducts();
+  }
+  async componentWillReceiveProps(props) {
+    this.setState({ user: props.user });
+    if (this.state.user) {
+      if (
+        this.state.user.is_admin ||
+        this.state.user.mun_role === "secretary_office"
+      ) {
+        this.setState({ canEdit: true });
+      }
+    }
   }
   updateProducts() {
     try {
