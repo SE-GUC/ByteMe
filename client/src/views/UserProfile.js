@@ -24,49 +24,50 @@ class UserProfile extends Component {
     };
 
     this.edit = () => {
-      this.setState({ isEditing: true })
-    }
+      this.setState({ isEditing: true });
+    };
 
     this.requestUser = () => {
-      this.setState({ requestUser: true })
-    }
+      this.setState({ requestUser: true });
+    };
 
-    this.save = (editedUser) => {
-      this.setState({ requestUser: false })
+    this.save = editedUser => {
+      this.setState({ requestUser: false });
       if (editedUser.password === editedUser.confirm_password) {
-        delete editedUser.confirm_password
+        delete editedUser.confirm_password;
 
         const token = Auth.getToken();
-        API.put(`users/${this.props.location.search}`,
-          editedUser,
-          {
-            headers: {
-              Authorization: token
-            }
-          })
+        API.put(`users/${this.props.location.search}`, editedUser, {
+          headers: {
+            Authorization: token
+          }
+        })
           .then(res => {
-            this.setState({ requestUser: false, isEditing: false, editingErr: "" })
-            this.props.login()
+            this.setState({
+              requestUser: false,
+              isEditing: false,
+              editingErr: ""
+            });
+            this.props.login();
           })
           .catch(err => {
-            console.log(err.response)
+            console.log(err.response);
             if (err.response.data)
-              this.setState({ editingErr: err.response.data.error })
-            else
-              this.setState({ editingErr: err.message })
-          })
+              this.setState({ editingErr: err.response.data.error });
+            else this.setState({ editingErr: err.message });
+          });
       } else {
-        this.setState({ editingErr: "Passwords Don't Match" })
+        this.setState({ editingErr: "Passwords Don't Match" });
       }
-    }
+    };
 
     this.cancel = () => {
-      this.setState({ requestUser: false, isEditing: false, editingErr: "" })
-    }
+      this.setState({ requestUser: false, isEditing: false, editingErr: "" });
+    };
 
     this.delete = () => {
       //display warning then delete user
-    }
+    };
   }
 
   static propTypes = {
@@ -80,7 +81,7 @@ class UserProfile extends Component {
     if (parsed.gucid) {
       this.setState({
         user: undefined
-      })
+      });
       if (this.props.user && this.props.user.is_admin) {
         const token = Auth.getToken();
         API.get(`/users/asAdmin/${parsed.gucid}`, {
@@ -124,34 +125,70 @@ class UserProfile extends Component {
     return this.state.err !== "" ? (
       <Alert variant="danger"> {this.state.err} </Alert>
     ) : this.state.user ? (
-      ((this.props.user && (this.props.user.is_admin || this.props.user.guc_id === this.state.user.guc_id)) ?
+      this.props.user &&
+      (this.props.user.is_admin ||
+        this.props.user.guc_id === this.state.user.guc_id) ? (
         <>
-          {this.state.editingErr !== "" ?
-            <Alert variant="danger">
-              {this.state.editingErr}
-            </Alert>
-            : <></>}
-          <User user={this.state.user} isEditing={this.state.isEditing} requestUser={this.state.requestUser} setUser={this.save} />
+          {this.state.editingErr !== "" ? (
+            <Alert variant="danger">{this.state.editingErr}</Alert>
+          ) : (
+            <></>
+          )}
+          <User
+            user={this.state.user}
+            isEditing={this.state.isEditing}
+            requestUser={this.state.requestUser}
+            setUser={this.save}
+          />
 
           <Form.Row className="profile-row">
-            <Col></Col>
-            {this.state.isEditing ? <Col xs="1" className="profile-col"><Button block variant="outline-warning" onClick={this.cancel}>Cancel</Button></Col> : <></>}
-            <Col xs="1" className="profile-col">{this.state.isEditing ? <Button block variant="outline-warning" onClick={this.requestUser}>Save</Button> : <Button block variant="outline-warning" onClick={this.edit}>Edit</Button>}</Col>
-            <Col xs="1" className="profile-col"><Button block variant="outline-danger" onClick={this.delete}>Delete</Button></Col>
+            <Col />
+            {this.state.isEditing ? (
+              <Col xs="1" className="profile-col">
+                <Button block variant="outline-warning" onClick={this.cancel}>
+                  Cancel
+                </Button>
+              </Col>
+            ) : (
+              <></>
+            )}
+            <Col xs="1" className="profile-col">
+              {this.state.isEditing ? (
+                <Button
+                  block
+                  variant="outline-warning"
+                  onClick={this.requestUser}
+                >
+                  Save
+                </Button>
+              ) : (
+                <Button block variant="outline-warning" onClick={this.edit}>
+                  Edit
+                </Button>
+              )}
+            </Col>
+            <Col xs="1" className="profile-col">
+              <Button block variant="outline-danger" onClick={this.delete}>
+                Delete
+              </Button>
+            </Col>
           </Form.Row>
 
-          {this.state.isEditing ?
+          {this.state.isEditing ? (
             <Alert variant="warning">
-              Only edit fields you want changed! Fields left empty will stay as they are.
+              Only edit fields you want changed! Fields left empty will stay as
+              they are.
             </Alert>
-            : <></>}
-
-        </> :
+          ) : (
+            <></>
+          )}
+        </>
+      ) : (
         <User user={this.state.user} />
       )
     ) : (
-          <></>
-        );
+      <></>
+    );
   }
 }
 

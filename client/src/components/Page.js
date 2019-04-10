@@ -9,7 +9,6 @@ class Page extends Component {
 
     return (
       <Card className="by">
-
         <Card.Img
           className="img"
           src="https://www.solidbackgrounds.com/images/1920x1080/1920x1080-yellow-solid-color-background.jpg"

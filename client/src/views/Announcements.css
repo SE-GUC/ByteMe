@@ -1,15 +1,15 @@
 @font-face {
-    font-family: "GothamBook";
-    src: url("../fonts/GothamBook.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-  }
-  
-  h1 {
-    font-family: GothamBook;
-    text-align: center;
-  }
-  
-  announcements {
-    margin: 15px;
-  }
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+h1 {
+  font-family: GothamBook;
+  text-align: center;
+}
+
+announcements {
+  margin: 15px;
+}

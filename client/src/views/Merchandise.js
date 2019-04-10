@@ -11,7 +11,9 @@ class Merchandise extends Component {
     // Next we establish our state
     this.state = {
       isLoading: true,
-      products: []
+      products: [],
+      user: props.user,
+      isEditing: false
     };
   }
   // The render function, where we actually tell the browser what it should show
@@ -23,6 +25,7 @@ class Merchandise extends Component {
           <div className="product-group">
             {this.state.products.map(product => (
               <Product
+                id={product._id}
                 name={product.name}
                 pic_ref={product.pic_ref}
                 description={product.description}

@@ -32,7 +32,6 @@ class App extends Component {
     this.state = {
       isLoggedIn: false,
       user: undefined,
-
       councils: [],
       events: []
     };
@@ -43,17 +42,15 @@ class App extends Component {
         headers: {
           Authorization: token
         }
-      })
-        .then(res => {
-          this.setState({
-            user: res.data.data
-          })
-          this.setState({
-            isLoggedIn: true
-          })
-          //for some reason combining these into one setState ruins private user???????????????????
-        })
-
+      }).then(res => {
+        this.setState({
+          user: res.data.data
+        });
+        this.setState({
+          isLoggedIn: true
+        });
+        //for some reason combining these into one setState ruins private user???????????????????
+      });
     };
 
     this.logout = () => {
@@ -62,7 +59,7 @@ class App extends Component {
         isLoggedIn: false
       });
 
-      Auth.deauthenticateUser()
+      Auth.deauthenticateUser();
     };
 
     if (Auth.isUserAuthenticated()) this.login();
@@ -72,7 +69,6 @@ class App extends Component {
     API.get("/page").then(res => {
       this.setState({ councils: res.data.data });
     });
-
 
     API.get("/events").then(res => {
       this.setState({ events: res.data.data });
@@ -130,13 +126,23 @@ class App extends Component {
               render={props => <Login login={this.login} {...props} />}
             />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/merchandise" component={Merchandise} />
+            <Route
+              exact
+              path="/merchandise"
+              render={props => (
+                <Merchandise user={this.state.user} {...props} />
+              )}
+            />
             <Route exact path="/events" component={Events} />
 
             <Route
               path="/profile/:gucid?"
               render={props => (
-                <UserProfile user={this.state.user} login={this.login} {...props} />
+                <UserProfile
+                  user={this.state.user}
+                  login={this.login}
+                  {...props}
+                />
               )}
             />
           </div>
