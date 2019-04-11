@@ -198,30 +198,26 @@ class UserProfile extends Component {
                 )}
 
               <Col xs="1" className="profile-col">
-                {this.state.isEditing ? (
-                  <Button
-                    block
-                    variant="outline-warning"
-                    onClick={this.requestUser}
-                  >
-                    Save
+                {this.state.isEditing ?
+                  this.state.editLoading ?
+                    <img
+                      height="40"
+                      src={LoadingGif}
+                      alt="Loading"
+                    /> :
+                    <Button
+                      block
+                      variant="outline-warning"
+                      onClick={this.requestUser}
+                    >
+                      Save
                     </Button>
-                ) : (
+                  : (
                     <Button block variant="outline-warning" onClick={this.edit}>
                       Edit
                 </Button>
                   )}
               </Col>
-              {this.state.editLoading ?
-                <Col xs="0" className="profile-col">
-                  <img
-                    height="40"
-                    className="mr-3"
-                    src={LoadingGif}
-                    alt="Loading"
-                  />
-                </Col>
-                : <></>}
               <Col xs="1" className="profile-col">
                 <Button block variant="outline-danger" onClick={this.delete}>
                   Delete
