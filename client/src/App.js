@@ -10,6 +10,7 @@ import PortalLibrary from "./views/PortalLibrary";
 import Announcements from "./views/Announcements";
 import UserProfile from "./views/UserProfile";
 import Merchandise from "./views/Merchandise";
+import ResetPass from "./views/ResetPass"
 import Register from "./views/Register";
 import AboutUs from "./views/AboutUs";
 import Contact from "./views/Contact";
@@ -146,6 +147,7 @@ class App extends Component {
                 />
               )}
             />
+            <Route path="/resetpass/:id" component={ResetPass} />
           </div>
         </Router>
         <Navbar bg="black">
