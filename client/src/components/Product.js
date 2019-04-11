@@ -6,9 +6,7 @@ import {
   Modal,
   InputGroup,
   FormControl,
-  Spinner,
-  ButtonGroup,
-  Form
+  Spinner
 } from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import "./Product.css";
@@ -18,8 +16,6 @@ import uploaderDefaultImage from "../images/upload-icon.png";
 import productDefaultImage from "../images/product-icon.png";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
-import Circle from "./Circle";
-import { TwitterPicker } from "react-color";
 
 class Product extends Component {
   constructor(props, context) {
@@ -28,27 +24,19 @@ class Product extends Component {
     this.handleDeleteClose = this.handleDeleteClose.bind(this);
     this.handleEditShow = this.handleEditShow.bind(this);
     this.handleEditClose = this.handleEditClose.bind(this);
-    this.handleColorChange = this.handleColorChange.bind(this);
-    this.addColor = this.addColor.bind(this);
-    this.clearColors = this.clearColors.bind(this);
-    this.sizeExists = this.sizeExists.bind(this);
-
     this.state = {
       isLoading: false,
       showDeleteConfirmation: false,
       showEditWindow: false,
-      editedProduct: { sizes: [], colors: [] },
-      canEdit: props.canEdit,
-      colorPicked: "#000000",
-      colorsPicked: [],
-      newProductSizes: []
+      editedProduct: {},
+      canEdit: props.canEdit
     };
   }
   render() {
-    const { id, name, description, pic_ref, price, colors, sizes } = this.props;
+    const { id, name, description, pic_ref, price } = this.props;
     return (
       <div>
-        <Card style={{ width: "18rem", margin: "10px", height: "40rem" }}>
+        <Card style={{ width: "18rem", margin: "10px", height: "30rem" }}>
           {this.state.canEdit ? (
             <>
               <Button
@@ -80,32 +68,9 @@ class Product extends Component {
               {price} EGP
             </Card.Subtitle>
             <Card.Text className="product-description">{description}</Card.Text>
-            <Card.Text className="product-headers-text">Colors</Card.Text>
-            <div
-              style={{
-                display: "flex",
-                "flex-direction": "row",
-                "justify-content": "center"
-              }}
-            >
-              {colors.map(color => (
-                <Circle bgColor={color} />
-              ))}
-            </div>
-            <Card.Text className="product-headers-text">Sizing</Card.Text>
-            <div
-              style={{
-                display: "flex",
-                "flex-direction": "row",
-                "justify-content": "center"
-              }}
-            >
-              <ButtonGroup size="lg" aria-label="First group">
-                {sizes.map(size => (
-                  <Button variant="secondary">{size}</Button>
-                ))}
-              </ButtonGroup>
-            </div>
+            <Button variant="secondary" className="product-button">
+              Add to Cart
+            </Button>
           </Card.Body>
         </Card>
         {/* DELETE MODAL */}
@@ -138,7 +103,7 @@ class Product extends Component {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Update a product</Modal.Title>
+            <Modal.Title>Add a new product</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {/* image */}
@@ -151,7 +116,11 @@ class Product extends Component {
                     <input {...getInputProps()} />
                     <img
                       className="product-picture-picker"
-                      src={pic_ref !== "false" ? pic_ref : uploaderDefaultImage}
+                      src={
+                        this.state.editedProduct.pic_ref
+                          ? this.state.editedProduct.pic_ref
+                          : uploaderDefaultImage
+                      }
                       alt="Product"
                     />
                   </div>
@@ -182,63 +151,6 @@ class Product extends Component {
                 <InputGroup.Text>EGP</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
-            {/* Color */}
-            <InputGroup className="mb-3">
-              <FormControl
-                name="color"
-                onChange={this.change}
-                placeholder="Available Colors"
-                aria-label="Available Colors"
-                autoComplete="off"
-                value={this.state.colorsPicked.join(",")}
-              />
-            </InputGroup>
-            <div style={{ display: "flex", "flex-direction": "row" }}>
-              <TwitterPicker
-                className="mb-3"
-                onChange={this.handleColorChange}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  "flex-direction": "column",
-                  "margin-top": "-20px"
-                }}
-              >
-                <Button
-                  style={{
-                    background: this.state.colorPicked
-                  }}
-                  className="color-picking-button"
-                  onClick={() => this.addColor(this.state.colorPicked)}
-                >
-                  Add Color!
-                </Button>
-                <Button
-                  className="color-picking-button"
-                  variant="light"
-                  onClick={() => this.clearColors()}
-                >
-                  Clear Colors
-                </Button>{" "}
-              </div>
-            </div>
-            {/* newProductSizes */}
-            <div style={{ display: "flex", "flex-direction": "row" }}>
-              {["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"].map(size => (
-                <div key={`checkbox-${size}`} className="mb-3 mr-3">
-                  <Form.Check
-                    custom
-                    type="checkbox"
-                    name={size}
-                    checked={this.sizeExists(size) ? true : false}
-                    onChange={this.handleSizeChange}
-                    id={`custom-checkbox-${size}`}
-                    label={size}
-                  />{" "}
-                </div>
-              ))}
-            </div>
             {/* description */}
             <InputGroup className="mb-3">
               <FormControl
@@ -318,18 +230,13 @@ class Product extends Component {
     };
   };
   editProduct(id, editedProduct) {
-    const newProduct = {
-      ...editedProduct,
-      sizes: this.state.newProductSizes.filter(Boolean),
-      colors: this.state.colorsPicked.filter(Boolean)
-    };
     try {
       this.setState({ isLoading: true });
       const token = Auth.getToken();
       const headers = {
         Authorization: `${token}`
       };
-      API.put(`products/${id}`, newProduct, { headers }).then(res => {
+      API.put(`products/${id}`, editedProduct, { headers }).then(res => {
         this.props.updateProducts();
         this.setState({ isLoading: false });
         this.handleEditClose();
@@ -340,46 +247,6 @@ class Product extends Component {
   }
   async componentWillReceiveProps(props) {
     this.setState({ canEdit: props.canEdit });
-    this.setState({ colorsPicked: props.colors });
-    this.setState({ newProductSizes: props.sizes });
-  }
-
-  handleColorChange(color, event) {
-    this.setState({ colorPicked: color.hex });
-  }
-  addColor(color) {
-    var colorsPicked = this.state.colorsPicked;
-    colorsPicked.push(color);
-    this.setState({ colorsPicked: colorsPicked });
-  }
-  clearColors() {
-    this.setState({ colorsPicked: [] });
-  }
-  handleSizeChange = event => {
-    if (event.target.checked) {
-      const newProductSizes = this.state.newProductSizes;
-      const name = event.target.name;
-      newProductSizes.push(name);
-      this.setState({ newProductSizes: newProductSizes });
-    } else {
-      const newProductSizes = this.state.newProductSizes;
-      const name = event.target.name;
-      for (var i = newProductSizes.length - 1; i >= 0; i--) {
-        if (newProductSizes[i] === name) {
-          newProductSizes.splice(i, 1);
-        }
-      }
-      this.setState({ newProductSizes: newProductSizes });
-    }
-  };
-  sizeExists(name) {
-    const newProductSizes = this.state.newProductSizes;
-    for (var i = 0; i < newProductSizes.length; i++) {
-      if (newProductSizes[i] === name) {
-        return true;
-      }
-    }
-    return false;
   }
 }
 
