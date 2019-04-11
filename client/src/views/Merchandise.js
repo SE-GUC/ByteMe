@@ -7,12 +7,14 @@ import {
   Modal,
   InputGroup,
   FormControl,
-  Spinner
+  Spinner,
+  Form
 } from "react-bootstrap";
 import iconAdd from "../icons/plus.svg";
 import uploaderDefaultImage from "../images/upload-icon.png";
 import Dropzone from "react-dropzone";
 import Auth from "../utils/Auth";
+import { TwitterPicker } from "react-color";
 
 class Merchandise extends Component {
   constructor(props) {
@@ -22,6 +24,10 @@ class Merchandise extends Component {
     this.handleCreateClose = this.handleCreateClose.bind(this);
     this.change = this.change.bind(this);
     this.pictureUploader = this.pictureUploader.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
+    this.addColor = this.addColor.bind(this);
+    this.clearColors = this.clearColors.bind(this);
+    this.handleSizeChange = this.handleSizeChange.bind(this);
 
     this.state = {
       isLoading: true,
@@ -29,7 +35,10 @@ class Merchandise extends Component {
       user: props.user,
       canEdit: false,
       showAddProductWindow: false,
-      newProduct: {}
+      newProduct: { sizes: [], colors: [] },
+      colorsPicked: [],
+      colorPicked: "#000000",
+      newProductSizes: []
     };
     if (this.state.user) {
       if (
@@ -65,6 +74,8 @@ class Merchandise extends Component {
                 pic_ref={product.pic_ref}
                 description={product.description}
                 price={product.price}
+                colors={product.colors}
+                sizes={product.sizes}
                 updateProducts={this.updateProducts}
                 canEdit={this.state.canEdit}
               />
@@ -109,6 +120,7 @@ class Merchandise extends Component {
                 onChange={this.change}
                 placeholder="Product Name"
                 aria-label="Product Name"
+                autoComplete="off"
               />
             </InputGroup>
             {/* price */}
@@ -119,11 +131,68 @@ class Merchandise extends Component {
                 onChange={this.change}
                 placeholder="Product Price"
                 aria-label="Product Price"
+                autoComplete="off"
               />
               <InputGroup.Append>
                 <InputGroup.Text>EGP</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
+            {/* Color */}
+            <InputGroup className="mb-3">
+              <FormControl
+                name="color"
+                onChange={this.change}
+                placeholder="Available Colors"
+                aria-label="Available Colors"
+                autoComplete="off"
+                value={this.state.colorsPicked.join(",")}
+              />
+            </InputGroup>
+            <div style={{ display: "flex", "flex-direction": "row" }}>
+              <TwitterPicker
+                className="mb-3"
+                onChange={this.handleColorChange}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  "flex-direction": "column",
+                  "margin-top": "-20px"
+                }}
+              >
+                <Button
+                  style={{
+                    background: this.state.colorPicked
+                  }}
+                  className="color-picking-button"
+                  onClick={() => this.addColor(this.state.colorPicked)}
+                >
+                  Add Color!
+                </Button>
+                <Button
+                  className="color-picking-button"
+                  variant="light"
+                  onClick={() => this.clearColors()}
+                >
+                  Clear Colors
+                </Button>{" "}
+              </div>
+            </div>
+            {/* newProductSizes */}
+            <div style={{ display: "flex", "flex-direction": "row" }}>
+              {["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"].map(size => (
+                <div key={`checkbox-${size}`} className="mb-3 mr-3">
+                  <Form.Check
+                    custom
+                    type="checkbox"
+                    name={size}
+                    onChange={this.handleSizeChange}
+                    id={`custom-checkbox-${size}`}
+                    label={size}
+                  />{" "}
+                </div>
+              ))}
+            </div>
             {/* description */}
             <InputGroup className="mb-3">
               <FormControl
@@ -133,6 +202,7 @@ class Merchandise extends Component {
                 rows="2"
                 placeholder="Product description"
                 aria-label="Product description"
+                autoComplete="off"
               />
             </InputGroup>
           </Modal.Body>
@@ -188,6 +258,9 @@ class Merchandise extends Component {
   change = event => {
     const newProduct = this.state.newProduct;
     const name = event.target.name;
+    if (name === "color") {
+      return;
+    }
     newProduct[name] = event.target.value;
     this.setState({ newProduct: newProduct });
   };
@@ -203,8 +276,14 @@ class Merchandise extends Component {
       console.log("Error uploading image: ", error);
     };
   };
-  createProduct(newProduct) {
+  createProduct(product) {
     this.setState({ isLoading: true });
+    const newProduct = {
+      ...product,
+      sizes: this.state.newProductSizes.filter(Boolean),
+      colors: this.state.colorsPicked.filter(Boolean)
+    };
+    //Send
     try {
       const token = Auth.getToken();
       const headers = {
@@ -219,6 +298,34 @@ class Merchandise extends Component {
       console.log(`😱 Axios request failed: ${e}`);
     }
   }
+  handleColorChange(color, event) {
+    this.setState({ colorPicked: color.hex });
+  }
+  addColor(color) {
+    var colorsPicked = this.state.colorsPicked;
+    colorsPicked.push(color);
+    this.setState({ colorsPicked: colorsPicked });
+  }
+  clearColors() {
+    this.setState({ colorsPicked: [] });
+  }
+  handleSizeChange = event => {
+    if (event.target.checked) {
+      const newProductSizes = this.state.newProductSizes;
+      const name = event.target.name;
+      newProductSizes.push(name);
+      this.setState({ newProductSizes: newProductSizes });
+    } else {
+      const newProductSizes = this.state.newProductSizes;
+      const name = event.target.name;
+      for (var i = newProductSizes.length - 1; i >= 0; i--) {
+        if (newProductSizes[i] === name) {
+          newProductSizes.splice(i, 1);
+        }
+      }
+      this.setState({ newProductSizes: newProductSizes });
+    }
+  };
 }
 
 export default Merchandise;
