@@ -8,6 +8,8 @@ import User from "../components/User";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 
+import LoadingGif from "../images/Loading.gif"
+
 import "./UserProfile.css";
 
 const queryString = require("query-string");
@@ -20,7 +22,8 @@ class UserProfile extends Component {
       err: "",
       isEditing: false,
       editingErr: "",
-      requestUser: false
+      requestUser: false,
+      editLoading: false
     };
 
     this.edit = () => {
@@ -32,7 +35,7 @@ class UserProfile extends Component {
     };
 
     this.save = editedUser => {
-      this.setState({ requestUser: false });
+      this.setState({ requestUser: false, editLoading: true });
       if (editedUser.password === editedUser.confirm_password) {
         delete editedUser.confirm_password;
 
@@ -46,25 +49,26 @@ class UserProfile extends Component {
             this.setState({
               requestUser: false,
               isEditing: false,
-              editingErr: ""
+              editingErr: "",
+              editLoading: false
             });
             this.props.login();
           })
           .catch(err => {
             console.log(err.response);
             if (err.response.data)
-              this.setState({ editingErr: err.response.data.error });
+              this.setState({ editingErr: err.response.data.error, editLoading: false });
             else {
               if (err.response.status === 413)
                 this.setState({
                   editingErr:
                     "That image is too large, try an image that is below 5MB"
                 });
-              else this.setState({ editingErr: err.message });
+              else this.setState({ editingErr: err.message, editLoading: false });
             }
           });
       } else {
-        this.setState({ editingErr: "Passwords Don't Match" });
+        this.setState({ editingErr: "Passwords Don't Match", editLoading: false });
       }
     };
 
@@ -75,10 +79,10 @@ class UserProfile extends Component {
     this.delete = () => {
       const prompts = [
         `Deleting ${
-          this.props.location.search === "" ? "your" : "this"
+        this.props.location.search === "" ? "your" : "this"
         } profile is permanent. There is no going back!`,
         `This means ${
-          this.props.location.search === "" ? "leaving" : "removing"
+        this.props.location.search === "" ? "leaving" : "removing"
         } forever!`,
         "Are you absolutely 100% certain you want this?"
       ];
@@ -166,69 +170,80 @@ class UserProfile extends Component {
       <Alert variant="danger"> {this.state.err} </Alert>
     ) : this.state.user ? (
       this.props.user &&
-      (this.props.user.is_admin ||
-        this.props.user.guc_id === this.state.user.guc_id) ? (
-        <>
-          {this.state.editingErr !== "" ? (
-            <Alert variant="danger">{this.state.editingErr}</Alert>
-          ) : (
-            <></>
-          )}
-          <User
-            user={this.state.user}
-            isEditing={this.state.isEditing}
-            requestUser={this.state.requestUser}
-            setUser={this.save}
-          />
-
-          <Form.Row className="profile-row">
-            <Col />
-            {this.state.isEditing ? (
-              <Col xs="1" className="profile-col">
-                <Button block variant="outline-warning" onClick={this.cancel}>
-                  Cancel
-                </Button>
-              </Col>
+        (this.props.user.is_admin ||
+          this.props.user.guc_id === this.state.user.guc_id) ? (
+          <>
+            {this.state.editingErr !== "" ? (
+              <Alert variant="danger">{this.state.editingErr}</Alert>
             ) : (
-              <></>
-            )}
-            <Col xs="1" className="profile-col">
-              {this.state.isEditing ? (
-                <Button
-                  block
-                  variant="outline-warning"
-                  onClick={this.requestUser}
-                >
-                  Save
-                </Button>
-              ) : (
-                <Button block variant="outline-warning" onClick={this.edit}>
-                  Edit
-                </Button>
+                <></>
               )}
-            </Col>
-            <Col xs="1" className="profile-col">
-              <Button block variant="outline-danger" onClick={this.delete}>
-                Delete
-              </Button>
-            </Col>
-          </Form.Row>
+            <User
+              user={this.state.user}
+              isEditing={this.state.isEditing}
+              requestUser={this.state.requestUser}
+              setUser={this.save}
+            />
 
-          {this.state.isEditing ? (
-            <Alert variant="warning">
-              Only edit fields you want changed! Fields left empty will stay as
-              they are.
+            <Form.Row className="profile-row">
+              <Col />
+              {this.state.isEditing ? (
+                <Col xs="1" className="profile-col">
+                  <Button block variant="outline-warning" onClick={this.cancel}>
+                    Cancel
+                </Button>
+                </Col>
+              ) : (
+                  <></>
+                )}
+
+              <Col xs="1" className="profile-col">
+                {this.state.isEditing ? (
+                  <Button
+                    block
+                    variant="outline-warning"
+                    onClick={this.requestUser}
+                  >
+                    Save
+                    </Button>
+                ) : (
+                    <Button block variant="outline-warning" onClick={this.edit}>
+                      Edit
+                </Button>
+                  )}
+              </Col>
+              {this.state.editLoading ?
+                <Col xs="0" className="profile-col">
+                  <img
+                    height="40"
+                    className="mr-3"
+                    src={LoadingGif}
+                    alt="Loading"
+                  />
+                </Col>
+                : <></>}
+              <Col xs="1" className="profile-col">
+                <Button block variant="outline-danger" onClick={this.delete}>
+                  Delete
+              </Button>
+              </Col>
+            </Form.Row>
+
+            {this.state.isEditing ? (
+              <Alert variant="warning">
+                Only edit fields you want changed! Fields left empty will stay as
+                they are.
             </Alert>
-          ) : (
-            <></>
-          )}
-        </>
-      ) : (
-        <User user={this.state.user} />
-      )
+            ) : (
+                <></>
+              )}
+          </>
+        ) : (
+          <User user={this.state.user} />
+        )
     ) : (
-      <></>
-    );
+          <></>
+        );
   }
 }
 
