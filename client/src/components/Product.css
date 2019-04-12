@@ -22,19 +22,15 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 .product-name {
   text-align: center;
-  font-family: GothamMedium;
-}
-.product-button {
-  float: right;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  margin-bottom: 15px;
-  margin-right: 15px;
   font-family: GothamBlack;
-  background-color: #ffffff;
 }
 
 .btn-secondary,
@@ -65,7 +61,7 @@
 }
 
 .card-img-top {
-  height: 18rem;
+  height: 240px;
 }
 .card {
   border: 1px solid #ffd700;
@@ -88,4 +84,9 @@
   margin-top: 5px;
   border-radius: 50px !important;
   text-align: center;
+}
+.product-headers-text {
+  text-align: left;
+  font-family: GothamBook;
+  font-weight: 500;
 }
