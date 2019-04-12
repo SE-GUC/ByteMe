@@ -10,7 +10,7 @@ import PortalLibrary from "./views/PortalLibrary";
 import Announcements from "./views/Announcements";
 import UserProfile from "./views/UserProfile";
 import Merchandise from "./views/Merchandise";
-import ResetPass from "./views/ResetPass"
+import ResetPass from "./views/ResetPass";
 import Register from "./views/Register";
 import AboutUs from "./views/AboutUs";
 import Contact from "./views/Contact";
@@ -118,7 +118,13 @@ class App extends Component {
             <Route exact path="/library" component={PortalLibrary} />
             <Route exact path="/aboutus" component={AboutUs} />
             <Route exact path="/faq" component={FAQs} />
-            <Route exact path="/announcements" component={Announcements} />
+            <Route
+              exact
+              path="/announcements"
+              render={props => (
+                <Announcements user={this.state.user} {...props} />
+              )}
+            />
             <Route exact path="/clubs" component={Club} />
             <Route exact path="/ContactUs" component={Contact} />
             <Route
@@ -168,4 +174,3 @@ class App extends Component {
 }
 
 export default App;
-
