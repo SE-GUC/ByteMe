@@ -40,12 +40,13 @@ class Product extends Component {
       editedProduct: { sizes: [], colors: [] },
       canEdit: props.canEdit,
       colorPicked: "#000000",
-      colorsPicked: [],
-      newProductSizes: []
+      colorsPicked: props.colors,
+      newProductSizes: props.sizes
     };
   }
   render() {
-    const { id, name, description, pic_ref, price, colors, sizes } = this.props;
+    const { id, name, description, pic_ref, price } = this.props;
+
     return (
       <div>
         <Card style={{ width: "18rem", margin: "10px", height: "40rem" }}>
@@ -88,7 +89,7 @@ class Product extends Component {
                 "justify-content": "center"
               }}
             >
-              {colors.map(color => (
+              {this.state.colorsPicked.map(color => (
                 <Circle bgColor={color} />
               ))}
             </div>
@@ -101,7 +102,7 @@ class Product extends Component {
               }}
             >
               <ButtonGroup size="lg" aria-label="First group">
-                {sizes.map(size => (
+                {this.state.newProductSizes.map(size => (
                   <Button variant="secondary">{size}</Button>
                 ))}
               </ButtonGroup>
@@ -151,7 +152,13 @@ class Product extends Component {
                     <input {...getInputProps()} />
                     <img
                       className="product-picture-picker"
-                      src={pic_ref !== "false" ? pic_ref : uploaderDefaultImage}
+                      src={
+                        this.state.editedProduct.pic_ref
+                          ? this.state.editedProduct.pic_ref
+                          : pic_ref !== "false"
+                          ? pic_ref
+                          : uploaderDefaultImage
+                      }
                       alt="Product"
                     />
                   </div>
@@ -339,11 +346,10 @@ class Product extends Component {
     }
   }
   async componentWillReceiveProps(props) {
-    this.setState({ canEdit: props.canEdit });
-    this.setState({ colorsPicked: props.colors });
-    this.setState({ newProductSizes: props.sizes });
+    this.setState({
+      canEdit: props.canEdit
+    });
   }
-
   handleColorChange(color, event) {
     this.setState({ colorPicked: color.hex });
   }

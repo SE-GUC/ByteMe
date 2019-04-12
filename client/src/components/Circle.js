@@ -10,7 +10,8 @@ class Circle extends Component {
       backgroundColor: this.props.bgColor,
       borderRadius: "50%",
       width: 40,
-      height: 40
+      height: 40,
+      border: "1px solid #ccc"
     };
   }
   render() {
