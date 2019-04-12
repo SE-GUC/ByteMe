@@ -32,6 +32,7 @@ Product {
   margin-top: 10px;
   border-radius: 50px !important;
   text-align: center;
+  z-index: 1;
 }
 .product-picture-picker {
   width: 128px;
