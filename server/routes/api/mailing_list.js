@@ -25,21 +25,25 @@ router.get(
 );
 
 //subscribe to mailing list
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const isValidated = validator.createValidation(req.body);
-    if (isValidated.error)
-      return res.json({ msg: "validations not satisfied" });
-
-    const newMailinglist = await Mailing_list.create(req.body);
-
-    res.json({ msg: "Subscribed successfully", data: newMailinglist });
+    const isValidated = validator.createValidation(req.body)
+    const email = req.body.email
+    if (isValidated.error) {
+      return res
+        .status(400)
+        .json({ error: isValidated.error.details[0].message })
+    }
+    var user = await User.findOne({ email })
+    const newMailinglist = await Mailing_list.create(req.body)
+    if (!user)
+    res.json({ msg: 'Subscribed successfully', data: newMailinglist })
   } catch (error) {
     // We will be handling the error later
 
-    console.log(error);
+    console.log(error)
   }
-});
+})
 
 //admins unsubscribe mails by id
 router.delete(

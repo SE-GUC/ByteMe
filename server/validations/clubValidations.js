@@ -3,22 +3,10 @@ const Joi = require("joi");
 module.exports = {
   createValidation: request => {
     const createSchema = {
-      name: Joi.string()
-        .min(1)
-        .max(500)
-        .required(),
-      description: Joi.string()
-        .min(10)
-        .max(10000)
-        .required(),
-      banner: Joi.string()
-        .min(5)
-        .max(1000)
-        .required(),
-      link: Joi.string()
-        .min(3)
-        .max(100)
-        .required()
+      name: Joi.string().required(),
+      description: Joi.string().required(),
+      banner: Joi.string(),
+      link: Joi.string().required()
     };
 
     return Joi.validate(request, createSchema);
@@ -26,18 +14,13 @@ module.exports = {
 
   updateValidation: request => {
     const updateSchema = {
-      name: Joi.string()
-        .min(1)
-        .max(500),
+      name: Joi.string(),
       description: Joi.string()
-        .min(10)
-        .max(10000),
+      ,
       banner: Joi.string()
-        .min(5)
-        .max(1000),
+       ,
       link: Joi.string()
-        .min(3)
-        .max(1000)
+      
     };
 
     return Joi.validate(request, updateSchema);

@@ -14,3 +14,23 @@ h1 {
 Mailing {
   margin: 8px;
 }
+input[type="s"] {
+  background-color: #003255;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  float: center;
+  text-align: center;
+  position: center;
+  
+  cursor: pointer;
+}
+
+input[type="s"]:hover {
+  background-color: #ffd700;
+}
+
+.sub{
+  text-align:center;
+}

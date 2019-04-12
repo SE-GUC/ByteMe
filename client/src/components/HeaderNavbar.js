@@ -77,6 +77,14 @@ class HeaderNavbar extends Component {
 
         {this.props.isLoggedIn ? (
           <Nav>
+          {this.props.user.awg_admin === 'mun' ||
+         this.props.user.mun_role === 'secretary_office' ? (
+           <Nav>
+               <LinkContainer to='/mailing_list'>
+               <Nav.Link>Subscribers</Nav.Link>
+             </LinkContainer>
+         </Nav>): null}
+          
             <LinkContainer to="/profile">
               <Nav.Link>
                 {(this.props.user.first_name + " " + this.props.user.last_name)
