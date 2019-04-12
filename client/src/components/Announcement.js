@@ -166,10 +166,10 @@ class Announcement extends Component {
     this.setState({ showEditWindow: true });
   }
   change = event => {
-    const editAnnouncement = this.state.editedAnnouncement;
+    const editedAnnouncement = this.state.editedAnnouncement;
     const name = event.target.name;
-    editAnnouncement[name] = event.target.value;
-    this.setState({ editAnnouncement: editAnnouncement });
+    editedAnnouncement[name] = event.target.value;
+    this.setState({ editedAnnouncement: editedAnnouncement });
   };
 
   editAnnouncement(id, editedAnnouncement) {
