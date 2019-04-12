@@ -68,7 +68,8 @@ module.exports.hideSecrets = user => {
     picture_ref,
     is_admin,
     is_private,
-    mun_role
+    mun_role,
+    awg_admin
   } = user;
 
   return {
@@ -80,6 +81,7 @@ module.exports.hideSecrets = user => {
     picture_ref: picture_ref,
     is_admin: is_admin,
     is_private: is_private,
-    mun_role: mun_role
+    mun_role: mun_role,
+    awg_admin: awg_admin
   };
 };

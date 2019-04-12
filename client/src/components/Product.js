@@ -396,7 +396,6 @@ class Product extends Component {
     return false;
   }
 }
-
 Product.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string,
@@ -404,5 +403,4 @@ Product.propTypes = {
   pic_ref: PropTypes.string,
   isLoading: PropTypes.bool
 };
-
 export default Product;
