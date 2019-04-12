@@ -8,7 +8,8 @@ import {
   InputGroup,
   FormControl,
   Spinner,
-  Form
+  Form,
+  CardDeck
 } from "react-bootstrap";
 import iconAdd from "../icons/plus.svg";
 import uploaderDefaultImage from "../images/upload-icon.png";
@@ -54,7 +55,7 @@ class Merchandise extends Component {
       <div>
         <h1 style={{ margin: "15px" }}>GUCMUN SWAG</h1>
         <div className="merchandise">
-          <div className="product-group">
+          <CardDeck className="product-group">
             {this.state.canEdit ? (
               <Button
                 variant="warning"
@@ -66,7 +67,6 @@ class Merchandise extends Component {
             ) : (
               <></>
             )}
-
             {this.state.products.map(product => (
               <Product
                 id={product._id}
@@ -80,7 +80,7 @@ class Merchandise extends Component {
                 canEdit={this.state.canEdit}
               />
             ))}
-          </div>
+          </CardDeck>
         </div>
         {/* CREATE MODAL */}
         <Modal

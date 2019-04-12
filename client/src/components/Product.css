@@ -42,7 +42,24 @@
 
 .product-description {
   font-family: CenturyGothic;
+  height: 80px;
+  overflow-y: scroll;
+  text-align: center;
+  overflow: hidden;
 }
+
+.product-description:hover {
+  font-family: CenturyGothic;
+  height: 80px;
+  overflow-y: scroll;
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
 .card-img-top {
   height: 240px;
 }

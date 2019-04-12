@@ -46,10 +46,11 @@ class Product extends Component {
   }
   render() {
     const { id, name, description, pic_ref, price } = this.props;
+    const allSizesInOrder = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
     return (
       <div>
-        <Card style={{ width: "18rem", margin: "10px", height: "40rem" }}>
+        <Card style={{ width: "18rem", margin: "10px" }}>
           {this.state.canEdit ? (
             <>
               <Button
@@ -81,6 +82,7 @@ class Product extends Component {
               {price} EGP
             </Card.Subtitle>
             <Card.Text className="product-description">{description}</Card.Text>
+
             <Card.Text className="product-headers-text">Colors</Card.Text>
             <div
               style={{
@@ -102,9 +104,15 @@ class Product extends Component {
               }}
             >
               <ButtonGroup size="lg" aria-label="First group">
-                {this.state.newProductSizes.map(size => (
-                  <Button variant="secondary">{size}</Button>
-                ))}
+                {this.state.newProductSizes
+                  .slice()
+                  .sort(
+                    (a, b) =>
+                      allSizesInOrder.indexOf(a) - allSizesInOrder.indexOf(b)
+                  )
+                  .map(size => (
+                    <Button variant="secondary">{size}</Button>
+                  ))}
               </ButtonGroup>
             </div>
           </Card.Body>
