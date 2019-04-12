@@ -58,16 +58,23 @@ module.exports = {
 
     return Joi.validate(request, updateSchema);
   },
-  createFeedbackValidation: request => {
-    const addFeedbackSchema = {
-      content: Joi.string().required(),
-      rating: Joi.number()
+  createCommentValidation: request => {
+    const addCommentSchema = {
+      comment: Joi.string().required()
+    };
+
+    return Joi.validate(request, addCommentSchema);
+  },
+
+  createRateValidation: request => {
+    const addRateSchema = {
+      rate: Joi.number()
         .min(0)
         .max(5)
         .required()
     };
 
-    return Joi.validate(request, addFeedbackSchema);
+    return Joi.validate(request, addRateSchema);
   },
 
   photoValidation: request => {

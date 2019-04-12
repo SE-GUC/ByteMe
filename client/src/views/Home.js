@@ -17,14 +17,16 @@ class Home extends Component {
       <Timeline lineColor={"#ffd700"} collapsible className="home">
         {this.state.events.map(event => (
           <EventTimeline
-            id={event.id}
+            _id={event._id}
+            comingSoon={event.comingSoon}
             title={event.title}
             brief={event.brief}
             location={event.location}
             dateTime={event.dateTime}
             description={event.description}
             photos={event.photos}
-            feedback={event.feedback}
+            comments={event.comments}
+            rates={event.rates}
             creator={event.creator}
             rating={event.rating}
           />

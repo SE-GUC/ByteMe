@@ -12,20 +12,22 @@ class EventTimeline extends Component {
     return (
       <TimelineItem
         // key="001"
-        dateText={dateTime}
+        dateText={dateTime.toString().split("T")[0]}
         dateInnerStyle={{ background: "#003255", color: "#ffd700" }}
         style={{ color: "#003255" }}
       >
         <Collapsible trigger={title} triggerStyle={{ color: "#003255" }}>
           <Event
-            id={this.props.id}
+            _id={this.props._id}
+            comingSoon={this.props.comingSoon}
             title={this.props.title}
             brief={this.props.brief}
             location={this.props.location}
             dateTime={this.props.dateTime}
             description={this.props.description}
             photos={this.props.photos}
-            feedback={this.props.feedback}
+            comments={this.props.comments}
+            rates={this.props.rates}
             creator={this.props.creator}
             rating={this.props.rating}
           />

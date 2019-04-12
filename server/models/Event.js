@@ -35,10 +35,15 @@ const EventSchema = new Schema({
     }
   ],
 
-  feedback: [
+  comments: [
     {
-      content: { type: String, unique: false, required: true },
-      rating: { type: Number, unique: false, required: true }
+      comment: { type: String, unique: false, required: false }
+    }
+  ],
+
+  rates: [
+    {
+      rate: { type: Number, unique: false, required: false }
     }
   ],
 
