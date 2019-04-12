@@ -54,7 +54,7 @@ router.put(
       const isValidated = validator.updateValidation(req.body);
       if (isValidated.error)
         return res.json({ message: "Validations not met" });
-      await Product.findByIdAndUpdate(faq, req.body);
+      await FAQ.findByIdAndUpdate(faq, req.body);
       res.json({ msg: "FAQ updated successfully" });
     } catch (error) {
       return res.json({ msg: error });
