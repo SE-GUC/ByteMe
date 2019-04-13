@@ -15,8 +15,7 @@ const ClubSchema = new Schema({
   },
   banner: {
     type: String,
-    unique: false,
-    required: true
+    default:"false"
   },
   link: {
     type: String,
@@ -24,6 +23,6 @@ const ClubSchema = new Schema({
     required: true
   }
 });
-ClubSchema.index({ name: "text", description: "text", banner: "text" });
+ClubSchema.index({ name: "text", description: "text" });
 
 module.exports = Club = mongoose.model("Club", ClubSchema);

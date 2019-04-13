@@ -1,3 +1,4 @@
+
 @font-face {
   font-family: "GothamBook";
   src: url("../fonts/GothamBook.ttf") format("truetype");
@@ -5,62 +6,50 @@
   font-style: normal;
 }
 
-* {
-  box-sizing: border-box;
-}
+* {box-sizing: border-box;}
 
 .App {
-  max-width: 420px;
+  max-width: 400px;
   margin: 0 auto;
-}
-p {
-  text-align: center;
-
-  font-weight: 500;
+  text-align:center;
 }
 
-input[type="text"],
-input[type="email"],
-select,
-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
+
+input[type=text],input[type=email], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
 }
 
-input[type="submit"] {
-  background-color: #4caf50;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+input[type=submit] {
+    background-color: #003255;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    position:center;
+    float:center;
 }
 
-input[type="submit"]:hover {
-  background-color: #45a049;
+input[type=submit]:hover {
+    background-color:  #ffd700;
 }
 
 .container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-.sucsess {
-  margin: 20px 0;
-  border: 1px solid green;
-  padding: 7px;
-  font-weight: bold;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
 }
 
-.error {
-  margin: 20px 0;
-  border: 1px solid red;
-  padding: 7px;
-  font-weight: bold;
+.errorMsg {
+  color: #cc0000;
+  margin-bottom: 12px;
 }
+
+

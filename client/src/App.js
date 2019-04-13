@@ -1,6 +1,6 @@
 ﻿import { BrowserRouter as Router, Route } from "react-router-dom";
 import React, { Component } from "react";
-import { Navbar } from "react-bootstrap";
+import { Navbar, Modal, Nav } from "react-bootstrap";
 
 import logo from "./logo.svg";
 import "./App.css";
@@ -8,6 +8,7 @@ import "./App.css";
 import DetailedEvents from "./views/DetailedEvents";
 import PortalLibrary from "./views/PortalLibrary";
 import Announcements from "./views/Announcements";
+import Mailing_list from "./views/Mailing_list";
 import UserProfile from "./views/UserProfile";
 import Merchandise from "./views/Merchandise";
 import ResetPass from "./views/ResetPass";
@@ -34,9 +35,15 @@ class App extends Component {
       isLoggedIn: false,
       user: undefined,
       councils: [],
-      events: []
+      events: [],
+      email: "",
+      show: false,
+      error: ""
     };
 
+    this.handleClose = this.handleClose.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleShow = this.handleShow.bind(this);
     this.login = () => {
       var token = Auth.getToken();
       API.get("/users/profile", {
@@ -65,6 +72,34 @@ class App extends Component {
 
     if (Auth.isUserAuthenticated()) this.login();
   }
+  handleClose() {
+    this.setState({ show: false });
+  }
+  handleShow = e => {
+    e.preventDefault();
+    this.setState({ show: true });
+  };
+  validateForm() {
+    let formIsValid = true;
+    if (this.state.email === "") {
+      formIsValid = false;
+      this.setState({ error: "*Please enter your email." });
+    }
+
+    if (this.state.email !== "") {
+      var pattern = new RegExp(
+        /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+      );
+      if (!pattern.test(this.state.email)) {
+        formIsValid = false;
+        this.setState({ error: "*Please enter valid email." });
+      } else {
+        formIsValid = true;
+        this.setState({ error: "" });
+      }
+    }
+    return formIsValid;
+  }
 
   async componentDidMount() {
     API.get("/page").then(res => {
@@ -74,6 +109,16 @@ class App extends Component {
     API.get("/events").then(res => {
       this.setState({ events: res.data.data });
     });
+  }
+  async handleSubmit(e) {
+    e.preventDefault();
+    if (this.validateForm()) {
+      const { email } = this.state;
+      const form = await API.post("mailing_list", {
+        email
+      });
+      this.setState({ show: false, email: "" });
+    }
   }
 
   render() {
@@ -99,11 +144,31 @@ class App extends Component {
           />
 
           <div className="content-div">
-            <Route exact path="/" component={Home} />
-            <Route exact path="/home" component={Home} />
+            <Route
+              exact
+              path="/"
+              render={props => <Home user={this.state.user} {...props} />}
+            />
+
+            <Route
+              exact
+              path="/home"
+              render={props => <Home user={this.state.user} {...props} />}
+            />
             {this.state.councils.map(council => {
               return (
-                <Route exact path={`/pages/${council._id}`} component={Pages} />
+                <Route
+                  exact
+                  path={`/pages/${council._id}`}
+                  render={props => (
+                    <Pages
+                      isLoggedIn={this.state.isLoggedIn}
+                      user={this.state.user}
+                      logout={this.logout}
+                      {...props}
+                    />
+                  )}
+                />
               );
             })}
             {this.state.events.map(event => {
@@ -141,7 +206,7 @@ class App extends Component {
               )}
             />
             <Route exact path="/events" component={Events} />
-
+            <Route exact path="/mailing_list" component={Mailing_list} />
             <Route
               path="/profile/:gucid?"
               render={props => (
@@ -166,6 +231,43 @@ class App extends Component {
               alt="React Bootstrap logo"
             />
           </Navbar.Brand>
+          <div className="sub">
+            <input
+              type="submit"
+              onClick={e => this.handleShow(e)}
+              value="Click me!"
+            />
+          </div>
+          {this.state.show ? (
+            <Nav>
+              <Modal
+                className="pop"
+                show={this.state.show}
+                onHide={this.handleClose}
+              >
+                <Modal.Body>
+                  <h1>Subscribe here!</h1>
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Your email"
+                    value={this.state.email}
+                    onChange={e => this.setState({ email: e.target.value })}
+                  />
+                  <div className="errorMsg">{this.state.error}</div>
+                  <div className="sub">
+                    <input
+                      type="submit"
+                      onClick={e => this.handleSubmit(e)}
+                      value="Done"
+                    />
+                  </div>
+                </Modal.Body>
+              </Modal>
+            </Nav>
+          ) : null}
           © 2019 GUCMUN
         </Navbar>{" "}
       </div>

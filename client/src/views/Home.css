@@ -1,3 +1,10 @@
 .home {
   min-height: 42.8rem;
 }
+.register{
+  text-align: center;
+}
+.social{
+  float:right;
+  text-align: right;
+}
