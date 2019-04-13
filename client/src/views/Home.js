@@ -13,6 +13,8 @@ import {
   ModalFooter
 } from "react-bootstrap";
 import { TwitterTimelineEmbed} from 'react-twitter-embed';
+import SearchBar from "../components/SearchBar";
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -174,6 +176,25 @@ class Home extends Component {
 
 :(<></>)}
           </div>
+
+        <SearchBar />
+        <Timeline lineColor={"#ffd700"} collapsible className="home">
+          {this.state.events.map(event => (
+            <EventTimeline
+              id={event.id}
+              title={event.title}
+              brief={event.brief}
+              location={event.location}
+              dateTime={event.dateTime}
+              description={event.description}
+              photos={event.photos}
+              feedback={event.feedback}
+              creator={event.creator}
+              rating={event.rating}
+            />
+          ))}
+        </Timeline>
+
       </div>
     );
   }
