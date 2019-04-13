@@ -69,6 +69,7 @@ class ResetPass extends Component {
                             </Col>
                             <Col>
                                 <Form.Control
+                                    type="password"
                                     placeholder="New password"
                                     onChange={this.changePassword}
                                 />
