@@ -24,5 +24,4 @@ components, I've already implemented it you can import components you want to us
 - Title margins and sizing needs to become consistent.
 - Academic Library should be seperated by year.[OMAR]
 - AWG platform home page
-- Online google sheets for registration.[done]
 

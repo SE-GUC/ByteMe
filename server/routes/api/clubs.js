@@ -24,7 +24,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post(
-  "/addclub",
+  "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
