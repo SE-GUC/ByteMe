@@ -77,13 +77,16 @@ class Pages extends Component {
             <CardDeck className="deck">
               {this.state.events.map(event => (
                 <Event
+                  _id={event._id}
+                  comingSoon={event.comingSoon}
                   title={event.title}
                   brief={event.brief}
                   location={event.location}
                   dateTime={event.dateTime}
                   description={event.description}
                   photos={event.photos}
-                  feedback={event.feedback}
+                  comments={event.comments}
+                  rates={event.rates}
                   creator={event.creator}
                   rating={event.rating}
                 />
