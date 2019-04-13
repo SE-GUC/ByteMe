@@ -68,6 +68,8 @@ class Event extends Component {
       rating
     } = this.props;
 
+    console.log(comments + "coms")
+
     return (
       <div>
         <Card
@@ -182,7 +184,7 @@ class Event extends Component {
               ) : (
                 <>
                   <h4>Event Feedback</h4>
-                  {comments.length === 0 ? (
+                  {comments && comments.length === 0 ? (
                     <h5>No feedback</h5>
                   ) : (
                     <>
