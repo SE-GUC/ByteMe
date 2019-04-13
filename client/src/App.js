@@ -8,6 +8,7 @@ import "./App.css";
 import DetailedEvents from "./views/DetailedEvents";
 import PortalLibrary from "./views/PortalLibrary";
 import Announcements from "./views/Announcements";
+import Mailing_list from "./views/Mailing_list";
 import UserProfile from "./views/UserProfile";
 import Merchandise from "./views/Merchandise";
 import ResetPass from "./views/ResetPass";
@@ -20,7 +21,7 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 import FAQs from "./views/FAQs";
 import Club from "./views/Club";
-import Mailing_list from "./views/Mailing_list";
+
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import Auth from "./utils/Auth";
@@ -182,12 +183,14 @@ class App extends Component {
             <Route exact path="/library" component={PortalLibrary} />
             <Route exact path="/aboutus" component={AboutUs} />
             <Route exact path="/faq" component={FAQs} />
-            <Route exact path="/announcements" component={Announcements} />
             <Route
               exact
-              path="/clubs"
-              render={props => <Club user={this.state.user} {...props} />}
+              path="/announcements"
+              render={props => (
+                <Announcements user={this.state.user} {...props} />
+              )}
             />
+            <Route exact path="/clubs" component={Club} />
             <Route exact path="/ContactUs" component={Contact} />
             <Route
               exact
