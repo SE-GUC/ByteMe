@@ -19,6 +19,14 @@ const ProductSchema = new Schema({
   pic_ref: {
     type: String,
     default: false
+  },
+  colors: {
+    type: Array,
+    default: []
+  },
+  sizes: {
+    type: Array,
+    default: []
   }
 });
 

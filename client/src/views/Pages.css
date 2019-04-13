@@ -5,57 +5,29 @@
   font-style: normal;
 }
 
-.title {
-  font-family: GothamBook;
-  text-align: center;
-  color: blue;
-}
-
-.text {
-  font-family: GothamLight;
-  text-align: center;
-  color: blue;
-}
 .members {
   font-family: GothamLight;
   border: solid;
-  background-color: blue;
 }
 
 .events {
   font-family: GothamLight;
   border: solid;
-  background-color: blue;
 }
 
-.buttons {
-  position: relative;
+.events-members {
+  position: center;
   margin-left: 680px;
-  margin-top: 300px;
+  margin-top: 400px;
 }
 
 .deck {
-  background: #efefef;
+  background: #ffffff;
   position: relative;
-  text-decoration-color: blue;
   height: 30px;
 
   margin-top: 100px;
 
   margin-left: auto;
   margin-right: auto;
-}
-
-.deck2 {
-  background: #efefef;
-  position: relative;
-  text-decoration-color: blue;
-  height: 30px;
-
-  margin-top: 100px;
-}
-
-h1 {
-  font-family: GothamBook;
-  text-align: center;
 }
