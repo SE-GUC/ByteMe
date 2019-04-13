@@ -4,7 +4,6 @@ import "./Pages.css";
 import Event from "../components/Event";
 import "./Events.css";
 import Member from "../components/Member";
-//import "./Member.css";
 import API from "../utils/API";
 import { Button, ButtonGroup, CardDeck } from "react-bootstrap";
 
@@ -13,7 +12,7 @@ class Pages extends Component {
   // Then we add our constructor which receives our props
   constructor(props) {
     super(props);
-
+    this.updatePages = this.updatePages.bind(this);
     // Next we establish our state
     this.state = {
       show: false,
@@ -45,13 +44,20 @@ class Pages extends Component {
         <pages>
           {this.state.pages.map(page => (
             <Page
+              isLoggedIn={this.props.isLoggedIn}
+              user={this.props.user}
+              loc={this.props.location}
+              logout={this.props.logout}
               name={page.name}
               role_to_control={page.role_to_control}
               description={page.description}
               members={page.members}
+              _id={page._id}
+              url={this.props.location.pathname}
+              updatePages={this.updatePages}
             />
           ))}
-          <ButtonGroup className="buttons">
+          <ButtonGroup className="events-members">
             <Button
               className="events"
               variant="secondary"
@@ -64,7 +70,7 @@ class Pages extends Component {
               variant="secondary"
               onClick={() => this.handleTwo()}
             >
-              Members
+              Our People
             </Button>
           </ButtonGroup>
           {this.state.show && this.state.show1 ? (
@@ -85,9 +91,12 @@ class Pages extends Component {
             </CardDeck>
           ) : null}
           {this.state.show && this.state.show2 ? (
-            <CardDeck className="deck2">
+            <CardDeck>
               {this.state.members.map(member => (
                 <Member
+                  isLoggedIn={this.props.isLoggedIn}
+                  user={this.props.user}
+                  logout={this.props.logout}
                   email={member.email}
                   first_name={member.first_name}
                   last_name={member.last_name}
@@ -95,6 +104,10 @@ class Pages extends Component {
                   guc_id={member.guc_id}
                   picture_ref={member.picture_ref}
                   mun_role={member.mun_role}
+                  url={this.props.location.pathname}
+                  role_to_control={this.state.pages[0].role_to_control}
+                  page_name={this.state.pages[0].name}
+                  updatePages={this.updatePages}
                 />
               ))}
             </CardDeck>
@@ -104,7 +117,12 @@ class Pages extends Component {
     );
   }
   async componentDidMount() {
+    this.updatePages();
+  }
+
+  updatePages() {
     try {
+      this.setState({ isLoading: true });
       var pathArray = this.props.location.pathname.split("/");
       const secondLevelLocation = pathArray[2];
       API.get(`page/${secondLevelLocation}/events`).then(res => {
@@ -115,7 +133,7 @@ class Pages extends Component {
         this.setState({ pages: res.data.data, isLoading: false });
       });
 
-      API.get(`page/${secondLevelLocation}/my_members`).then(res => {
+      API.get(`page/${secondLevelLocation}/members`).then(res => {
         this.setState({ members: res.data.data, isLoading: false });
       });
     } catch (e) {
