@@ -184,8 +184,8 @@ class Home extends Component {
             : (<></>)}
         </div>
 
-        <SearchBar />
-
+        {//<SearchBar />
+        }
       </div>
     );
   }
