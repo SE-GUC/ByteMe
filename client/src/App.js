@@ -182,14 +182,13 @@ class App extends Component {
             })}
             <Route exact path="/library" component={PortalLibrary} />
             <Route exact path="/aboutus" component={AboutUs} />
-            <Route exact path="/faq" component={FAQs} />
             <Route
               exact
-              path="/announcements"
-              render={props => (
-                <Announcements user={this.state.user} {...props} />
-              )}
+              path="/faq"
+              render={props => <FAQs user={this.state.user} {...props} />}
             />
+            <Route exact path="/announcements" component={Announcements} />
+
             <Route exact path="/clubs" component={Club} />
             <Route exact path="/ContactUs" component={Contact} />
             <Route
