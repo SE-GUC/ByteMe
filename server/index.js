@@ -12,7 +12,9 @@ const announcements = require("./routes/api/announcements");
 const clubs = require("./routes/api/clubs");
 const product = require("./routes/api/products");
 const search = require("./routes/api/search");
+const forms = require('./routes/api/forms')
 
+const subscribers = require('./routes/api/subscribers')
 const app = express();
 
 // DB Config
@@ -29,13 +31,17 @@ mongoose
   .catch(err => console.log(err));
 
 // Init middleware
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
   next();
 });
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "5mb" }));
+app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use(passport.initialize());
 require("./config/passport")(passport);
 
@@ -60,7 +66,8 @@ app.use("/api/announcements", announcements);
 app.use("/api/clubs", clubs);
 app.use("/api/products", product);
 app.use("/api/search", search);
-
+app.use('/api/forms', forms)
+app.use('/api/subscribers', subscribers)
 app.use((req, res) =>
   res.status(404).send(`<h1>Can not find what you're looking for</h1>`)
 );

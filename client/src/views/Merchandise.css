@@ -8,6 +8,8 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
   /*justify-content: center*/
 }
 h1 {
@@ -22,4 +24,28 @@ Product {
   border-radius: 25px;
   /* border: 2px solid #ffd700; */
   border: 2px solid #003255;
+}
+.product-create-button {
+  width: fit-content;
+  position: absolute;
+  right: 45px;
+  margin-top: 10px;
+  border-radius: 50px !important;
+  text-align: center;
+  z-index: 1;
+}
+.product-picture-picker {
+  width: 128px;
+  height: 128px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 8px;
+  margin-top: -8px;
+}
+.color-picking-button {
+  height: 30%;
+  margin-left: 40px;
+  width: 80%;
+  margin-top: 20px;
 }

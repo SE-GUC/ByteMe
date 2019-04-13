@@ -180,7 +180,6 @@ describe("Adding a photo to existing event - The one just created, and getting i
         expect(response.type).toBe("application/json");
         expect(response.body.data[0].link).toBe(photoToBeAdded.link);
         photoAddedID = response.body.data[0]._id;
-        console.log(response.body.data);
       });
   });
   test("Deleting photo should require authorization", () => {

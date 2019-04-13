@@ -14,16 +14,18 @@ router.get("/", (req, res) => res.json({ data: "Users Route Online" }));
 router.get("/role/:role", async (req, res) => {
   try {
     const role = req.params.role;
-    if (role === "none") return res.status("400").json({ error: "You can't look for this role!" })
+    if (role === "none")
+      return res.status("400").json({ error: "You can't look for this role!" });
     const users_with_roles = await User.find({ mun_role: role });
     if (users_with_roles.length === 0)
       return res.json({ message: "No users assigned to this role" });
     res.json({
       msg: "Users assigned to this role",
-      data: users_with_roles.map(user => { return hideSecrets(user) })
+      data: users_with_roles.map(user => {
+        return hideSecrets(user);
+      })
     });
   } catch (error) {
-    // We will be handling the error later
     console.log(error);
   }
 });
@@ -35,7 +37,7 @@ router.post("/register", async (req, res) => {
       .status(400)
       .send({ error: isValidated.error.details[0].message });
 
-  const {
+  var {
     email,
     first_name,
     last_name,
@@ -48,6 +50,8 @@ router.post("/register", async (req, res) => {
     mun_role,
     awg_admin
   } = req.body;
+
+  email = email.toLowerCase();
 
   var user = await User.findOne({ email });
   if (user)
@@ -89,7 +93,7 @@ router.post("/login", async (req, res) => {
         .status(400)
         .send({ error: isValidated.error.details[0].message });
 
-    const email = req.body.email;
+    const email = req.body.email.toLowerCase();
     const password = req.body.password;
 
     const userWithEmail = await User.findOne({ email });
@@ -112,7 +116,6 @@ router.post("/login", async (req, res) => {
       }
     });
   } catch (error) {
-    // We will be handling the error later
     console.log(error);
   }
 });
@@ -122,11 +125,8 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      // req.batee5 = 'maamad'
-      //req.logOut();
       return res.json({ message: "logout successful" });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -207,7 +207,6 @@ router.put(
       const updatedUser = await User.findOne({ guc_id: req.body.guc_id });
       return res.json({ message: "updated!", user: updatedUser });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -248,7 +247,6 @@ router.put(
       const updatedUser = await User.findOne({ guc_id: req.body.guc_id });
       return res.json({ message: "updated!", user: updatedUser });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -259,14 +257,13 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      const user = await User.findByIdAndUpdate(
+      await User.findByIdAndUpdate(
         req.user,
         { is_admin: "false" },
         { upsert: false }
       );
       return res.json({ message: "you are no longer an admin!" });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -277,14 +274,13 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      const user = await User.findByIdAndUpdate(
+      await User.findByIdAndUpdate(
         req.user,
         { awg_admin: "none" },
         { upsert: false }
       );
       return res.json({ message: "you are no longer an admin!" });
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -313,7 +309,9 @@ router.put(
               .status(400)
               .send({ error: isValidated.error.details[0].message });
 
-          const email = req.body.email;
+          const email = req.body.email
+            ? req.body.email.toLowerCase()
+            : req.body.email;
 
           const userWithEmail = await User.findOne({ email });
           if (userWithEmail)
@@ -340,7 +338,6 @@ router.put(
             "updated user": userAfterUpdate
           });
         } catch (error) {
-          // We will be handling the error later
           console.log(error);
         }
       } else {
@@ -352,7 +349,9 @@ router.put(
             .status(400)
             .send({ error: isValidated.error.details[0].message });
 
-        const email = req.body.email;
+        const email = req.body.email
+          ? req.body.email.toLowerCase()
+          : req.body.email;
 
         const userWithEmail = await User.findOne({ email });
         if (userWithEmail)
@@ -380,7 +379,6 @@ router.put(
         });
       }
     } catch (error) {
-      // We will be handling the error later
       console.log(error);
     }
   }
@@ -426,11 +424,11 @@ router.put("/forgotpass", (req, res) => {
   const emailData = {
     to: req.body.email,
     subject: "AWG reset Password",
-    text: `Please use the following link to reset your password: localhost:3000/api/users/resetpass/${token}`,
-    html: `<p>Please use the following link to reset your password:</p><p>localhost:3000/api/users/resetpass/${token}</p>`
+    text: `Please use the following link to reset your password: localhost:3001/resetpass/${token}`,
+    html: `<p>Please use the following link to reset your password:</p><p>localhost:3001/resetpass/${token}</p>`
   };
-  return User.updateOne(
-    { email: req.body.email },
+  return User.findOneAndUpdate(
+    { email: req.body.email.toLowerCase() },
     { $set: { resetPassLink: token } },
     function (error, feedback) {
       if (error) return res.send(error);
@@ -448,7 +446,7 @@ router.put("/resetpass", (req, res) => {
   const { resetPassLink, newPassword } = req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(newPassword, salt);
-  return User.updateOne(
+  return User.findOneAndUpdate(
     { resetPassLink },
     { $set: { password: hashedPassword, resetPassLink: "" } },
     function (error, feedback) {

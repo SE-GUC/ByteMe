@@ -44,23 +44,21 @@ router.get("/month", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const event = await Event.find({ _id: id });
+    const event = await Event.findOne({ _id: id });
     if (!event) return res.json({ message: "Event does not exist" });
     res.json({ msg: "Event data", data: event });
   } catch (error) {
-    // We will be handling the error later
-    console.log(error);
+    return res.json({ msg: error });
   }
 });
-// get all feedbacks of certain event by id
-router.get("/:id/viewfeedback", async (req, res) => {
+// get all comments of certain event by id
+router.get("/:id/viewcomments", async (req, res) => {
   try {
     const id = req.params.id;
     const event = await Event.findById({ _id: id });
-    res.json({ data: event.feedback });
+    res.json({ data: event.comments });
   } catch (error) {
-    // We will be handling the error later
-    console.log(error);
+    return res.json({ msg: error });
   }
 });
 // get all photos of certain event by id
@@ -70,8 +68,7 @@ router.get("/:id/viewphotos", async (req, res) => {
     const event = await Event.findById({ _id: id });
     res.json({ data: event.photos });
   } catch (error) {
-    // We will be handling the error later
-    console.log(error);
+    return res.json({ msg: error });
   }
 });
 
@@ -106,16 +103,15 @@ router.post(
         res.json({ msg: "Event was created successfully", data: newEvent });
       }
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
-// anonymously post feedback on event by id
-router.post("/:id/addfeedback", async (req, res) => {
+// anonymously post comment on event by id
+router.post("/:id/addcomment", async (req, res) => {
   try {
     const id = req.params.id;
-    const isValidated = validator.createFeedbackValidation(req.body);
+    const isValidated = validator.createCommentValidation(req.body);
     if (isValidated.error) return res.json({ message: "Validations not met" });
     var event = await Event.findById(id);
     if (event.comingSoon === true) {
@@ -123,32 +119,52 @@ router.post("/:id/addfeedback", async (req, res) => {
     }
     const f = Event.updateOne(
       { _id: id },
-      { $push: { feedback: [req.body] } }
+      { $push: { comments: [req.body] } }
+    ).exec();
+
+    return res.json({ msg: "Comment was created successfully", data: f });
+  } catch (error) {
+    return res.json({ msg: error });
+  }
+});
+
+// anonymously post comment on event by id
+router.post("/:id/addrate", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const isValidated = validator.createRateValidation(req.body);
+    if (isValidated.error) return res.json({ message: "Validations not met" });
+    var event = await Event.findById(id);
+    if (event.comingSoon === true) {
+      return res.json({ message: "This event is still coming soon" });
+    }
+    const f = Event.updateOne(
+      { _id: id },
+      { $push: { rates: req.body } }
     ).exec();
     var count = 0;
     var rating = 0;
 
-    event.feedback.forEach(value => {
-      rating += value.rating;
+    event.rates.forEach(value => {
+      rating += value.rate;
       count += 1;
     });
-    rating += Number(req.body.rating);
+    rating += Number(req.body.rate);
     count += 1;
-    console.log(rating);
-    console.log(count);
+
     const result = rating / count;
-    console.log(result);
+
     const e = await Event.findByIdAndUpdate(
       id,
       { rating: result },
       { upsert: false }
     );
-    return res.json({ msg: "Feedback was created successfully", data: f });
+    return res.json({ msg: "Rating was created successfully", data: f });
   } catch (error) {
-    // We will be handling the error later
-    console.log(error);
+    return res.json({ msg: error });
   }
 });
+
 //admins post photo to event by id
 router.post(
   "/:id/addphoto",
@@ -195,8 +211,7 @@ router.post(
         });
       }
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -214,13 +229,14 @@ router.put(
       ) {
         const isValidated = validator.updateValidation(req.body);
         if (isValidated.error) return res.json({ msg: "Validations not met" });
-        const updatedEvent = await Event.updateOne(req.body);
+        const event = await Event.findOne({ _id: id });
+        await Event.findByIdAndUpdate(event, req.body);
         return res.json({
-          msg: "Event updated successfully",
-          data: updatedEvent
+          msg: "Event updated successfully"
         });
       } else {
-        const event = await Event.findById(id);
+        const event = await Event.findOne({ _id: id });
+
         const page = await Page.findOne({ name: event.creator });
         if (!page) return res.json({ msg: "Page not found" });
         if (
@@ -232,12 +248,12 @@ router.put(
           });
         const isValidated = validator.updateValidation(req.body);
         if (isValidated.error) return res.json({ msg: "Validations not met" });
-        const updatedEvent = await Event.updateOne(req.body);
-        res.json({ msg: "Event updated successfully", data: updatedEvent });
+        await Event.findByIdAndUpdate(event, req.body);
+
+        res.json({ msg: "Event updated successfully" });
       }
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
@@ -273,14 +289,13 @@ router.delete(
         res.json({ msg: "Event was deleted successfully", data: deletedEvent });
       }
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );
-//admins delete certain feedback of a certain event
+//admins delete certain comment of a certain event
 router.delete(
-  "/:id/:id1/deletefeedback",
+  "/:id/:id1/deletecomment",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
@@ -293,9 +308,9 @@ router.delete(
       ) {
         Event.updateOne(
           { _id: id },
-          { $pull: { feedback: { _id: id1 } } }
+          { $pull: { comments: { _id: id1 } } }
         ).exec();
-        res.json({ msg: "Feedback was deleted successfully" });
+        res.json({ msg: "Comment was deleted successfully" });
       } else {
         const event = await Event.findById(id);
         const page = await Page.findOne({ name: event.creator });
@@ -308,17 +323,16 @@ router.delete(
           !(userOne.mun_role == event.creator)
         )
           return res.json({
-            msg: "Only authorized admins can delete this event feedback"
+            msg: "Only authorized admins can delete this event comment"
           });
         Event.updateOne(
           { _id: id },
-          { $pull: { feedback: { _id: id1 } } }
+          { $pull: { comments: { _id: id1 } } }
         ).exec();
-        res.json({ msg: "Feedback was deleted successfully" });
+        res.json({ msg: "Comment was deleted successfully" });
       }
     } catch (error) {
-      // We will be handling the error later
-      console.log(error);
+      return res.json({ msg: error });
     }
   }
 );

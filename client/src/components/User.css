@@ -1,28 +1,40 @@
 @font-face {
-    font-family: "GothamBook";
-    src: url("../fonts/GothamBook.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-  }
-
-.user{
-    font-family: "GothamBook";
-    margin: 4%;
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
-.user-row{
-    padding: 0.7%;
-}
-.user-header{
-    text-align: left;
-    font-weight: bold;
-    font-size: 115%;
-    color: #003255;
-    background: #ffffff;
+.user {
+  font-family: "GothamBook";
+  margin: 3%;
 }
 
-.user-other{  
-    background: #003255;
-    color: #ffffff;
-    padding: 0.5%
+.user-row {
+  padding: 0.7%;
+}
+
+.user-header {
+  text-align: left;
+  font-weight: bold;
+  font-size: 115%;
+  color: #003255;
+  background: #ffffff;
+}
+
+.user-other {
+  background: #003255;
+  color: #ffffff;
+  padding: 0.5%;
+}
+
+.user-dropzone-div {
+  width: 128px;
+  height: 128px;
+}
+
+.miniuser-mail {
+  color: #6f6f6f;
+  font-size: 80%;
+  font-style: italic;
 }

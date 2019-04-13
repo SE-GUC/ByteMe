@@ -5,14 +5,13 @@
   font-style: normal;
 }
 
-
-.login-form {    
+.login-form {
   font-family: GothamBook;
   font-size: 130%;
   margin: 5%;
 }
 
-.login-label{
+.login-label {
   font-size: 80%;
-  color: gray
+  color: gray;
 }

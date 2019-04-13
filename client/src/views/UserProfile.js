@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
-import { Alert } from "react-bootstrap";
+import { Alert, Button, Form, Col } from "react-bootstrap";
 
 import User from "../components/User";
 
 import API from "../utils/API";
 import Auth from "../utils/Auth";
+
+import LoadingGif from "../images/Loading.gif"
+
+import "./UserProfile.css";
 
 const queryString = require("query-string");
 
@@ -15,7 +19,97 @@ class UserProfile extends Component {
     super(props);
     this.state = {
       user: props.user,
-      err: ""
+      err: "",
+      isEditing: false,
+      editingErr: "",
+      requestUser: false,
+      editLoading: false
+    };
+
+    this.edit = () => {
+      this.setState({ isEditing: true });
+    };
+
+    this.requestUser = () => {
+      this.setState({ requestUser: true });
+    };
+
+    this.save = editedUser => {
+      this.setState({ requestUser: false, editLoading: true });
+      if (editedUser.password === editedUser.confirm_password) {
+        delete editedUser.confirm_password;
+
+        const token = Auth.getToken();
+        API.put(`users/${this.props.location.search}`, editedUser, {
+          headers: {
+            Authorization: token
+          }
+        })
+          .then(res => {
+            this.setState({
+              requestUser: false,
+              isEditing: false,
+              editingErr: "",
+              editLoading: false
+            });
+            this.props.login();
+          })
+          .catch(err => {
+            console.log(err.response);
+            if (err.response.data)
+              this.setState({ editingErr: err.response.data.error, editLoading: false });
+            else {
+              if (err.response.status === 413)
+                this.setState({
+                  editingErr:
+                    "That image is too large, try an image that is below 5MB"
+                });
+              else this.setState({ editingErr: err.message, editLoading: false });
+            }
+          });
+      } else {
+        this.setState({ editingErr: "Passwords Don't Match", editLoading: false });
+      }
+    };
+
+    this.cancel = () => {
+      this.setState({ requestUser: false, isEditing: false, editingErr: "" });
+    };
+
+    this.delete = () => {
+      const prompts = [
+        `Deleting ${
+        this.props.location.search === "" ? "your" : "this"
+        } profile is permanent. There is no going back!`,
+        `This means ${
+        this.props.location.search === "" ? "leaving" : "removing"
+        } forever!`,
+        "Are you absolutely 100% certain you want this?"
+      ];
+      const randInt = Math.floor(Math.random() * prompts.length);
+      console.log(randInt);
+      if (window.confirm(prompts[randInt])) {
+        const token = Auth.getToken();
+        API.delete(`users/${this.props.location.search}`, {
+          headers: {
+            Authorization: token
+          }
+        })
+          .then(res => {
+            if (this.props.location.search === "") {
+              this.props.logout();
+              //redirect to home
+            } else {
+              this.setState({ err: "Profile Deleted" });
+            }
+          })
+          .catch(err => {
+            console.log(err.response);
+            if (err.response.data)
+              this.setState({ editingErr: err.response.data.error });
+            else this.setState({ editingErr: err.message });
+          });
+      }
     };
   }
 
@@ -30,7 +124,7 @@ class UserProfile extends Component {
     if (parsed.gucid) {
       this.setState({
         user: undefined
-      })
+      });
       if (this.props.user && this.props.user.is_admin) {
         const token = Auth.getToken();
         API.get(`/users/asAdmin/${parsed.gucid}`, {
@@ -39,22 +133,21 @@ class UserProfile extends Component {
           }
         })
           .then(res => {
-            console.log("here")
             this.setState({ user: res.data.data, err: "" });
-            console.log(this.state.user)
           })
           .catch(err => {
-            if (err.response)
-              this.setState({ err: err.response.error, user: undefined });
+            if (err.response.data)
+              this.setState({ err: err.response.data.error, user: undefined });
             else this.setState({ err: err.message, user: undefined });
           });
       } else {
         API.get(`/users/${parsed.gucid}`)
           .then(res => {
+            console.log(res.data);
             this.setState({ user: res.data.data, err: "" });
           })
           .catch(err => {
-            if (err.response)
+            if (err.response.data)
               this.setState({
                 err: err.response.data.error
                   ? err.response.data.error
@@ -76,7 +169,74 @@ class UserProfile extends Component {
     return this.state.err !== "" ? (
       <Alert variant="danger"> {this.state.err} </Alert>
     ) : this.state.user ? (
-      <User user={this.state.user} />
+      this.props.user &&
+        (this.props.user.is_admin ||
+          this.props.user.guc_id === this.state.user.guc_id) ? (
+          <>
+            {this.state.editingErr !== "" ? (
+              <Alert variant="danger">{this.state.editingErr}</Alert>
+            ) : (
+                <></>
+              )}
+            <User
+              user={this.state.user}
+              isEditing={this.state.isEditing}
+              requestUser={this.state.requestUser}
+              setUser={this.save}
+            />
+
+            <Form.Row className="profile-row">
+              <Col />
+              {this.state.isEditing ? (
+                <Col xs="1" className="profile-col">
+                  <Button block variant="outline-warning" onClick={this.cancel}>
+                    Cancel
+                </Button>
+                </Col>
+              ) : (
+                  <></>
+                )}
+
+              <Col xs="1" className="profile-col">
+                {this.state.isEditing ?
+                  this.state.editLoading ?
+                    <img
+                      height="40"
+                      src={LoadingGif}
+                      alt="Loading"
+                    /> :
+                    <Button
+                      block
+                      variant="outline-warning"
+                      onClick={this.requestUser}
+                    >
+                      Save
+                    </Button>
+                  : (
+                    <Button block variant="outline-warning" onClick={this.edit}>
+                      Edit
+                </Button>
+                  )}
+              </Col>
+              <Col xs="1" className="profile-col">
+                <Button block variant="outline-danger" onClick={this.delete}>
+                  Delete
+              </Button>
+              </Col>
+            </Form.Row>
+
+            {this.state.isEditing ? (
+              <Alert variant="warning">
+                Only edit fields you want changed! Fields left empty will stay as
+                they are.
+            </Alert>
+            ) : (
+                <></>
+              )}
+          </>
+        ) : (
+          <User user={this.state.user} />
+        )
     ) : (
           <></>
         );
