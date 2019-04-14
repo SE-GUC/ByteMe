@@ -1,0 +1,47 @@
+@font-face {
+  font-family: "GothamMedium";
+  src: url("../fonts/GothamMedium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamLight";
+  src: url("../fonts/GothamLight.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamBlack";
+  src: url("../fonts/GothamBlack.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "CenturyGothic";
+  src: url("../fonts/CenturyGothic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.paper-delete-button {
+  width: fit-content;
+  position: absolute;
+  right: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.paper-edit-button {
+  width: fit-content;
+  position: absolute;
+  left: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}

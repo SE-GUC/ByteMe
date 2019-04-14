@@ -27,6 +27,20 @@ router.get("/:name", async (req, res) => {
   }
 });
 
+//filtering library by year
+router.get("/filter/:year", async (req, res) => {
+  try {
+    const filter_year = req.params.year;
+    const library = await Library.find({
+      year: filter_year
+    });
+
+    res.json({ data: library });
+  } catch (error) {
+    res.sendStatus(400).json(error);
+  }
+});
+
 // admins post a new library entry
 router.post(
   "/",
