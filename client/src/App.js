@@ -21,7 +21,7 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 import FAQs from "./views/FAQs";
 import Club from "./views/Club";
-
+import Development from "./views/Development";
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import Auth from "./utils/Auth";
@@ -182,6 +182,10 @@ class App extends Component {
             })}
             <Route exact path="/library" component={PortalLibrary} />
             <Route exact path="/aboutus" component={AboutUs} />
+            <Route exact path="/development" render={props => (
+                <Development user={this.state.user} {...props} />
+              )}
+             />
             <Route
               exact
               path="/faq"
