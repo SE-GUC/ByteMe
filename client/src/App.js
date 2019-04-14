@@ -244,7 +244,7 @@ class App extends Component {
             <input
               type="submit"
               onClick={e => this.handleShow(e)}
-              value="Click me!"
+              value="Subscribe to our newsletter"
             />
           </div>
           {this.state.show ? (
