@@ -79,7 +79,8 @@ class Home extends Component {
   render() {
     return (
       <div>
-
+       <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2"></script>
         <div className="social">
           <Button
             variant="light"
@@ -103,11 +104,14 @@ class Home extends Component {
               containerTagName='div'
             />) : (<></>)}
 
-          {this.state.showT ? (<TwitterTimelineEmbed
+          {this.state.showT ?/* (<TwitterTimelineEmbed
             sourceType="profile"
             screenName="gucmun"
             options={{ height: 800, width: 300 }} />)
-            : (<></>)}
+            : (<></>)}*?*/
+            
+            
+            (<iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="340" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>):(<></>)}
 
         </div>
         <Timeline lineColor={"#ffd700"} collapsible className="home">
