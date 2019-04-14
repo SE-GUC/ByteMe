@@ -180,12 +180,21 @@ class App extends Component {
                 />
               );
             })}
-            <Route exact path="/library" component={PortalLibrary} />
+            <Route
+              exact
+              path="/library"
+              render={props => (
+                <PortalLibrary user={this.state.user} {...props} />
+              )}
+            />
             <Route exact path="/aboutus" component={AboutUs} />
-            <Route exact path="/development" render={props => (
+            <Route
+              exact
+              path="/development"
+              render={props => (
                 <Development user={this.state.user} {...props} />
               )}
-             />
+            />
             <Route
               exact
               path="/faq"
@@ -193,8 +202,11 @@ class App extends Component {
             />
             <Route exact path="/announcements" component={Announcements} />
 
-            <Route exact path="/clubs" render={props => (
-                <Club user={this.state.user} {...props} />)}/>
+            <Route
+              exact
+              path="/clubs"
+              render={props => <Club user={this.state.user} {...props} />}
+            />
             <Route exact path="/ContactUs" component={Contact} />
             <Route
               exact
