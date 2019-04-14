@@ -193,7 +193,8 @@ class App extends Component {
             />
             <Route exact path="/announcements" component={Announcements} />
 
-            <Route exact path="/clubs" component={Club} />
+            <Route exact path="/clubs" render={props => (
+                <Club user={this.state.user} {...props} />)}/>
             <Route exact path="/ContactUs" component={Contact} />
             <Route
               exact
