@@ -1,0 +1,36 @@
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.mmm {
+  display: flex;
+}
+h1 {
+  font-family: GothamBook;
+  text-align: center;
+}
+Mailing {
+  margin: 8px;
+}
+input[type="s"] {
+  background-color: #003255;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  float: center;
+  text-align: center;
+  position: center;
+  
+  cursor: pointer;
+}
+
+input[type="s"]:hover {
+  background-color: #ffd700;
+}
+
+.sub{
+  text-align:center;
+}

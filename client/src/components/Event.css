@@ -1,0 +1,71 @@
+@font-face {
+  font-family: "GothamMedium";
+  src: url("../fonts/GothamMedium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamLight";
+  src: url("../fonts/GothamLight.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamBlack";
+  src: url("../fonts/GothamBlack.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "CenturyGothic";
+  src: url("../fonts/CenturyGothic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.event-title {
+  font-family: GothamMedium;
+}
+.event-button {
+  float: right;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-family: GothamBlack;
+  background-color: #ffffff;
+}
+
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:active,
+.btn-secondary:visited {
+  background-color: #003255 !important;
+}
+
+.event-description {
+  font-family: CenturyGothic;
+}
+
+.card {
+  border: 1px solid #ffd700;
+}
+.event-brief {
+  font-family: GothamLight;
+}
+.event-delete-button {
+  width: fit-content;
+  position: absolute;
+  right: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.event-edit-button {
+  width: fit-content;
+  position: absolute;
+  left: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}

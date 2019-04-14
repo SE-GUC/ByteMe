@@ -1,0 +1,42 @@
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.event-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /*justify-content: center*/
+}
+h1 {
+  font-family: GothamBook;
+  text-align: center;
+}
+Event {
+  margin: 8px;
+}
+.eventss {
+  margin: 25px;
+  border-radius: 25px;
+  /* border: 2px solid #ffd700; */
+  border: 2px solid #003255;
+}
+.event-create-button {
+  width: fit-content;
+  position: absolute;
+  right: 45px;
+  margin-top: 10px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.event-picture-picker {
+  width: 128px;
+  height: 128px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 8px;
+  margin-top: -8px;
+}

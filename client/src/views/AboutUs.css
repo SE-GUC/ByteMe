@@ -1,0 +1,47 @@
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+h1 {
+  font-family: GothamBook;
+  text-align: center;
+}
+.slide-container,
+.each-slide > div {
+  max-width: 100%;
+
+  max-height: 340px;
+  position: center;
+  margin: auto;
+  float: center;
+  text-align: center;
+  object-fit: cover;
+}
+.each-slide > div {
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  height: 340px;
+  width: 50%;
+  object-fit: cover;
+  float: center;
+}
+
+.each-slide span {
+  padding: 20px;
+  font-size: 20px;
+  background: #efefef;
+  text-align: center;
+}
+.hierarchy{
+  text-align: center;
+  float:center;
+}
+.mission{
+  
+  text-align: center;
+  float:center;
+  font-family: " Gothic Medium"
+}

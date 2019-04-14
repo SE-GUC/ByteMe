@@ -1,0 +1,50 @@
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.page-name {
+  font-family: CenturyBook;
+  text-align: center;
+  color: #003250;
+  margin-top: -20px;
+}
+
+.page-desc {
+  font-family: GothamLight;
+  text-align: left;
+  color: #003250;
+}
+.tex {
+  font-family: GothamMedium;
+  text-align: left;
+  color: #003250;
+  margin-top: 10px;
+}
+
+.card-style {
+  height: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-delete-button {
+  margin-top: -80px;
+  margin-left: 1450px;
+  border-radius: 20px !important;
+  text-align: center;
+}
+.page-edit-button {
+  margin-top: -30px;
+  border-radius: 20px !important;
+  text-align: center;
+}
+
+.member-add-button {
+  margin-top: -30px;
+  margin-right: 10px;
+  border-radius: 20px !important;
+  text-align: center;
+}

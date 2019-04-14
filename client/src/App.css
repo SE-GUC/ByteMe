@@ -1,0 +1,37 @@
+.bg-blue {
+  background-color: #003255;
+}
+.bg-yellow {
+  background-color: #ffd700;
+}
+.bg-black {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+#default-div {
+  background-color: whitesmoke;
+}
+
+.content-div {
+  background-color: whitesmoke;
+  min-height: 100vh;
+  width: 100%;
+}
+.sub{
+  text-align:center;
+}
+.errorMsg {
+  color: #cc0000;
+  margin-bottom: 12px;
+}
+input[type=submit] {
+  background-color: #003255;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color:  #ffd700;
+}

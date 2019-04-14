@@ -1,0 +1,92 @@
+@font-face {
+  font-family: "GothamMedium";
+  src: url("../fonts/GothamMedium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamLight";
+  src: url("../fonts/GothamLight.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamBlack";
+  src: url("../fonts/GothamBlack.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "CenturyGothic";
+  src: url("../fonts/CenturyGothic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+.product-name {
+  text-align: center;
+  font-family: GothamBlack;
+}
+
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:active,
+.btn-secondary:visited {
+  background-color: #003255 !important;
+}
+
+.product-description {
+  font-family: CenturyGothic;
+  height: 80px;
+  overflow-y: scroll;
+  text-align: center;
+  overflow: hidden;
+}
+
+.product-description:hover {
+  font-family: CenturyGothic;
+  height: 80px;
+  overflow-y: scroll;
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.card-img-top {
+  height: 240px;
+}
+.card {
+  border: 1px solid #ffd700;
+}
+.product-price {
+  font-family: GothamLight;
+}
+.product-delete-button {
+  width: fit-content;
+  position: absolute;
+  right: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.product-edit-button {
+  width: fit-content;
+  position: absolute;
+  left: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.product-headers-text {
+  text-align: left;
+  font-family: GothamBook;
+  font-weight: 500;
+}

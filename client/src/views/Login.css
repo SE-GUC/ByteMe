@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "GothamBook";
+  src: url("../fonts/GothamBook.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.login-form {
+  font-family: GothamBook;
+  font-size: 130%;
+  margin: 5%;
+}
+
+.login-label {
+  font-size: 80%;
+  color: gray;
+}
