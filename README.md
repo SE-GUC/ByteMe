@@ -18,9 +18,8 @@ components, I've already implemented it you can import components you want to us
 
 ###### Please add/edit this list as you see fit.
 
-- Search, Update, Create, and Delete mechanisms must be implemented.
-- Move announcements, FAQs and AWG pages to seperate site (AWG Platform)
 - Title margins and sizing needs to become consistent.
-- Academic Library should be seperated by year.[OMAR]
+- Academic Library should be seperated by year.
 - AWG platform home page ,Move announcements, FAQs and AWG pages to seperate site (AWG Platform)
+- Front End deployment should be moved to the gucmun.me domain
 
