@@ -1,4 +1,3 @@
-/*global FB*/
 import React, { Component } from "react";
 import "./Home.css";
 import { Timeline } from "vertical-timeline-component-for-react";
@@ -117,7 +116,7 @@ class Home extends Component {
           )}
         </div>
         {/* facebook starts here */}
-        <div id="fb-root" />
+        {/* <div id="fb-root" />
         <script
           async
           defer
@@ -139,7 +138,7 @@ class Home extends Component {
           >
             <a href="https://www.facebook.com/facebook">Facebook</a>
           </blockquote>
-        </div>
+        </div> */}
         {/* facebook ends here */}
         <Timeline lineColor={"#ffd700"} collapsible className="home">
           {this.state.events.map(event => (
@@ -236,29 +235,29 @@ class Home extends Component {
       console.log(`😱 Axios request failed: ${e}`);
     }
 
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId: "390253315039099",
-        xfbml: true,
-        version: "v2.6"
-      });
+    //   window.fbAsyncInit = function() {
+    //     FB.init({
+    //       appId: "390253315039099",
+    //       xfbml: true,
+    //       version: "v2.6"
+    //     });
 
-      FB.getLoginStatus(function(response) {
-        //this.statusChangeCallback(response);
-      });
-    };
+    //     FB.getLoginStatus(function(response) {
+    //       //this.statusChangeCallback(response);
+    //     });
+    //   };
 
-    (function(d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    })(document, "script", "facebook-jssdk");
+    //   (function(d, s, id) {
+    //     var js,
+    //       fjs = d.getElementsByTagName(s)[0];
+    //     if (d.getElementById(id)) {
+    //       return;
+    //     }
+    //     js = d.createElement(s);
+    //     js.id = id;
+    //     js.src = "//connect.facebook.net/en_US/sdk.js";
+    //     fjs.parentNode.insertBefore(js, fjs);
+    //   })(document, "script", "facebook-jssdk");
   }
 }
 
