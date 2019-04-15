@@ -21,7 +21,7 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 import FAQs from "./views/FAQs";
 import Club from "./views/Club";
-
+import Development from "./views/Development";
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import Auth from "./utils/Auth";
@@ -180,8 +180,21 @@ class App extends Component {
                 />
               );
             })}
-            <Route exact path="/library" component={PortalLibrary} />
+            <Route
+              exact
+              path="/library"
+              render={props => (
+                <PortalLibrary user={this.state.user} {...props} />
+              )}
+            />
             <Route exact path="/aboutus" component={AboutUs} />
+            <Route
+              exact
+              path="/development"
+              render={props => (
+                <Development user={this.state.user} {...props} />
+              )}
+            />
             <Route
               exact
               path="/faq"
@@ -189,7 +202,11 @@ class App extends Component {
             />
             <Route exact path="/announcements" component={Announcements} />
 
-            <Route exact path="/clubs" component={Club} />
+            <Route
+              exact
+              path="/clubs"
+              render={props => <Club user={this.state.user} {...props} />}
+            />
             <Route exact path="/ContactUs" component={Contact} />
             <Route
               exact
@@ -239,7 +256,7 @@ class App extends Component {
             <input
               type="submit"
               onClick={e => this.handleShow(e)}
-              value="Click me!"
+              value="Subscribe to our newsletter"
             />
           </div>
           {this.state.show ? (

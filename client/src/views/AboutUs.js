@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./AboutUs.css";
-
+import Hierarchy from  './Hierarchy.js'
 import { Slide } from "react-slideshow-image";
 
 // First we create our class
@@ -21,12 +21,27 @@ class AboutUs extends Component {
     };
     return (
       <div>
+        
+        <h1>Our Hierarchy</h1>
+        <br></br>
+        <div className="hierarchy" >
+        <Hierarchy ></Hierarchy>
+        </div>
+        <br></br>
+        <br></br>
         <h1>Our Mission & Vision</h1>
-        <p>
+        
+        <br></br>
+        <div className="mission">
+        <p >
           We see ourselves as representatives of the United Nations, and do our
           best to help in development in different fields.{" "}
         </p>
+        <br></br>
+        </div>
         <h1>Our Achievements</h1>
+        
+        <br></br>
         <div className="slide-container">
           <Slide {...properties}>
             <div className="each-slide">

@@ -211,7 +211,7 @@ router.delete(
       if (
         !(
           userOne.awg_admin === "mun" ||
-          userOne.awg_admin === "secretary_office" ||
+          userOne.mun_role === "secretary_office" ||
           userOne.mun_role === page.role_to_control ||
           userOne.mun_role === page.name
         )
@@ -222,12 +222,12 @@ router.delete(
 
       await User.update(
         { mun_role: page.name },
-        { mun_role: req.body.name },
+        { mun_role: "none" },
         { upsert: false }
       );
       await User.updateOne(
         { mun_role: `${page.name}_member` },
-        { mun_role: `${req.body.name}_member` },
+        { mun_role: "none" },
         { upsert: false }
       );
       const deletedPage = await Page.findByIdAndRemove(id);
