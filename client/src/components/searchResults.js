@@ -7,6 +7,8 @@ import Announcement from "./Announcement";
 import User from "./User";
 import toaster from "toasted-notes";
 
+import MiniUser from "./MiniUser"
+
 class SearchResults extends Component {
   constructor(props) {
     super(props);
@@ -31,13 +33,11 @@ class SearchResults extends Component {
         <div>
           {users && users.constructor === Array ? (
             users.map(user => {
-              return toaster.notify(<User user={user} />, {
-                duration: 2000
-              });
+              return <MiniUser user={user} />
             })
           ) : (
-            <></>
-          )}
+              <></>
+            )}
           {events && events.constructor == Array ? (
             events.map(event => {
               return toaster.notify(
@@ -60,8 +60,8 @@ class SearchResults extends Component {
               );
             })
           ) : (
-            <></>
-          )}
+              <></>
+            )}
 
           {
             //format enta ba2a bera7tak we esta3mel miniUser 3ashan gamed
@@ -76,35 +76,35 @@ class SearchResults extends Component {
 }
 /*
 <CardDeck>
-          {clubs.map(c => (
-            <AWG
-              name={c.name}
-              description={c.description}
-              banner={c.banner}
-              link={c.link}
-            />
-          ))}
- 
-          {events.map(e => (
-            <Event
-              _id={e._id}
-              comingSoon={e.comingSoon}
-              title={e.title}
-              brief={e.brief}
-              location={e.location}
-              dateTime={e.dateTime}
-              description={e.description}
-              photos={e.photos}
-              feedback={e.feedback}
-              creator={e.creator}
-              rating={e.rating}
-            />
-          ))}
- 
-          {announcements.map(a => (
-            <Announcement date={a.date} info={a.info} />
-          ))}
-          */
+      {clubs.map(c => (
+        <AWG
+          name={c.name}
+          description={c.description}
+          banner={c.banner}
+          link={c.link}
+        />
+      ))}
+
+      {events.map(e => (
+        <Event
+          _id={e._id}
+          comingSoon={e.comingSoon}
+          title={e.title}
+          brief={e.brief}
+          location={e.location}
+          dateTime={e.dateTime}
+          description={e.description}
+          photos={e.photos}
+          feedback={e.feedback}
+          creator={e.creator}
+          rating={e.rating}
+        />
+      ))}
+
+      {announcements.map(a => (
+        <Announcement date={a.date} info={a.info} />
+      ))}
+      */
 
 // </CardDeck>
 

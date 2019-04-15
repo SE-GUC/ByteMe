@@ -3,6 +3,8 @@ import { Button, InputGroup, FormControl, CardDeck } from "react-bootstrap";
 import SearchResults from "./searchResults";
 import API from "../utils/API";
 
+import "./SearchBar.css"
+
 class SearchBar extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +31,7 @@ class SearchBar extends Component {
               searchResults_users: res.data.users
             });
           });
-        }, 1000);
+        }, 500);
       } catch (e) {
         console.log(`😱 Axios request failed: ${e}`);
       }
@@ -42,17 +44,21 @@ class SearchBar extends Component {
         <FormControl
           placeholder="What are you looking for?"
           onChange={this.changeSearchKey}
+          plaintext
+          style={{ color: "white", textAlign: "center", backgroundColor: "#05375A" }}
         />
         {this.state.searchkey === "" ? (
           <></>
         ) : (
-          <SearchResults
-            clubs={this.state.searchResults_clubs}
-            events={this.state.searchResults_events}
-            announcements={this.state.searchResults_announcementss}
-            users={this.state.searchResults_users}
-          />
-        )}
+            <div className="results-div">
+              <SearchResults
+                clubs={this.state.searchResults_clubs}
+                events={this.state.searchResults_events}
+                announcements={this.state.searchResults_announcementss}
+                users={this.state.searchResults_users}
+              />
+            </div>
+          )}
       </div>
     );
   }
