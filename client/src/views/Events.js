@@ -107,9 +107,9 @@ class Events extends Component {
                     <img
                       className="event-picture-picker"
                       src={
-                        this.state.newPhotos
-                          ? this.state.newPhotos[0]
-                          : uploaderDefaultImage
+                        this.state.newPhotos.length === 0
+                          ? uploaderDefaultImage
+                          : this.state.newPhotos
                       }
                       alt="Event"
                     />
@@ -256,25 +256,27 @@ class Events extends Component {
     };
     try {
       await API.post(`events/addevent`, newEvent, { headers }).then(res => {
-        this.setState({ newEventId: res.data.data.id });
+        this.setState({ newEventId: res.data.data._id });
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
 
     try {
-      newPhotos.map(p =>
-        API.post(
-          `events/${this.state.newEventId}/addphoto`,
-          { link: `${p}` },
-          {
-            headers
-          }
-        ).then(res => {
-          this.updateEvents();
-          this.setState({ isLoading: false });
-          this.handleCreateClose();
-        })
+      newPhotos.map(
+        async p =>
+          await API.post(
+            `events/${this.state.newEventId}/addphoto`,
+            { link: `${p}` },
+            {
+              headers
+            }
+          ).then(res => {
+            console.log(res.data);
+            this.updateEvents();
+            this.setState({ isLoading: false });
+            this.handleCreateClose();
+          })
       );
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
