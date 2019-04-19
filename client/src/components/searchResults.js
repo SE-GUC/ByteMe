@@ -1,11 +1,11 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom"
 import PropTypes from "prop-types";
 import Announcement from "./Announcement";
 
 import MiniUser from "./MiniUser";
 import MiniEvent from "./MiniEvent";
 import MiniClub from "./MiniClub";
-
 import "./SearchBar.css"
 
 class SearchResults extends Component {
@@ -30,7 +30,7 @@ class SearchResults extends Component {
             }
             {users && users.constructor === Array ?
               users.map(user => {
-                return <MiniUser user={user} />
+                return <Link to={`../profile/?gucid=${user.guc_id}`}><MiniUser user={user} /></Link>
               })
               :
               <></>
