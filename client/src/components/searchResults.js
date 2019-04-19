@@ -1,22 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { CardDeck } from "react-bootstrap";
-import Event from "./Event";
-import AWG from "./AWG";
 import Announcement from "./Announcement";
-import User from "./User";
-import toaster from "toasted-notes";
+
+import MiniUser from "./MiniUser";
+import MiniEvent from "./MiniEvent";
+import MiniClub from "./MiniClub";
+
+import "./SearchBar.css"
 
 class SearchResults extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      users: {},
-      clubs: {},
-      events: {},
-      announcements: {}
-    };
+    this.state = props
   }
 
   async componentWillReceiveProps(props) {
@@ -25,48 +21,66 @@ class SearchResults extends Component {
 
   render() {
     const { clubs, events, announcements, users } = this.state;
-    console.log(users);
     try {
       return (
-        <div>
-          {users && users.constructor === Array ? (
-            users.map(user => {
-              return toaster.notify(<User user={user} />, {
-                duration: 2000
-              });
-            })
-          ) : (
-            <></>
-          )}
-          {events && events.constructor == Array ? (
-            events.map(event => {
-              return toaster.notify(
-                <Event
-                  _id={event._id}
-                  comingSoon={event.comingSoon}
-                  title={event.title}
-                  brief={event.brief}
-                  location={event.location}
-                  dateTime={event.dateTime}
-                  description={event.description}
-                  photos={event.photos}
-                  feedback={event.feedback}
-                  creator={event.creator}
-                  rating={event.rating}
-                />,
-                {
-                  duration: 2000
-                }
-              );
-            })
-          ) : (
-            <></>
-          )}
-
-          {
-            //format enta ba2a bera7tak we esta3mel miniUser 3ashan gamed
-          }
-        </div>
+        clubs || events || announcements || users ?
+          <>
+            {users && users.constructor === Array && users.length !== 0 ?
+              <p className="padded">Users:</p> : <></>
+            }
+            {users && users.constructor === Array ?
+              users.map(user => {
+                return <MiniUser user={user} />
+              })
+              :
+              <></>
+            }
+            {events && events.constructor === Array && events.length !== 0 ?
+              <p className="padded">Events:</p> : <></>
+            }
+            {events && events.constructor == Array ?
+              events.map(event => {
+                return (
+                  <MiniEvent event={event} />
+                );
+              })
+              :
+              <></>
+            }
+            {clubs && clubs.constructor === Array && clubs.length !== 0 ?
+              <p className="padded">Clubs:</p> : <></>
+            }
+            {clubs && clubs.constructor == Array ?
+              clubs.map(club => {
+                return (
+                  <MiniClub
+                    club={club}
+                  />
+                );
+              })
+              :
+              <></>
+            }
+            {announcements && announcements.constructor === Array && announcements.length !== 0 ?
+              <p className="padded">Announcements:</p> : <></>
+            }
+            {announcements && announcements.constructor == Array ?
+              announcements.map(announcement => {
+                return (
+                  <div className="padded">
+                    <Announcement
+                      id={announcement._id}
+                      date={announcement.date}
+                      info={announcement.info}
+                    />
+                  </div>
+                );
+              })
+              :
+              <></>
+            }
+          </> :
+          <h4>Nothing here!</h4>
       );
     } catch (err) {
       console.log(err);
@@ -74,39 +88,6 @@ class SearchResults extends Component {
     return <></>;
   }
 }
-/*
-<CardDeck>
-          {clubs.map(c => (
-            <AWG
-              name={c.name}
-              description={c.description}
-              banner={c.banner}
-              link={c.link}
-            />
-          ))}
- 
-          {events.map(e => (
-            <Event
-              _id={e._id}
-              comingSoon={e.comingSoon}
-              title={e.title}
-              brief={e.brief}
-              location={e.location}
-              dateTime={e.dateTime}
-              description={e.description}
-              photos={e.photos}
-              feedback={e.feedback}
-              creator={e.creator}
-              rating={e.rating}
-            />
-          ))}
- 
-          {announcements.map(a => (
-            <Announcement date={a.date} info={a.info} />
-          ))}
-          */
-
-// </CardDeck>
 
 SearchResults.propTypes = {
   clubs: PropTypes.arrayOf(Object),

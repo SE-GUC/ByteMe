@@ -7,7 +7,7 @@ import InstagramEmbed from "react-instagram-embed";
 import iconAdd from "../icons/pencil.svg";
 import instagram from "../icons/instagram.svg";
 import twitter from "../icons/twitter.svg";
-import { Button, Modal, ModalFooter } from "react-bootstrap";
+import { Button, Modal, ModalFooter, Navbar } from "react-bootstrap";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import SearchBar from "../components/SearchBar";
 
@@ -41,13 +41,11 @@ class Home extends Component {
     this.handleShow2 = this.handleShow2.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
+
   handleShow() {
-    if (this.state.show === true) {
-      this.setState({ show: false });
-    } else {
-      this.setState({ show: true });
-    }
+    this.setState({ show: !this.state.show })
   }
+
   handleShowI() {
     if (this.state.showI === true) {
       this.setState({ showI: false, showT: false });
@@ -72,6 +70,7 @@ class Home extends Component {
   render() {
     return (
       <div>
+        <SearchBar />
         <div id="fb-root" />
         <script
           async
@@ -102,8 +101,8 @@ class Home extends Component {
               containerTagName="div"
             />
           ) : (
-            <></>
-          )}
+              <></>
+            )}
 
           {this.state.showT ? (
             <TwitterTimelineEmbed
@@ -112,8 +111,8 @@ class Home extends Component {
               options={{ height: 800, width: 300 }}
             />
           ) : (
-            <></>
-          )}
+              <></>
+            )}
         </div>
         {/* facebook starts here */}
         {/* <div id="fb-root" />
@@ -169,39 +168,41 @@ class Home extends Component {
               <img src={iconAdd} alt="Add club" />
             </Button>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
           <input
             type="submit"
             onClick={this.handleShow}
             value="Register to our current event"
           />
         </div>
-        {this.state.show2 ? (
-          <>
-            <Modal show={this.state.show2} onHide={this.handleClose}>
-              <Modal.Header closeButton>
-                <Modal.Title>Add google form link</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                {/* name */}
-                <label>Link</label>
-                <textarea
-                  id="link"
-                  name="Google form link "
-                  placeholder="Google form link"
-                  onChange={e => this.setState({ link: e.target.value })}
-                  value={this.state.link}
-                />
-              </Modal.Body>
-              <ModalFooter>
-                <input type="submit" onClick={this.handleClose} value="Done" />
-              </ModalFooter>
-            </Modal>
-          </>
-        ) : (
-          <></>
-        )}
+        {
+          this.state.show2 ? (
+            <>
+              <Modal show={this.state.show2} onHide={this.handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Add google form link</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  {/* name */}
+                  <label>Link</label>
+                  <textarea
+                    id="link"
+                    name="Google form link "
+                    placeholder="Google form link"
+                    onChange={e => this.setState({ link: e.target.value })}
+                    value={this.state.link}
+                  />
+                </Modal.Body>
+                <ModalFooter>
+                  <input type="submit" onClick={this.handleClose} value="Done" />
+                </ModalFooter>
+              </Modal>
+            </>
+          ) : (
+              <></>
+            )
+        }
         <div className="register">
           {this.state.show ? (
             <iframe
@@ -215,14 +216,10 @@ class Home extends Component {
               Loading...
             </iframe>
           ) : (
-            <></>
-          )}
+              <></>
+            )}
         </div>
-
-        {
-          //<SearchBar />
-        }
-      </div>
+      </div >
     );
   }
   async componentDidMount() {

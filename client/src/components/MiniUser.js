@@ -23,8 +23,8 @@ class MiniUser extends Component {
     const { email, first_name, last_name, picture_ref } = this.state.user;
 
     return (
-      <Container className="user">
-        <Row className="user-row">
+      <Container>
+        <Row>
           <Media>
             <img
               width={50}
@@ -35,7 +35,7 @@ class MiniUser extends Component {
                   ? picture_ref
                   : "https://www.watsonmartin.com/wp-content/uploads/2016/03/default-profile-picture.jpg"
               }
-              alt="Generic placeholder"
+              alt="profile pic"
             />
             <Media.Body>
               <h5>
