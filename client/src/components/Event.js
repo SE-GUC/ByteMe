@@ -73,13 +73,9 @@ class Event extends Component {
       <div>
         <Card
           className="text-center"
-          // bg="warning"
-          text="white"
           style={{
             width: "18rem",
-            backgroundColor: "#003255",
-            margin: "10px",
-            height: "35rem"
+            margin: "10px"
           }}
         >
           <Card.Header className="event-title">{title}</Card.Header>
@@ -112,6 +108,7 @@ class Event extends Component {
                     className="d-block w-100"
                     src={eventDefaultImage}
                     alt="No Photos"
+                    height="150rem"
                   />
                 </Carousel.Item>
               </Carousel>
@@ -125,6 +122,7 @@ class Event extends Component {
                       className="d-block w-100"
                       src={p.link}
                       alt="Event Photos"
+                      height="150rem"
                     />
                   </Carousel.Item>
                 ))}
@@ -150,7 +148,7 @@ class Event extends Component {
                 <p style={{ color: "#ffd700" }}>Not Rated</p>
               )}
             </Card.Subtitle>
-            <Card.Text className="mb-2 text-muted">{description}</Card.Text>
+            <Card.Text className="event-description">{description}</Card.Text>
           </Card.Body>
           <Card.Footer>
             <Button
@@ -168,7 +166,7 @@ class Event extends Component {
             </Modal.Header>
             <Modal.Body>
               <h4>Description</h4>
-              <h5 style={{ color: "#003255" }}>{description}</h5>
+              <h5>{description}</h5>
               <h4>Location</h4>
               <h5>{location}</h5>
               <h4>Date</h4>
@@ -539,9 +537,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -554,9 +549,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -569,9 +561,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -584,9 +573,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -599,49 +585,42 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
   }
-  editEvent(_id, editedEvent, newPhotos) {
+  async editEvent(_id, editedEvent, newPhotos) {
     this.setState({ isLoading: true });
     const token = Auth.getToken();
     const headers = {
       Authorization: `${token}`
     };
     try {
-      API.put(`events/${_id}`, editedEvent, { headers }).then(res => {
-        this.props.updateEvents();
-        this.setState({ isLoading: false });
-        this.handleEditClose();
-      });
+      await API.put(`events/${_id}`, editedEvent, { headers });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
+    }
+    if (newPhotos.length > 0) {
+      try {
+        newPhotos.map(
+          async p =>
+            await API.post(
+              `events/${_id}/addphoto`,
+              { link: `${p}` },
+              {
+                headers
+              }
+            )
+        );
+      } catch (e) {
+        console.log(`😱 Axios request failed: ${e}`);
+      }
     }
 
-    try {
-      newPhotos.map(
-        async p =>
-          await API.post(
-            `events/${_id}/addphoto`,
-            { link: `${p}` },
-            {
-              headers
-            }
-          ).then(res => {
-            // console.log(res.data);
-            // this.updateEvents();
-            // this.setState({ isLoading: false });
-            // this.handleCreateClose();
-          })
-      );
-    } catch (e) {
-      console.log(`😱 Axios request failed: ${e}`);
-    }
+    this.props.updateEvents();
+    this.setState({ isLoading: false });
+    this.handleEditClose();
   }
   async componentWillReceiveProps(props) {
     this.setState({ canEdit: props.canEdit });
