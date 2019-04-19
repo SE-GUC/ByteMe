@@ -8,6 +8,10 @@
     background-color: #ededed;
   }
   
-  .results-div:hover {
+.results-div:hover {
     overflow-y: scroll;
   }
+
+.padded {
+  padding: 0.5%;
+}
