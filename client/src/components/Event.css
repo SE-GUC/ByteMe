@@ -23,7 +23,8 @@
   font-style: normal;
 }
 .event-title {
-  font-family: GothamMedium;
+  text-align: center;
+  font-family: GothamBlack;
 }
 .event-button {
   float: right;
@@ -45,6 +46,25 @@
 
 .event-description {
   font-family: CenturyGothic;
+  height: 80px;
+  overflow-y: scroll;
+  text-align: center;
+  overflow: hidden;
+}
+
+.event-description:hover {
+  font-family: CenturyGothic;
+  height: 80px;
+  overflow-y: scroll;
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+h5 {
+  font-family: GothamMedium;
 }
 
 .card {
