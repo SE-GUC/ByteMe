@@ -40,6 +40,7 @@ class Event extends Component {
       showEditWindow: false,
       editedEvent: {},
       canEdit: props.canEdit,
+      newPhotos: [],
       newComment: ""
     };
   }
@@ -68,19 +69,13 @@ class Event extends Component {
       rating
     } = this.props;
 
-    console.log(comments + "coms")
-
     return (
       <div>
         <Card
           className="text-center"
-          // bg="warning"
-          text="white"
           style={{
             width: "18rem",
-            backgroundColor: "#003255",
-            margin: "10px",
-            height: "35rem"
+            margin: "10px"
           }}
         >
           <Card.Header className="event-title">{title}</Card.Header>
@@ -113,6 +108,7 @@ class Event extends Component {
                     className="d-block w-100"
                     src={eventDefaultImage}
                     alt="No Photos"
+                    height="150rem"
                   />
                 </Carousel.Item>
               </Carousel>
@@ -126,6 +122,7 @@ class Event extends Component {
                       className="d-block w-100"
                       src={p.link}
                       alt="Event Photos"
+                      height="150rem"
                     />
                   </Carousel.Item>
                 ))}
@@ -151,7 +148,7 @@ class Event extends Component {
                 <p style={{ color: "#ffd700" }}>Not Rated</p>
               )}
             </Card.Subtitle>
-            <Card.Text className="mb-2 text-muted">{description}</Card.Text>
+            <Card.Text className="event-description">{description}</Card.Text>
           </Card.Body>
           <Card.Footer>
             <Button
@@ -169,7 +166,7 @@ class Event extends Component {
             </Modal.Header>
             <Modal.Body>
               <h4>Description</h4>
-              <h5 style={{ color: "#003255" }}>{description}</h5>
+              <h5>{description}</h5>
               <h4>Location</h4>
               <h5>{location}</h5>
               <h4>Date</h4>
@@ -271,27 +268,48 @@ class Event extends Component {
             <Modal.Title>Edit event</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {photos.length === 0 ? (
+              <></>
+            ) : (
+              <>
+                {photos.map(p => (
+                  <>
+                    <img
+                      className="eventt-picture-picker"
+                      src={p.link}
+                      alt="Event Photos"
+                    />
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      // className="event-delete-button"
+                      onClick={() => this.deletePhoto(_id, p._id)}
+                    >
+                      Delete Photo
+                    </Button>
+                  </>
+                ))}
+              </>
+            )}
             {/* image */}
-            {/* <Dropzone
-              onDrop={acceptedFiles => this.pictureUploader(acceptedFiles[0])}
+            <Dropzone
+              onDrop={acceptedFiles =>
+                acceptedFiles.forEach(a => this.pictureUploader(a))
+              }
             >
               {({ getRootProps, getInputProps }) => (
                 <section>
                   <div {...getRootProps()}>
                     <input {...getInputProps()} />
                     <img
-                      className="event-picture-picker"
-                      src={
-                        this.state.editedPhotos.photos
-                          ? this.state.editedPhotos.photos
-                          : uploaderDefaultImage
-                      }
-                      alt="Event"
+                      className="eventt-picture-picker"
+                      src={uploaderDefaultImage}
+                      alt="Event Photos"
                     />
                   </div>
                 </section>
               )}
-            </Dropzone> */}
+            </Dropzone>
             {/* Title */}
             <h6>Event Title</h6>
             <InputGroup className="mb-3">
@@ -391,7 +409,13 @@ class Event extends Component {
             </Button>
             <Button
               variant="success"
-              onClick={() => this.editEvent(_id, this.state.editedEvent)}
+              onClick={() =>
+                this.editEvent(
+                  _id,
+                  this.state.editedEvent,
+                  this.state.newPhotos
+                )
+              }
             >
               {this.state.isLoading ? (
                 <Spinner animation="border" />
@@ -446,6 +470,25 @@ class Event extends Component {
       console.log(`😱 Axios request failed: ${e}`);
     }
   }
+  deletePhoto(event_id, photo_id) {
+    try {
+      this.setState({ isLoading: true });
+      const token = Auth.getToken();
+      const headers = {
+        Authorization: `${token}`
+      };
+      API.delete(`events/${event_id}/${photo_id}/deletephoto`, {
+        headers
+      }).then(res => {
+        this.setState({ isLoading: false });
+        this.handleEditClose();
+        this.props.updateEvents();
+        // this.handleDeleteClose();
+      });
+    } catch (e) {
+      console.log(`😱 Axios request failed: ${e}`);
+    }
+  }
   commentEvent(_id, newComment) {
     try {
       this.setState({ isLoading: true });
@@ -479,9 +522,9 @@ class Event extends Component {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      const editedEvent = this.state.editedEvent;
-      editedEvent.photos = reader.result;
-      this.setState({ editedEvent: editedEvent });
+      const newPhotos = this.state.newPhotos;
+      newPhotos.push(reader.result);
+      this.setState({ newPhotos: newPhotos });
     };
     reader.onerror = error => {
       console.log("Error uploading image: ", error);
@@ -494,9 +537,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -509,9 +549,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -524,9 +561,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -539,9 +573,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -554,29 +585,42 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
   }
-  editEvent(_id, editedEvent) {
+  async editEvent(_id, editedEvent, newPhotos) {
+    this.setState({ isLoading: true });
+    const token = Auth.getToken();
+    const headers = {
+      Authorization: `${token}`
+    };
     try {
-      this.setState({ isLoading: true });
-      const token = Auth.getToken();
-      const headers = {
-        Authorization: `${token}`
-      };
-      API.put(`events/${_id}`, editedEvent, { headers }).then(res => {
-        this.props.updateEvents();
-        this.setState({ isLoading: false });
-        this.handleEditClose();
-      });
+      await API.put(`events/${_id}`, editedEvent, { headers });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
+    if (newPhotos.length > 0) {
+      try {
+        newPhotos.map(
+          async p =>
+            await API.post(
+              `events/${_id}/addphoto`,
+              { link: `${p}` },
+              {
+                headers
+              }
+            )
+        );
+      } catch (e) {
+        console.log(`😱 Axios request failed: ${e}`);
+      }
+    }
+
+    this.props.updateEvents();
+    this.setState({ isLoading: false });
+    this.handleEditClose();
   }
   async componentWillReceiveProps(props) {
     this.setState({ canEdit: props.canEdit });

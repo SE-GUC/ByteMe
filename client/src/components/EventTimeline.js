@@ -15,22 +15,19 @@ class EventTimeline extends Component {
         dateText={dateTime.toString().split("T")[0]}
         dateInnerStyle={{ background: "#003255", color: "#ffd700" }}
         style={{ color: "#003255" }}
+        bodyContainerStyle={{
+          background: "#ffd700",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0.5rem 0.5rem 2rem 0 rgba(0, 0, 0, 0.2)"
+        }}
       >
-        <Collapsible trigger={title} triggerStyle={{ color: "#003255" }}>
-          <Event
-            _id={this.props._id}
-            comingSoon={this.props.comingSoon}
-            title={this.props.title}
-            brief={this.props.brief}
-            location={this.props.location}
-            dateTime={this.props.dateTime}
-            description={this.props.description}
-            photos={this.props.photos}
-            comments={this.props.comments}
-            rates={this.props.rates}
-            creator={this.props.creator}
-            rating={this.props.rating}
-          />
+        <Collapsible
+          trigger={<h3>{title}</h3>}
+          triggerStyle={{ color: "#003255" }}
+        >
+          <h4 style={{ color: "#003255" }}>{this.props.brief}</h4>
+          <p>{this.props.description}</p>
         </Collapsible>
       </TimelineItem>
     );

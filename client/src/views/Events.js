@@ -7,7 +7,8 @@ import {
   Modal,
   InputGroup,
   FormControl,
-  Spinner
+  Spinner,
+  CardDeck
 } from "react-bootstrap";
 import iconAdd from "../icons/plus.svg";
 import uploaderDefaultImage from "../images/upload-icon.png";
@@ -49,9 +50,11 @@ class Events extends Component {
   render() {
     return (
       <div>
-        <h1 style={{ margin: "15px" }}>Events</h1>
+        <h1 style={{ margin: "15px" }}>
+          Events {this.state.isLoading ? <Spinner animation="border" /> : ""}
+        </h1>
         <div className="eventss">
-          <div className="event-group">
+          <CardDeck className="event-group">
             {this.state.canEdit ? (
               <Button
                 variant="warning"
@@ -82,7 +85,7 @@ class Events extends Component {
                 canEdit={this.state.canEdit}
               />
             ))}
-          </div>
+          </CardDeck>
         </div>
 
         <Modal
@@ -107,9 +110,9 @@ class Events extends Component {
                     <img
                       className="event-picture-picker"
                       src={
-                        this.state.newPhotos
-                          ? this.state.newPhotos[0]
-                          : uploaderDefaultImage
+                        this.state.newPhotos.length === 0
+                          ? uploaderDefaultImage
+                          : this.state.newPhotos
                       }
                       alt="Event"
                     />
@@ -124,6 +127,7 @@ class Events extends Component {
                 onChange={this.change}
                 placeholder="Event title"
                 aria-label="Event title"
+                autoComplete="off"
               />
             </InputGroup>
             {/* Brief */}
@@ -133,6 +137,7 @@ class Events extends Component {
                 onChange={this.change}
                 placeholder="Event brief"
                 aria-label="Event Brief"
+                autoComplete="off"
               />
             </InputGroup>
             {/* location */}
@@ -142,6 +147,7 @@ class Events extends Component {
                 onChange={this.change}
                 placeholder="Event location"
                 aria-label="Event location"
+                autoComplete="off"
               />
             </InputGroup>
 
@@ -153,6 +159,7 @@ class Events extends Component {
                 onChange={this.change}
                 placeholder="Event Timing"
                 aria-label="Event Timing"
+                autoComplete="off"
               />
             </InputGroup>
 
@@ -165,6 +172,7 @@ class Events extends Component {
                 rows="4"
                 placeholder="Event Description"
                 aria-label="Event Description"
+                autoComplete="off"
               />
             </InputGroup>
 
@@ -175,6 +183,7 @@ class Events extends Component {
                 onChange={this.change}
                 placeholder="Event Creator"
                 aria-label="Event Creator"
+                autoComplete="off"
               />
             </InputGroup>
           </Modal.Body>
@@ -256,29 +265,31 @@ class Events extends Component {
     };
     try {
       await API.post(`events/addevent`, newEvent, { headers }).then(res => {
-        this.setState({ newEventId: res.data.data.id });
+        this.setState({ newEventId: res.data.data._id });
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
-
-    try {
-      newPhotos.map(p =>
-        API.post(
-          `events/${this.state.newEventId}/addphoto`,
-          { link: `${p}` },
-          {
-            headers
-          }
-        ).then(res => {
-          this.updateEvents();
-          this.setState({ isLoading: false });
-          this.handleCreateClose();
-        })
-      );
-    } catch (e) {
-      console.log(`😱 Axios request failed: ${e}`);
+    if (newPhotos.length > 0) {
+      try {
+        newPhotos.map(
+          async p =>
+            await API.post(
+              `events/${this.state.newEventId}/addphoto`,
+              { link: `${p}` },
+              {
+                headers
+              }
+            )
+        );
+      } catch (e) {
+        console.log(`😱 Axios request failed: ${e}`);
+      }
     }
+
+    this.updateEvents();
+    this.setState({ isLoading: false });
+    this.handleCreateClose();
   }
 }
 
