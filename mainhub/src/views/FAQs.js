@@ -42,7 +42,9 @@ class FAQs extends Component {
     return (
       <div>
         <faqs>
-          <h1>FAQs</h1>
+          <h1>
+            FAQs {this.state.isLoading ? <Spinner animation="border" /> : ""}
+          </h1>
           {this.state.canEdit ? (
             <Button variant="warning" onClick={this.handleCreateShow}>
               Add FAQ

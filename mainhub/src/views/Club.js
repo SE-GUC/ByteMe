@@ -7,9 +7,11 @@ import {
   Modal,
   InputGroup,
   FormControl,
-  Spinner
+  Spinner,
+  CardDeck,
+  CardGroup
 } from "react-bootstrap";
-// import uploaderDefaultImage from "../../../client/src/images/upload-icon.png";
+import uploaderDefaultImage from "../images/upload-icon.png";
 import Dropzone from "react-dropzone";
 import Auth from "../utils/Auth";
 // First we create our class
@@ -42,34 +44,36 @@ class Club extends Component {
   render() {
     return (
       <div>
-        <h1 style={{ margin: "15px" }}>AWGs</h1>
-        <div className="clubs">
-          <div className="clubs-group">
-            {this.state.canEdit ? (
-              <Button
-                variant="warning"
-                className="club-create-button"
-                onClick={this.handleCreateShow}
-              >
-                Add Club
-                {/* <img src={iconAdd} alt="Add club" /> */}
-              </Button>
-            ) : (
-              <></>
-            )}
-            {this.state.clubs.map(A => (
-              <AWG
-                id={A._id}
-                name={A.name}
-                description={A.description}
-                banner={A.banner}
-                link={A.link}
-                updateClub={this.updateClub}
-                canEdit={this.state.canEdit}
-              />
-            ))}
-          </div>
-        </div>
+        <h1 style={{ margin: "15px" }}>
+          AWGs {this.state.isLoading ? <Spinner animation="border" /> : ""}
+        </h1>
+
+        {this.state.canEdit ? (
+          <Button
+            variant="warning"
+            // className="club-create-button"
+            onClick={this.handleCreateShow}
+          >
+            Add Club
+          </Button>
+        ) : (
+          <></>
+        )}
+        <br />
+        <CardGroup>
+          {this.state.clubs.map(A => (
+            <AWG
+              id={A._id}
+              name={A.name}
+              description={A.description}
+              banner={A.banner}
+              link={A.link}
+              updateClub={this.updateClub}
+              canEdit={this.state.canEdit}
+            />
+          ))}
+        </CardGroup>
+
         {/* CREATE MODAL */}
         <Modal
           show={this.state.showAddClubWindow}
@@ -93,7 +97,7 @@ class Club extends Component {
                       src={
                         this.state.newClub.banner
                           ? this.state.newClub.banner
-                          : "No Image"
+                          : uploaderDefaultImage
                       }
                       alt="Club"
                     />

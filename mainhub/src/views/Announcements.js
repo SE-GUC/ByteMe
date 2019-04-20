@@ -42,7 +42,10 @@ class Announcements extends Component {
     return (
       <div>
         <announcements>
-          <h1>Announcements</h1>
+          <h1>
+            Announcements{" "}
+            {this.state.isLoading ? <Spinner animation="border" /> : ""}
+          </h1>
           {this.state.canEdit ? (
             <Button variant="warning" onClick={this.handleCreateShow}>
               Add Announncement

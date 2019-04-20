@@ -10,8 +10,8 @@ import {
   Spinner
 } from "react-bootstrap";
 import Dropzone from "react-dropzone";
-// import uploaderDefaultImage from "../../../client/src/images/upload-icon.png";
-// import productDefaultImage from "../../../client/src/images/club.png";
+import uploaderDefaultImage from "../images/upload-icon.png";
+import productDefaultImage from "../images/club.png";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 
@@ -36,45 +36,43 @@ class AWG extends Component {
     return (
       <div>
         <Card
-          className="card"
-          style={{ width: "18rem", margin: "10px", height: "30rem" }}
+          border="warning"
+          style={{
+            width: "35rem",
+            // heiht: "50",
+            margin: "10px"
+          }}
         >
-          {this.state.canEdit ? (
-            <>
-              <Button
-                variant="info"
-                className="club-edit-button"
-                onClick={this.handleEditShow}
-              >
-                Edit
-                {/* <img src={iconEdit} alt="Edit Club" /> */}
-              </Button>
-              <Button
-                variant="danger"
-                className="club-delete-button"
-                onClick={this.handleDeleteShow}
-              >
-                Delete
-                {/* <img src={iconDelete} alt="Delete club" /> */}
-              </Button>
-            </>
-          ) : (
-            <></>
-          )}
           <Card.Img
             variant="top"
-            src={banner !== "false" ? banner : "No Image"}
+            className="d-block w-100"
+            src={banner !== "false" ? banner : productDefaultImage}
+            height="150rem"
           />
-          <Card.Body className="club-body">
-            <Card.Title className="club-name">{name}</Card.Title>
-            <Card.Text className="club-description">{description}</Card.Text>
-            <ul>
-              <li>
-                <a href={link}>Visit us</a>
-                {""}
-              </li>
-            </ul>
-          </Card.Body>
+
+          <Card.Title>{name}</Card.Title>
+          <Card.Subtitle>{description}</Card.Subtitle>
+          {/* <ul>
+            <li>
+              <a href={link}>Visit us</a>
+              {""}
+            </li>
+          </ul> */}
+          <Card.Footer>
+            <Card.Link href={link}>Visit US</Card.Link>
+            {this.state.canEdit ? (
+              <>
+                <Button variant="dark" onClick={this.handleEditShow}>
+                  Edit
+                </Button>
+                <Button variant="danger" onClick={this.handleDeleteShow}>
+                  Delete
+                </Button>
+              </>
+            ) : (
+              <></>
+            )}
+          </Card.Footer>
         </Card>
         {/* DELETE MODAL */}
         <Modal
@@ -120,7 +118,7 @@ class AWG extends Component {
                       src={
                         this.state.editedClub.banner
                           ? this.state.editedClub.banner
-                          : "NO image"
+                          : uploaderDefaultImage
                       }
                       alt="Product"
                     />

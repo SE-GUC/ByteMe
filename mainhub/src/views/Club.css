@@ -7,14 +7,6 @@ h1 {
   text-align: center;
 }
 
-.club-create-button {
-  width: fit-content;
-  position: absolute;
-  right: 45px;
-  margin-top: 10px;
-  border-radius: 50px !important;
-  text-align: center;
-}
 .club-picture-picker {
   width: 128px;
   height: 128px;
