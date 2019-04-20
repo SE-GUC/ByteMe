@@ -1,0 +1,20 @@
+.bg-blue {
+  background-color: #000000;
+}
+.bg-yellow {
+  background-color: #ffd900;
+}
+.bg-black {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+#default-div {
+  background-color: whitesmoke;
+}
+
+.content-div {
+  background-color: whitesmoke;
+  min-height: 100vh;
+  width: 100%;
+}

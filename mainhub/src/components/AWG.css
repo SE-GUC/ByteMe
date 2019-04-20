@@ -1,0 +1,28 @@
+.club-name {
+  text-align: center;
+}
+
+.club-description {
+  font-family: CenturyGothic;
+}
+
+.card {
+  border: 1px solid #ffd700;
+}
+
+.club-delete-button {
+  width: fit-content;
+  position: absolute;
+  right: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}
+.club-edit-button {
+  width: fit-content;
+  position: absolute;
+  left: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+}
