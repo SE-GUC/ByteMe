@@ -1,0 +1,10 @@
+.register-form {
+  font-size: 130%;
+  margin: 5%;
+}
+
+.register-check,
+.register-label {
+  font-size: 80%;
+  color: gray;
+}
