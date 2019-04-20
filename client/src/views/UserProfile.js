@@ -119,6 +119,10 @@ class UserProfile extends Component {
     history: PropTypes.object.isRequired
   };
 
+  async componentDidMount(props) {
+    this.componentWillReceiveProps(props)
+  }
+
   async componentWillReceiveProps(props) {
     const parsed = queryString.parse(this.props.location.search);
     if (parsed.gucid) {

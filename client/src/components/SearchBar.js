@@ -26,7 +26,8 @@ class SearchBar extends Component {
 
     this.changeSearchKey = event => {
       this.setState({
-        searchkey: event.target.value
+        searchkey: event.target.value,
+        searchClicked: false
       });
       if (event.target.value == "")
         this.setState({
@@ -35,7 +36,6 @@ class SearchBar extends Component {
           searchResults_events: undefined,
           searchResults_users: undefined,
           loading: false,
-          searchClicked: false
         })
     };
 
@@ -75,8 +75,8 @@ class SearchBar extends Component {
           />
           <InputGroup.Append>
             <Button
-              style={{ color: "#05375A", border: "#05375A", borderRadius: "0", textAlign: "center", backgroundColor: "#ffd700" }}
-              variant="" onClick={this.search}>Search</Button>
+              style={{ color: "#05375A", border: "#05375A", borderRadius: "0", fontWeight: "600", textAlign: "center", backgroundColor: "#ffd700" }}
+              variant="warning" onClick={this.search}>Search</Button>
           </InputGroup.Append>
         </InputGroup>
         {this.state.searchkey === "" || !this.state.searchClicked ? (
