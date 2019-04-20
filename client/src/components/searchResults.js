@@ -1,11 +1,11 @@
 import React, { Component } from "react";
+import { LinkContainer } from "react-router-bootstrap"
 import PropTypes from "prop-types";
 import Announcement from "./Announcement";
 
 import MiniUser from "./MiniUser";
 import MiniEvent from "./MiniEvent";
 import MiniClub from "./MiniClub";
-
 import "./SearchBar.css"
 
 class SearchResults extends Component {
@@ -30,7 +30,13 @@ class SearchResults extends Component {
             }
             {users && users.constructor === Array ?
               users.map(user => {
-                return <MiniUser user={user} />
+                return (
+                  <LinkContainer to={`../profile/?gucid=${user.guc_id}`}>
+                    <div>
+                      <MiniUser user={user} />
+                    </div>
+                  </LinkContainer>
+                )
               })
               :
               <></>
@@ -41,7 +47,11 @@ class SearchResults extends Component {
             {events && events.constructor == Array ?
               events.map(event => {
                 return (
-                  <MiniEvent event={event} />
+                  <LinkContainer to="../events">
+                    <div>
+                      <MiniEvent event={event} />
+                    </div>
+                  </LinkContainer>
                 );
               })
               :
@@ -53,9 +63,11 @@ class SearchResults extends Component {
             {clubs && clubs.constructor == Array ?
               clubs.map(club => {
                 return (
-                  <MiniClub
-                    club={club}
-                  />
+                  <LinkContainer to="../clubs">
+                    <div>
+                      <MiniClub club={club} />
+                    </div>
+                  </LinkContainer>
                 );
               })
               :

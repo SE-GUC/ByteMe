@@ -12,6 +12,7 @@ class User extends Component {
   constructor(props) {
     super(props);
 
+    console.log(`props ${props.user.last_name}`)
     this.state = {
       user: this.props.user,
       isEditing: false,
