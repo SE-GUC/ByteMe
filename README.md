@@ -19,7 +19,9 @@ components, I've already implemented it you can import components you want to us
 ###### Please add/edit this list as you see fit.
 
 - Title margins and sizing needs to become consistent.
-- Academic Library should be seperated by year.
-- AWG platform home page ,Move announcements, FAQs and AWG pages to seperate site (AWG Platform)
-- Front End deployment should be moved to the gucmun.me domain
+- Academic Library styling and search.
+- AWGs styling in mainhub.
+- Delete unused components and views from client app and adjust app.js, header navbar accordingly.
+- mainhub deployment
+- client deployment should be moved to the gucmun.me domain
 
