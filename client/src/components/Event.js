@@ -21,6 +21,8 @@ import eventDefaultImage from "../images/event-icon.png";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 import StarRatings from "react-star-ratings";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
 
 class Event extends Component {
   constructor(props, context) {
@@ -29,7 +31,6 @@ class Event extends Component {
     this.handleDeleteClose = this.handleDeleteClose.bind(this);
     this.handleEditShow = this.handleEditShow.bind(this);
     this.handleEditClose = this.handleEditClose.bind(this);
-
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
@@ -41,7 +42,9 @@ class Event extends Component {
       editedEvent: {},
       canEdit: props.canEdit,
       newPhotos: [],
-      newComment: ""
+      newComment: "",
+      isOpen: false,
+      photoIndex: 0
     };
   }
 
@@ -71,11 +74,35 @@ class Event extends Component {
 
     return (
       <div>
+        {this.state.isOpen && (
+          <Lightbox
+            mainSrc={photos[this.state.photoIndex].link}
+            nextSrc={photos[(this.state.photoIndex + 1) % photos.length].link}
+            prevSrc={
+              photos[
+                (this.state.photoIndex + photos.length - 1) % photos.length
+              ].link
+            }
+            onCloseRequest={() => this.setState({ isOpen: false })}
+            onMovePrevRequest={() =>
+              this.setState({
+                photoIndex:
+                  (this.state.photoIndex + photos.length - 1) % photos.length
+              })
+            }
+            onMoveNextRequest={() =>
+              this.setState({
+                photoIndex: (this.state.photoIndex + 1) % photos.length
+              })
+            }
+          />
+        )}
         <Card
           className="text-center"
           style={{
             width: "18rem",
-            margin: "10px"
+            margin: "10px",
+            borderColor: "#ffd700"
           }}
         >
           <Card.Header className="event-title">{title}</Card.Header>
@@ -153,11 +180,24 @@ class Event extends Component {
           <Card.Footer>
             <Button
               variant="secondary"
+              style={{ color: "#ffd700" }}
               className="event-button"
               onClick={this.handleShow}
             >
               View details
             </Button>
+            {photos.length === 0 ? (
+              <></>
+            ) : (
+              <Button
+                variant="secondary"
+                style={{ color: "#ffd700" }}
+                className="event-button-photos"
+                onClick={() => this.setState({ isOpen: true })}
+              >
+                View photos
+              </Button>
+            )}
           </Card.Footer>
 
           <Modal show={this.state.show} onHide={this.handleClose} centered>
@@ -601,21 +641,20 @@ class Event extends Component {
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
-    if (newPhotos.length > 0) {
-      try {
-        newPhotos.map(
-          async p =>
-            await API.post(
-              `events/${_id}/addphoto`,
-              { link: `${p}` },
-              {
-                headers
-              }
-            )
-        );
-      } catch (e) {
-        console.log(`😱 Axios request failed: ${e}`);
-      }
+
+    try {
+      newPhotos.map(
+        async p =>
+          await API.post(
+            `events/${_id}/addphoto`,
+            { link: `${p}` },
+            {
+              headers
+            }
+          )
+      );
+    } catch (e) {
+      console.log(`😱 Axios request failed: ${e}`);
     }
 
     this.props.updateEvents();

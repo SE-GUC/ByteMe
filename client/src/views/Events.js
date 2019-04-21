@@ -270,21 +270,20 @@ class Events extends Component {
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
-    if (newPhotos.length > 0) {
-      try {
-        newPhotos.map(
-          async p =>
-            await API.post(
-              `events/${this.state.newEventId}/addphoto`,
-              { link: `${p}` },
-              {
-                headers
-              }
-            )
-        );
-      } catch (e) {
-        console.log(`😱 Axios request failed: ${e}`);
-      }
+
+    try {
+      newPhotos.map(
+        async p =>
+          await API.post(
+            `events/${this.state.newEventId}/addphoto`,
+            { link: `${p}` },
+            {
+              headers
+            }
+          )
+      );
+    } catch (e) {
+      console.log(`😱 Axios request failed: ${e}`);
     }
 
     this.updateEvents();
