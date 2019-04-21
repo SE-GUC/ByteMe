@@ -57,7 +57,9 @@ class Pages extends Component {
               updatePages={this.updatePages}
             />
           ))}
+          <div className="x">
           <ButtonGroup className="events-members">
+           
             <Button
               className="events"
               variant="secondary"
@@ -73,6 +75,8 @@ class Pages extends Component {
               Our People
             </Button>
           </ButtonGroup>
+          </div>
+          
           {this.state.show && this.state.show1 ? (
             <CardDeck className="deck">
               {this.state.events.map(event => (

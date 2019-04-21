@@ -237,7 +237,7 @@ class Page extends Component {
 
           <br />
           <Card.Title className="page-name">
-            <h1 className="ddd">
+            <h1 className="pageeeee">
               {" "}
               {name
                 .replace("_", " ")
