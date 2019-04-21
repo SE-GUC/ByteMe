@@ -4,12 +4,20 @@
   font-weight: normal;
   font-style: normal;
 }
+.pageeeee{
+  text-align:center;
+}
 
 .page-name {
   font-family: CenturyBook;
   text-align: center;
   color: #003250;
-  margin-top: -20px;
+  float:center;
+}
+.dod{
+  float:right;
+  
+  
 }
 
 .page-desc {
@@ -30,7 +38,7 @@
   margin-right: auto;
 }
 
-.page-delete-button {
+/*.page-delete-button {
   margin-top: -80px;
   margin-left: 1450px;
   border-radius: 20px !important;
@@ -47,4 +55,4 @@
   margin-right: 10px;
   border-radius: 20px !important;
   text-align: center;
-}
+}*/

@@ -9,25 +9,17 @@
   font-family: GothamLight;
   border: solid;
 }
+.x {
+  text-align: center;
+  margin-top: 400px;
+  font-family: GothamBlack;
+}
 
 .events {
   font-family: GothamLight;
   border: solid;
 }
 
-.events-members {
-  position: center;
-  margin-left: 680px;
-  margin-top: 400px;
-}
-
 .deck {
-  background: #ffffff;
-  position: relative;
-  height: 30px;
-
-  margin-top: 100px;
-
-  margin-left: auto;
-  margin-right: auto;
+  margin-top: 50px;
 }
