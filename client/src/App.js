@@ -21,7 +21,8 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 import FAQs from "./views/FAQs";
 import Club from "./views/Club";
-import Development from "./views/Development";
+import MunDev from "./views/MunDev";
+import Gallery from "./views/Gallery";
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import Auth from "./utils/Auth";
@@ -144,16 +145,30 @@ class App extends Component {
           />
 
           <div className="content-div">
-            <Route
+          <Route
               exact
               path="/"
-              render={props => <Home user={this.state.user} {...props} />}
+              render={props => (
+                <Home
+                  isLoggedIn={this.state.isLoggedIn}
+                  user={this.state.user}
+                  logout={this.logout}
+                  {...props}
+                />
+              )}
             />
 
             <Route
               exact
               path="/home"
-              render={props => <Home user={this.state.user} {...props} />}
+              render={props => (
+                <Home
+                  isLoggedIn={this.state.isLoggedIn}
+                  user={this.state.user}
+                  logout={this.logout}
+                  {...props}
+                />
+              )}
             />
             {this.state.councils.map(council => {
               return (
@@ -187,12 +202,41 @@ class App extends Component {
                 <PortalLibrary user={this.state.user} {...props} />
               )}
             />
-            <Route exact path="/aboutus" component={AboutUs} />
+            />
+            <Route
+              exact
+              path="/aboutus"
+              render={props => (
+                <AboutUs
+                  isLoggedIn={this.state.isLoggedIn}
+                  user={this.state.user}
+                  logout={this.logout}
+                  {...props}
+                />
+              )}
+            />
             <Route
               exact
               path="/development"
               render={props => (
-                <Development user={this.state.user} {...props} />
+                <MunDev
+                  isLoggedIn={this.state.isLoggedIn}
+                  user={this.state.user}
+                  logout={this.logout}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/gallery"
+              render={props => (
+                <Gallery
+                  isLoggedIn={this.state.isLoggedIn}
+                  user={this.state.user}
+                  logout={this.logout}
+                  {...props}
+                />
               )}
             />
             <Route

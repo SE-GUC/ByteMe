@@ -67,6 +67,7 @@ class Page extends Component {
     var pathArray = url.split("/");
     const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
+
     const updatedPage = await API.put(
       `page/${secondLevelLocation}`,
       {
@@ -208,26 +209,35 @@ class Page extends Component {
             (this.props.user.mun_role === "secretary_office" ||
             this.props.user.mun_role === role_to_control ||
             this.props.user.mun_role === name ? (
-              <div>
+              <div className="dod">
                 <Button
-                  className="member-add-button"
+                  variant="link"
+                  className="buttonP"
                   onClick={this.handleShow2}
                 >
                   <img src={iconAdd} alt="Add new Member" />
                 </Button>
-                <Button className="page-edit-button" onClick={this.handleShow1}>
+                <Button
+                  variant="link"
+                  className="buttonP"
+                  onClick={this.handleShow1}
+                >
                   <img src={iconEdit} alt="Edit page" />
                 </Button>
                 <Button
-                  className="page-delete-button"
+                  variant="link"
+                  className="buttonP"
                   onClick={this.handleShow3}
                 >
                   <img src={iconDelete} alt="Delete page" />
                 </Button>
               </div>
             ) : null)}
+          <br />
+
+          <br />
           <Card.Title className="page-name">
-            <h1>
+            <h1 className="ddd">
               {" "}
               {name
                 .replace("_", " ")
@@ -286,7 +296,7 @@ class Page extends Component {
             <Form.Control
               type="name"
               placeholder="Enter the new name "
-              value={this.state.name}
+              defaultValue={name}
               onChange={e => this.setState({ name: e.target.value })}
             />
             <br />
@@ -300,7 +310,7 @@ class Page extends Component {
                 label="Council"
                 type="radio"
                 checked={this.state.checked1}
-                value={this.state.role_to_control}
+                value={role_to_control}
                 onChange={this.one}
               />
               <Form.Check
@@ -311,7 +321,7 @@ class Page extends Component {
                 label="Committee"
                 type="radio"
                 checked={this.state.checked2}
-                value={this.state.role_to_control}
+                defaultValue={role_to_control}
                 onChange={this.two}
               />
               <Form.Check
@@ -322,7 +332,7 @@ class Page extends Component {
                 label="Office"
                 type="radio"
                 checked={this.state.checked3}
-                value={this.state.role_to_control}
+                defaultValue={role_to_control}
                 onChange={this.three}
               />
             </Form.Group>
@@ -334,7 +344,7 @@ class Page extends Component {
               rows="10"
               type="description"
               placeholder="Enter description"
-              value={this.state.description}
+              defaultValue={description}
               onChange={e => this.setState({ description: e.target.value })}
             />
           </Form.Group>

@@ -102,6 +102,10 @@ class HeaderNavbar extends Component {
           <LinkContainer to="/aboutus">
             <Nav.Link>About Us</Nav.Link>
           </LinkContainer>
+          <LinkContainer to="/gallery">
+            <Nav.Link>Gallery</Nav.Link>
+          </LinkContainer>
+
           <LinkContainer to="/development">
             <Nav.Link>Development</Nav.Link>
             </LinkContainer>

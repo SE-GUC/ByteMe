@@ -8,3 +8,19 @@
   float:right;
   text-align: right;
 }
+
+.dod{
+ float:right;
+ right: 45px;
+ margin-top: 10px;
+ text-align: center;
+}
+.ddd{
+  float:right;
+  width: fit-content;
+  position: absolute;
+  right: 45px;
+  margin-top: 10px;
+  border-radius: 50px !important;
+  text-align: center;
+ }
