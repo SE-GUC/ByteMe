@@ -7,7 +7,7 @@ import Collapsible from "react-collapsible";
 
 class EventTimeline extends Component {
   render() {
-    const { title, dateTime } = this.props;
+    const { title, brief, description, dateTime } = this.props;
 
     return (
       <TimelineItem
@@ -26,8 +26,8 @@ class EventTimeline extends Component {
           trigger={<h3>{title}</h3>}
           triggerStyle={{ color: "#003255" }}
         >
-          <h4 style={{ color: "#003255" }}>{this.props.brief}</h4>
-          <p>{this.props.description}</p>
+          <h4 style={{ color: "#003255" }}>{brief}</h4>
+          <p>{description}</p>
         </Collapsible>
       </TimelineItem>
     );
@@ -35,17 +35,11 @@ class EventTimeline extends Component {
 }
 
 Event.propTypes = {
-  id: PropTypes.string,
   title: PropTypes.string,
   brief: PropTypes.string,
-  location: PropTypes.string,
+
   dateTime: PropTypes.instanceOf(Date),
-  description: PropTypes.string,
-  photos: PropTypes.arrayOf(PropTypes.string),
-  feedback: PropTypes.arrayOf(PropTypes.string),
-  creator: PropTypes.string,
-  rating: PropTypes.number,
-  isLoading: PropTypes.bool
+  description: PropTypes.string
 };
 
 export default EventTimeline;

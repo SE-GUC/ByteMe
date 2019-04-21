@@ -230,44 +230,35 @@ class Home extends Component {
         <Timeline lineColor={"#ffd700"} collapsible className="home">
           {this.state.events.map(event => (
             <EventTimeline
-              _id={event._id}
-              comingSoon={event.comingSoon}
               title={event.title}
               brief={event.brief}
-              location={event.location}
               dateTime={event.dateTime}
               description={event.description}
-              photos={event.photos}
-              comments={event.comments}
-              rates={event.rates}
-              creator={event.creator}
-              rating={event.rating}
             />
           ))}
         </Timeline>
-          <div className="register">
+        <div className="register">
           {this.props.isLoggedIn &&
-            (this.props.user.mun_role === "secretary_office" ||
-            this.props.user.awg_admin === "mun" ) && this.state.links[0] ? 
-
-              ( 
-              <Button
-                variant="warning"
-                className="buttonP"
-                onClick={this.handleShow3}
-              >
-                <img src={iconDelete} alt="Delete page" />
-              </Button>
-                  
-              ) :( 
-              <Button
+          (this.props.user.mun_role === "secretary_office" ||
+            this.props.user.awg_admin === "mun") &&
+          this.state.links[0] ? (
+            <Button
+              variant="warning"
+              className="buttonP"
+              onClick={this.handleShow3}
+            >
+              <img src={iconDelete} alt="Delete page" />
+            </Button>
+          ) : (
+            <Button
               variant="warning"
               className="buttonP"
               onClick={this.handleShow2}
             >
               <img src={iconAdd} alt="Add new Member" />
-            </Button> )}
-          
+            </Button>
+          )}
+
           {this.state.links.map(link => (
             <input
               type="submit"
@@ -275,7 +266,7 @@ class Home extends Component {
               value="Register to our current event"
             />
           ))}
-          </div>
+        </div>
         <Modal show={this.state.show2} onHide={this.handleClose2}>
           <Modal.Header closeButton>
             <Modal.Title>Add google form link</Modal.Title>

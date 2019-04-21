@@ -108,9 +108,6 @@ class HeaderNavbar extends Component {
 
           <LinkContainer to="/development">
             <Nav.Link>Development</Nav.Link>
-            </LinkContainer>
-          <LinkContainer to="/announcements">
-            <Nav.Link>Announcements</Nav.Link>
           </LinkContainer>
 
           <NavDropdown title="Councils" id="basic-nav-dropdown">
@@ -141,12 +138,6 @@ class HeaderNavbar extends Component {
             <Nav.Link>Merchandise</Nav.Link>
           </LinkContainer>
 
-          <LinkContainer to="/faq">
-            <Nav.Link>FAQ</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to="/clubs">
-            <Nav.Link>AWGs</Nav.Link>
-          </LinkContainer>
           <LinkContainer to="/ContactUs">
             <Nav.Link>Contact Us</Nav.Link>
           </LinkContainer>

@@ -5,9 +5,7 @@ import { Navbar, Modal, Nav } from "react-bootstrap";
 import logo from "./logo.svg";
 import "./App.css";
 
-import DetailedEvents from "./views/DetailedEvents";
 import PortalLibrary from "./views/PortalLibrary";
-import Announcements from "./views/Announcements";
 import Mailing_list from "./views/Mailing_list";
 import UserProfile from "./views/UserProfile";
 import Merchandise from "./views/Merchandise";
@@ -19,8 +17,6 @@ import Events from "./views/Events";
 import Pages from "./views/Pages";
 import Login from "./views/Login";
 import Home from "./views/Home";
-import FAQs from "./views/FAQs";
-import Club from "./views/Club";
 import MunDev from "./views/MunDev";
 import Gallery from "./views/Gallery";
 import HeaderNavbar from "./components/HeaderNavbar";
@@ -145,7 +141,7 @@ class App extends Component {
           />
 
           <div className="content-div">
-          <Route
+            <Route
               exact
               path="/"
               render={props => (
@@ -157,7 +153,6 @@ class App extends Component {
                 />
               )}
             />
-
             <Route
               exact
               path="/home"
@@ -183,15 +178,6 @@ class App extends Component {
                       {...props}
                     />
                   )}
-                />
-              );
-            })}
-            {this.state.events.map(event => {
-              return (
-                <Route
-                  exact
-                  path={`/events/${event._id}`}
-                  component={DetailedEvents}
                 />
               );
             })}
@@ -239,18 +225,6 @@ class App extends Component {
                 />
               )}
             />
-            <Route
-              exact
-              path="/faq"
-              render={props => <FAQs user={this.state.user} {...props} />}
-            />
-            <Route exact path="/announcements" component={Announcements} />
-
-            <Route
-              exact
-              path="/clubs"
-              render={props => <Club user={this.state.user} {...props} />}
-            />
             <Route exact path="/ContactUs" component={Contact} />
             <Route
               exact
@@ -270,7 +244,6 @@ class App extends Component {
               path="/events"
               render={props => <Events user={this.state.user} {...props} />}
             />
-
             <Route exact path="/mailing_list" component={Mailing_list} />
             <Route
               path="/profile/:gucid?"
