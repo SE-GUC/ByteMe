@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Button, Modal, Form,FormGroup } from "react-bootstrap";
+import { Button, Modal, Form } from "react-bootstrap";
 import "./MissionVision.css";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
@@ -34,7 +34,7 @@ class MissionVision extends Component {
     const { brief } = this.state;
     const token = Auth.getToken();
 
-    const updatedPage = await API.put(
+    await API.put(
       `mission_vision/${this.props._id}`,
       {
         brief
@@ -94,31 +94,31 @@ class MissionVision extends Component {
             </div>
           ) : null)}
         <div className="brief-p">
-        {brief}
-        <Modal show={this.state.show1} onHide={this.handleClose1}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Mission&Vision</Modal.Title>
-          </Modal.Header>
-          <br />
-          <Form.Group controlId="editedPage">
-            <Form.Label>Description</Form.Label>
-            <br/>
-            <Form.Control
-              type="name"
-              placeholder="Enter the new description "
-              defaultValue={brief}
-              onChange={e => this.setState({ brief: e.target.value })}
-            />
-          </Form.Group>
+          {brief}
+          <Modal show={this.state.show1} onHide={this.handleClose1}>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Mission&Vision</Modal.Title>
+            </Modal.Header>
+            <br />
+            <Form.Group controlId="editedPage">
+              <Form.Label>Description</Form.Label>
+              <br />
+              <Form.Control
+                type="name"
+                placeholder="Enter the new description "
+                defaultValue={brief}
+                onChange={e => this.setState({ brief: e.target.value })}
+              />
+            </Form.Group>
 
-          <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.update(e)}>
-              Edit
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <br />
-      </div>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={e => this.update(e)}>
+                Edit
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <br />
+        </div>
       </div>
     );
   }

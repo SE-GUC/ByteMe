@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Card, Button, Modal, Form ,
+import {
+  Card,
+  Button,
+  Modal,
+  Form,
   FormGroup,
-  FormControl } from "react-bootstrap";
+  FormControl
+} from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import uploaderDefaultImage from "../images/upload-icon.png";
-import productDefaultImage from "../images/product-icon.png";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 import iconDelete from "../icons/x.svg";
@@ -46,7 +50,7 @@ class Achievement extends Component {
     const { description, pic_ref } = this.state;
     const token = Auth.getToken();
 
-    const updatedPage = await API.put(
+    await API.put(
       `achievement/${this.props._id}`,
       {
         description,
@@ -67,7 +71,7 @@ class Achievement extends Component {
     e.preventDefault();
     this.setState({ show3: false });
     const token = Auth.getToken();
-    const deletedMember = await API.delete(`achievement/${this.props._id}`, {
+    await API.delete(`achievement/${this.props._id}`, {
       headers: {
         Authorization: token
       }
@@ -104,8 +108,7 @@ class Achievement extends Component {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      this.state.pic_ref = reader.result;
-      this.setState({ pic_ref: this.state.pic_ref });
+      this.setState({ pic_ref: reader.result });
     };
     reader.onerror = error => {
       console.log("Error uploading image: ", error);
@@ -127,10 +130,10 @@ class Achievement extends Component {
     return (
       <Card>
         <Card.Title>
-        {this.props.isLoggedIn && this.props.user.mun_role === "secretary_office" ?
-          // this.props.user.mun_role === "secretary_office" ||this.props.user.awg_admin==="mun" ?
-           ( <>
-            
+          {this.props.isLoggedIn &&
+          this.props.user.mun_role === "secretary_office" ? (
+            // this.props.user.mun_role === "secretary_office" ||this.props.user.awg_admin==="mun" ?
+            <>
               <Button
                 variant="info"
                 className="club-edit-button"
@@ -144,18 +147,18 @@ class Achievement extends Component {
                 onClick={this.handleShow3}
               >
                 <img src={iconDelete} alt="Delete page" />
-              </Button>  </>) :<></>}
-          </Card.Title>
+              </Button>{" "}
+            </>
+          ) : (
+            <></>
+          )}
+        </Card.Title>
         <Card.Body>
-         
           <Card.Img width={50} height={500} src={pic_ref} alt="Card image" />
           {description}
         </Card.Body>
-           {/* EDIT MODAL */}
-           <Modal
-           show={this.state.show1} onHide={this.handleClose1}
-          centered
-        >
+        {/* EDIT MODAL */}
+        <Modal show={this.state.show1} onHide={this.handleClose1} centered>
           <Modal.Header closeButton>
             <Modal.Title>Edit Achievement </Modal.Title>
           </Modal.Header>
@@ -170,11 +173,10 @@ class Achievement extends Component {
                     <input {...getInputProps()} />
                     <img
                       className="club-picture-picker"
-                      
-                    src={
-                      this.state.pic_ref
-                        ? this.state.pic_ref
-                        : uploaderDefaultImage
+                      src={
+                        this.state.pic_ref
+                          ? this.state.pic_ref
+                          : uploaderDefaultImage
                       }
                       alt="Product"
                     />
@@ -182,21 +184,19 @@ class Achievement extends Component {
                 </section>
               )}
             </Dropzone>
-        
-            
+
             <FormGroup className="mb-3">
-            <Form.Label>Descsription</Form.Label>
+              <Form.Label>Descsription</Form.Label>
               <FormControl
                 name="description"
-                onChange={this.change}
                 as="textarea"
                 rows="2"
                 aria-label="Description"
                 defaultValue={description}
                 placeholder="Enter description"
-                onChange={e => this.setState({ description: e.target.value })}              />
+                onChange={e => this.setState({ description: e.target.value })}
+              />
             </FormGroup>
-           
           </Modal.Body>
 
           <Modal.Footer>
@@ -220,8 +220,8 @@ class Achievement extends Component {
         </Modal>
       </Card>
     );
-  }}
-
+  }
+}
 
 Achievement.propTypes = {
   description: PropTypes.string,

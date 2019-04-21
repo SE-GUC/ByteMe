@@ -49,7 +49,7 @@ class SearchResults extends Component {
             ) : (
               <></>
             )}
-            {events && events.constructor == Array ? (
+            {events && events.constructor === Array ? (
               events.map(event => {
                 return (
                   <LinkContainer to="../events">

@@ -24,14 +24,11 @@ class Member extends Component {
     var pathArray = url.split("/");
     const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    const deletedMember = await API.delete(
-      `page/${secondLevelLocation}/members/${guc_id}`,
-      {
-        headers: {
-          Authorization: token
-        }
+    await API.delete(`page/${secondLevelLocation}/members/${guc_id}`, {
+      headers: {
+        Authorization: token
       }
-    ).then(res => {
+    }).then(res => {
       this.props.updatePages();
       this.setState({ isLoading: false });
     });
@@ -44,7 +41,7 @@ class Member extends Component {
     var pathArray = url.split("/");
     const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    const updatedMember = await API.put(
+    await API.put(
       `page/${secondLevelLocation}/members/set_role`,
       {
         guc_id: `${x}`

@@ -2,11 +2,8 @@ import React, { Component } from "react";
 import "./AboutUs.css";
 import Dropzone from "react-dropzone";
 import uploaderDefaultImage from "../images/upload-icon.png";
-import productDefaultImage from "../images/product-icon.png";
 import Photo from "../components/Photo";
-import { Button, Modal, Form,FormGroup,
-  InputGroup,
-  FormControl } from "react-bootstrap";
+import { Button, Modal, Form, FormGroup, FormControl } from "react-bootstrap";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 import iconAdd from "../icons/plus.svg";
@@ -44,7 +41,7 @@ class Gallery extends Component {
     const { pic_ref, title, description } = this.state;
 
     const token = Auth.getToken();
-    const addedPhoto = await API.post(
+    await API.post(
       `gallery/`,
       {
         title,
@@ -74,8 +71,7 @@ class Gallery extends Component {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      this.state.pic_ref = reader.result;
-      this.setState({ pic_ref: this.state.pic_ref });
+      this.setState({ pic_ref: reader.result });
     };
     reader.onerror = error => {
       console.log("Error uploading image: ", error);
@@ -93,7 +89,9 @@ class Gallery extends Component {
     return (
       <div>
         <br />
-        <h1>OUR GALLERY  {this.props.isLoggedIn &&
+        <h1>
+          OUR GALLERY{" "}
+          {this.props.isLoggedIn &&
             (this.props.user.mun_role === "secretary_office" ||
             this.props.user.awg_admin === "mun" ? (
               <Button
@@ -103,9 +101,9 @@ class Gallery extends Component {
               >
                 <img src={iconAdd} alt="Add new Member" />
               </Button>
-            ) : null)}</h1>
+            ) : null)}
+        </h1>
         <div className="slide-container">
-         
           <Slide {...properties}>
             {this.state.photos.map(photo => (
               <Photo
@@ -121,10 +119,10 @@ class Gallery extends Component {
           </Slide>
         </div>
         <Modal show={this.state.show} onHide={this.handleClose} centered>
-          <Modal.Header closeButton> 
-          <Modal.Title closeButton>Add photo to gallery</Modal.Title></Modal.Header>
-           
-          
+          <Modal.Header closeButton>
+            <Modal.Title closeButton>Add photo to gallery</Modal.Title>
+          </Modal.Header>
+
           <Dropzone
             onDrop={acceptedFiles => this.pictureUploader(acceptedFiles[0])}
           >
@@ -148,30 +146,28 @@ class Gallery extends Component {
           <br />
 
           <FormGroup className="mb-3">
-          <Form.Label>Title</Form.Label>
-          <br/>
-              <FormControl
-                name="name"
-                placeholder="Title"
-                aria-label="Title"
-                onChange={e => this.setState({ title: e.target.value })}
-              />
-            </FormGroup>
-               
-          
-               <FormGroup className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <br/>
-              <FormControl
-                name="name"
-                placeholder="Description"
-                aria-label="Description"
-                as="textarea"
-                rows="2"
-                onChange={e => this.setState({ description: e.target.value })}
-              />
-            
-            </FormGroup>
+            <Form.Label>Title</Form.Label>
+            <br />
+            <FormControl
+              name="name"
+              placeholder="Title"
+              aria-label="Title"
+              onChange={e => this.setState({ title: e.target.value })}
+            />
+          </FormGroup>
+
+          <FormGroup className="mb-3">
+            <Form.Label>Description</Form.Label>
+            <br />
+            <FormControl
+              name="name"
+              placeholder="Description"
+              aria-label="Description"
+              as="textarea"
+              rows="2"
+              onChange={e => this.setState({ description: e.target.value })}
+            />
+          </FormGroup>
           <Modal.Footer>
             <Button variant="secondary" onClick={e => this.add(e)}>
               ADD

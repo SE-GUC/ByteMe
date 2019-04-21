@@ -111,7 +111,7 @@ class App extends Component {
     e.preventDefault();
     if (this.validateForm()) {
       const { email } = this.state;
-      const form = await API.post("mailing_list", {
+      await API.post("mailing_list", {
         email
       });
       this.setState({ show: false, email: "" });

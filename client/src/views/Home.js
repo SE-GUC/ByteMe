@@ -9,7 +9,7 @@ import iconDelete from "../icons/x.svg";
 import iconAdd from "../icons/plus.svg";
 import instagram from "../icons/instagram.svg";
 import twitter from "../icons/twitter.svg";
-import { Button, Modal, ModalFooter, Navbar } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import SearchBar from "../components/SearchBar";
 
@@ -69,7 +69,7 @@ class Home extends Component {
 
     const token = Auth.getToken();
 
-    const updatedPage = await API.put(
+    await API.put(
       `form/${this.state.links[0].link}`,
       {
         link
@@ -112,7 +112,7 @@ class Home extends Component {
   async delete(e) {
     e.preventDefault();
     const token = Auth.getToken();
-    const deletedMember = await API.delete(`form/${this.state.links[0]._id}`, {
+    await API.delete(`form/${this.state.links[0]._id}`, {
       headers: {
         Authorization: token
       }
@@ -306,6 +306,7 @@ class Home extends Component {
           {this.state.show ? (
             <iframe
               src={this.state.links[0].link}
+              title="iframe"
               width="640"
               height="640"
               frameborder="0"

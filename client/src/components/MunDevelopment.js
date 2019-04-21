@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Card, Button, Modal, Form, Container } from "react-bootstrap";
+import { Button, Modal, Form, Container } from "react-bootstrap";
 import "./MunDevelopment.css";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
@@ -43,7 +43,7 @@ class MunDevelopment extends Component {
     const { brief } = this.state;
     const token = Auth.getToken();
 
-    const updatedPage = await API.put(
+    await API.put(
       `mun_development/${this.props._id}`,
       {
         brief
@@ -63,14 +63,11 @@ class MunDevelopment extends Component {
     e.preventDefault();
     this.setState({ show3: false });
     const token = Auth.getToken();
-    const deletedMember = await API.delete(
-      `mun_development/${this.props._id}`,
-      {
-        headers: {
-          Authorization: token
-        }
+    await API.delete(`mun_development/${this.props._id}`, {
+      headers: {
+        Authorization: token
       }
-    ).then(res => {
+    }).then(res => {
       window.location.replace("/development");
       this.setState({ isLoading: false });
     });
@@ -114,34 +111,35 @@ class MunDevelopment extends Component {
 
     return (
       <div>
-      <Container className="development-div">
-      <div>
-      <ul><li>{brief}</li></ul>
-        {this.props.isLoggedIn &&
-          (this.props.user.mun_role === "secretary_office" ||
-          this.props.user.awg_admin === "mun" ? (
-            <div className="dod">
-              <Button
-                variant="link"
-                className="buttonP"
-                onClick={this.handleShow1}
-              >
-                <img src={iconEdit} alt="Edit page" />
-              </Button>
-              <Button
-                variant="link"
-                className="buttonP"
-                onClick={this.handleShow3}
-              >
-                <img src={iconDelete} alt="Delete page" />
-              </Button>
-            </div>
-          ) : null)}
+        <Container className="development-div">
+          <div>
+            <ul>
+              <li>{brief}</li>
+            </ul>
+            {this.props.isLoggedIn &&
+              (this.props.user.mun_role === "secretary_office" ||
+              this.props.user.awg_admin === "mun" ? (
+                <div className="dod">
+                  <Button
+                    variant="link"
+                    className="buttonP"
+                    onClick={this.handleShow1}
+                  >
+                    <img src={iconEdit} alt="Edit page" />
+                  </Button>
+                  <Button
+                    variant="link"
+                    className="buttonP"
+                    onClick={this.handleShow3}
+                  >
+                    <img src={iconDelete} alt="Delete page" />
+                  </Button>
+                </div>
+              ) : null)}
           </div>
-        <br />
-        <br />
-        
-      </Container>
+          <br />
+          <br />
+        </Container>
         <Modal show={this.state.show1} onHide={this.handleClose1} centered>
           <Modal.Header closeButton>
             <Modal.Title>Edit Development</Modal.Title>
@@ -150,7 +148,6 @@ class MunDevelopment extends Component {
           <Form.Group className="mb-3">
             <Form.Label>Description</Form.Label>
             <Form.Control
-              type="name"
               as="textarea"
               rows="5"
               type="description"
@@ -180,7 +177,7 @@ class MunDevelopment extends Component {
           </Modal.Footer>
         </Modal>
         <br />
-        </div>
+      </div>
     );
   }
 }

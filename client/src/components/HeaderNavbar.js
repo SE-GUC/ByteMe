@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Navbar, NavDropdown, Nav, Modal, Form, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import logo from "../logo.svg";
 import "../App.css";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
@@ -44,7 +43,7 @@ class HeaderNavbar extends Component {
     this.setState({ show: false });
     const { name, description, role_to_control } = this.state;
     const token = Auth.getToken();
-    const addedPage = await API.post(
+    await API.post(
       "page",
       {
         name,

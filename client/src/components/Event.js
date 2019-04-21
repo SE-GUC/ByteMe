@@ -3,14 +3,12 @@ import PropTypes from "prop-types";
 import {
   Card,
   Button,
-  Badge,
   Modal,
   ButtonGroup,
   InputGroup,
   FormControl,
   Carousel,
-  Spinner,
-  Alert
+  Spinner
 } from "react-bootstrap";
 import "./Event.css";
 import Dropzone from "react-dropzone";
@@ -67,7 +65,6 @@ class Event extends Component {
       description,
       photos,
       comments,
-      rates,
       creator,
       rating
     } = this.props;

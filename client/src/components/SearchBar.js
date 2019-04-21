@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, InputGroup, FormControl, CardDeck } from "react-bootstrap";
+import { Button, InputGroup, FormControl } from "react-bootstrap";
 import SearchResults from "./searchResults";
 import API from "../utils/API";
 
@@ -27,7 +27,7 @@ class SearchBar extends Component {
         searchkey: event.target.value,
         searchClicked: false
       });
-      if (event.target.value == "")
+      if (event.target.value === "")
         this.setState({
           // searchResults_announcementss: undefined,
           // searchResults_clubs: undefined,
@@ -111,10 +111,6 @@ class SearchBar extends Component {
       </div>
     );
   }
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export default SearchBar;

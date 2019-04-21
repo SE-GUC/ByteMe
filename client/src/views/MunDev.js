@@ -35,7 +35,7 @@ class MunDev extends Component {
     this.setState({ show2: false });
     const { brief } = this.state;
     const token = Auth.getToken();
-    const addedPhoto = await API.post(
+    await API.post(
       `mun_development/`,
       {
         brief
@@ -65,19 +65,20 @@ class MunDev extends Component {
       <div>
         <h1 style={{ color: "black", fontFamily: "GothamBook" }}>
           {" "}
-          OUR DEVELOPMENT {this.props.isLoggedIn &&
-          (this.props.user.mun_role === "secretary_office" ||
-          this.props.user.awg_admin === "mun" ? (
-            <Button
-              className="club-create-button"
-              variant="link"
-              onClick={this.handleShow}
-            >
-              <img src={iconAdd} alt="Add new Member" />
-            </Button>
-          ) : null)}
+          OUR DEVELOPMENT{" "}
+          {this.props.isLoggedIn &&
+            (this.props.user.mun_role === "secretary_office" ||
+            this.props.user.awg_admin === "mun" ? (
+              <Button
+                className="club-create-button"
+                variant="link"
+                onClick={this.handleShow}
+              >
+                <img src={iconAdd} alt="Add new Member" />
+              </Button>
+            ) : null)}
         </h1>
-      
+
         {this.state.devs.map(dev => (
           <MunDevelopment
             isLoggedIn={this.props.isLoggedIn}

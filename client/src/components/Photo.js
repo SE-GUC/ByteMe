@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Card, Button, Modal, Form ,FormGroup,
-  InputGroup,
-  FormControl } from "react-bootstrap";
+import {
+  Card,
+  Button,
+  Modal,
+  Form,
+  FormGroup,
+  FormControl
+} from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import uploaderDefaultImage from "../images/upload-icon.png";
-import productDefaultImage from "../images/product-icon.png";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 import iconDelete from "../icons/x.svg";
@@ -46,7 +50,7 @@ class Photo extends Component {
     const { title, description, pic_ref } = this.state;
     const token = Auth.getToken();
 
-    const updatedPage = await API.put(
+    await API.put(
       `gallery/${this.props._id}`,
       {
         title,
@@ -68,7 +72,7 @@ class Photo extends Component {
     e.preventDefault();
     this.setState({ show3: false });
     const token = Auth.getToken();
-    const deletedMember = await API.delete(`gallery/${this.props._id}`, {
+    await API.delete(`gallery/${this.props._id}`, {
       headers: {
         Authorization: token
       }
@@ -105,8 +109,7 @@ class Photo extends Component {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      this.state.pic_ref = reader.result;
-      this.setState({ pic_ref: this.state.pic_ref });
+      this.setState({ pic_ref: reader.result });
     };
     reader.onerror = error => {
       console.log("Error uploading image: ", error);
@@ -155,7 +158,7 @@ class Photo extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Edit Page</Modal.Title>
           </Modal.Header>
-          <br/>
+          <br />
           <Dropzone
             onDrop={acceptedFiles => this.pictureUploader(acceptedFiles[0])}
           >
@@ -177,32 +180,32 @@ class Photo extends Component {
             )}
           </Dropzone>
           <br />
-             {/* description */}
-             
-             <FormGroup className="mb-3">
-          <Form.Label>Title</Form.Label>
-              <FormControl
-                name="Title"
-                aria-label="Title"
-                defaultValue={title}
-                placeholder="Enter title"
-                onChange={e => this.setState({ title: e.target.value })}              />
-            </FormGroup>
-           
-             
-            {/* description */}
-               <FormGroup className="mb-3">
-            
-          <Form.Label>Description</Form.Label>
-              <FormControl
-                name="description"
-                as="textarea"
-                rows="2"
-                aria-label="Description"
-                defaultValue={description}
-                placeholder="Enter description"
-                onChange={e => this.setState({ description: e.target.value })}              />
-            </FormGroup>
+          {/* description */}
+
+          <FormGroup className="mb-3">
+            <Form.Label>Title</Form.Label>
+            <FormControl
+              name="Title"
+              aria-label="Title"
+              defaultValue={title}
+              placeholder="Enter title"
+              onChange={e => this.setState({ title: e.target.value })}
+            />
+          </FormGroup>
+
+          {/* description */}
+          <FormGroup className="mb-3">
+            <Form.Label>Description</Form.Label>
+            <FormControl
+              name="description"
+              as="textarea"
+              rows="2"
+              aria-label="Description"
+              defaultValue={description}
+              placeholder="Enter description"
+              onChange={e => this.setState({ description: e.target.value })}
+            />
+          </FormGroup>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={e => this.update(e)}>

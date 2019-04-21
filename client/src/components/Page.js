@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {
-  Card,
-  Button,
-  Modal,
-  ButtonGroup,
-  Form,
-  Collapse,
-  Row,
-  Col
-} from "react-bootstrap";
+import { Card, Button, Modal, Form } from "react-bootstrap";
 import "./Page.css";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
@@ -68,7 +59,7 @@ class Page extends Component {
     const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
 
-    const updatedPage = await API.put(
+    await API.put(
       `page/${secondLevelLocation}`,
       {
         name,
@@ -96,7 +87,7 @@ class Page extends Component {
     var pathArray = url.split("/");
     const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    const addedMember = await API.post(
+    await API.post(
       `page/${secondLevelLocation}/members`,
       {
         guc_id
@@ -119,7 +110,7 @@ class Page extends Component {
     var pathArray = url.split("/");
     const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    const deletedMember = await API.delete(`page/${secondLevelLocation}`, {
+    await API.delete(`page/${secondLevelLocation}`, {
       headers: {
         Authorization: token
       }
@@ -195,7 +186,6 @@ class Page extends Component {
   }
   render() {
     const { name, description, url, role_to_control } = this.props;
-    const { open } = this.state;
     return (
       <Card className="card-style">
         <Card.Img
