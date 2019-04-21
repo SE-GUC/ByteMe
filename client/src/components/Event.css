@@ -36,7 +36,16 @@
   font-family: GothamBlack;
   background-color: #ffffff;
 }
-
+.event-button-photos {
+  float: left;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  font-family: GothamBlack;
+  background-color: #ffffff;
+}
 .btn-secondary,
 .btn-secondary:hover,
 .btn-secondary:active,
