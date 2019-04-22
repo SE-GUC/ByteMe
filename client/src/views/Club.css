@@ -15,8 +15,6 @@ h1 {
   text-align: center;
 }
 
-
-
 .club-create-button {
   width: fit-content;
   position: absolute;
@@ -34,4 +32,3 @@ h1 {
   margin-bottom: 8px;
   margin-top: -8px;
 }
-

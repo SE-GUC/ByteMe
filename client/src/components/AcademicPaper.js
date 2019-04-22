@@ -66,7 +66,7 @@ class AcademicPaper extends Component {
 
             <Card.Footer>
               {" "}
-              <a href={link} target="_blank">
+              <a href={link} target="_blank" rel="noopener noreferrer">
                 View Academic Paper
               </a>
             </Card.Footer>

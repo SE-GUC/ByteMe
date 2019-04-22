@@ -109,15 +109,15 @@ class AboutUs extends Component {
           Our Achievements{" "}
           {this.props.isLoggedIn &&
             (this.props.user.mun_role === "secretary_office" ||
-              this.props.user.awg_admin === "mun" ? (
-                <Button
-                  variant="warning"
-                  className="product-create-button"
-                  onClick={this.handleShow}
-                >
-                  <img src={iconAdd} alt="Add new Member" />
-                </Button>
-              ) : null)}
+            this.props.user.awg_admin === "mun" ? (
+              <Button
+                variant="warning"
+                className="product-create-button"
+                onClick={this.handleShow}
+              >
+                <img src={iconAdd} alt="Add new Member" />
+              </Button>
+            ) : null)}
         </h1>
 
         <div className="slide-container">

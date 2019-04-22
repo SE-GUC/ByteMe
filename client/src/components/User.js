@@ -12,7 +12,7 @@ class User extends Component {
   constructor(props) {
     super(props);
 
-    console.log(`props ${props.user.last_name}`)
+    console.log(`props ${props.user.last_name}`);
     this.state = {
       user: this.props.user,
       isEditing: false,
@@ -97,14 +97,14 @@ class User extends Component {
                 )}
               </Dropzone>
             ) : (
-                <img
-                  width={128}
-                  height={128}
-                  className="mr-3"
-                  src={picture_ref ? picture_ref : defImage}
-                  alt="Display Pic"
-                />
-              )}
+              <img
+                width={128}
+                height={128}
+                className="mr-3"
+                src={picture_ref ? picture_ref : defImage}
+                alt="Display Pic"
+              />
+            )}
             <Media.Body>
               {this.state.isEditing ? (
                 <h4>
@@ -136,13 +136,13 @@ class User extends Component {
                   />
                 </h4>
               ) : (
-                  <h4>
-                    {(first_name + " " + last_name)
-                      .split(" ")
-                      .map(i => i[0].toUpperCase() + i.substring(1).toLowerCase())
-                      .join(" ")}
-                  </h4>
-                )}
+                <h4>
+                  {(first_name + " " + last_name)
+                    .split(" ")
+                    .map(i => i[0].toUpperCase() + i.substring(1).toLowerCase())
+                    .join(" ")}
+                </h4>
+              )}
             </Media.Body>
           </Media>
         </Row>
@@ -166,8 +166,8 @@ class User extends Component {
                 onChange={this.change}
               />
             ) : (
-                email
-              )}
+              email
+            )}
           </Col>
         </Row>
         <Row className="user-row">
@@ -190,8 +190,8 @@ class User extends Component {
                 onChange={this.change}
               />
             ) : (
-                birth_date.toString().split("T")[0]
-              )}
+              birth_date.toString().split("T")[0]
+            )}
           </Col>
         </Row>
         {this.state.isEditing ? (
@@ -238,8 +238,8 @@ class User extends Component {
             </Row>
           </div>
         ) : (
-            <></>
-          )}
+          <></>
+        )}
         <Row className="user-row">
           <Col className="user-header" xs={2}>
             GUC ID:
@@ -261,8 +261,8 @@ class User extends Component {
             </Col>
           </Row>
         ) : (
-            <></>
-          )}
+          <></>
+        )}
 
         {this.state.isEditing ? (
           <Form.Check
@@ -274,8 +274,8 @@ class User extends Component {
             onChange={this.change}
           />
         ) : (
-            <></>
-          )}
+          <></>
+        )}
       </Container>
     );
   }

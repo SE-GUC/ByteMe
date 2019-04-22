@@ -214,7 +214,7 @@ class Page extends Component {
     });
   }
   render() {
-    const { name, description, url, role_to_control } = this.props;
+    const { name, description, role_to_control } = this.props;
     return (
       <Card className="card-style">
         <Card.Img

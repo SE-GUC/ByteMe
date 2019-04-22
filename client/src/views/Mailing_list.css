@@ -23,7 +23,7 @@ input[type="s"] {
   float: center;
   text-align: center;
   position: center;
-  
+
   cursor: pointer;
 }
 
@@ -31,6 +31,6 @@ input[type="s"]:hover {
   background-color: #ffd700;
 }
 
-.sub{
-  text-align:center;
+.sub {
+  text-align: center;
 }

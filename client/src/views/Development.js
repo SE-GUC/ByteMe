@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import "./Development.css"
-import {
-  Button,
-  Modal, ModalFooter
-} from "react-bootstrap";
+import "./Development.css";
+import { Button, Modal, ModalFooter } from "react-bootstrap";
 import iconAdd from "../icons/pencil.svg";
 // First we create our class
 class Development extends Component {
@@ -14,17 +11,19 @@ class Development extends Component {
       user: props.user,
       canEdit: false,
       show2: false,
-      text: ''
-    }
+      text: ""
+    };
     if (this.state.user) {
-      if (this.state.user.mun_role === "secretary_office" || this.state.user.awg_admin === "mun"
+      if (
+        this.state.user.mun_role === "secretary_office" ||
+        this.state.user.awg_admin === "mun"
       ) {
         this.state.canEdit = true;
       }
     }
 
-    this.handleShow2 = this.handleShow2.bind(this)
-    this.handleClose = this.handleClose.bind(this)
+    this.handleShow2 = this.handleShow2.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
   handleClose() {
     this.setState({ show2: false });
@@ -35,36 +34,29 @@ class Development extends Component {
 
   render() {
     return (
-      <div >
-
+      <div>
         <h1 style={{ padding: "20px" }}>Our Development</h1>
-        <br></br>
+        <br />
         <div className="development">
           <p>
-            We see ourselves as representatives of the United Nations, and do our
-          best to help in development in different fields.{" "}
+            We see ourselves as representatives of the United Nations, and do
+            our best to help in development in different fields.{" "}
           </p>
         </div>
-        {
-          this.state.canEdit ? (
-            <Button
-              variant="warning"
-              className="product-create-button"
-              onClick={this.handleShow2}
-            >
-              <img src={iconAdd} alt="Add" />
-            </Button>
-          ) : (
-              <></>
-            )
-        }
-        {
-          this.state.show2 ? (<>
-            <Modal
-              show={this.state.show2}
-              onHide={this.handleClose}
-
-            >
+        {this.state.canEdit ? (
+          <Button
+            variant="warning"
+            className="product-create-button"
+            onClick={this.handleShow2}
+          >
+            <img src={iconAdd} alt="Add" />
+          </Button>
+        ) : (
+          <></>
+        )}
+        {this.state.show2 ? (
+          <>
+            <Modal show={this.state.show2} onHide={this.handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Edit Development..</Modal.Title>
               </Modal.Header>
@@ -79,16 +71,14 @@ class Development extends Component {
                 />
               </Modal.Body>
               <ModalFooter>
-                <input
-                  type="submit"
-                  onClick={this.handleClose}
-                  value="Done"
-                />
+                <input type="submit" onClick={this.handleClose} value="Done" />
               </ModalFooter>
             </Modal>
-          </>) : (<></>)
-        }
-      </div >
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
     );
   }
 }

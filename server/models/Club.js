@@ -15,7 +15,7 @@ const ClubSchema = new Schema({
   },
   banner: {
     type: String,
-    default:"false"
+    default: "false"
   },
   link: {
     type: String,

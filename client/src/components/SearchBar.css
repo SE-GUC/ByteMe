@@ -1,18 +1,17 @@
 .results-div {
-    font-family: CenturyGothic;
-    height: 150px;
-    overflow-y: scroll;
-    text-align: center;
-    overflow: hidden;
-    margin: 2%;
-    background-color: #ededed;
-  }
-  
+  font-family: CenturyGothic;
+  height: 150px;
+  overflow-y: scroll;
+  text-align: center;
+  overflow: hidden;
+  margin: 2%;
+  background-color: #ededed;
+}
+
 .results-div:hover {
-    overflow-y: scroll;
-  }
+  overflow-y: scroll;
+}
 
 .padded {
   padding: 0.5%;
 }
-

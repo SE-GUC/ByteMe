@@ -15,12 +15,9 @@ module.exports = {
   updateValidation: request => {
     const updateSchema = {
       name: Joi.string(),
-      description: Joi.string()
-      ,
-      banner: Joi.string()
-       ,
+      description: Joi.string(),
+      banner: Joi.string(),
       link: Joi.string()
-      
     };
 
     return Joi.validate(request, updateSchema);

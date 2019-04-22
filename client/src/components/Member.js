@@ -81,7 +81,6 @@ class Member extends Component {
       birth_date,
       guc_id,
       picture_ref,
-      mun_role,
       url,
       role_to_control,
       page_name

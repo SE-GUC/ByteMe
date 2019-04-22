@@ -46,8 +46,8 @@ class PortalLibrary extends Component {
     }
 
     this.changeSearchKey = event => {
-      this.setState({ searchKey: event.target.value })
-    }
+      this.setState({ searchKey: event.target.value });
+    };
 
     this.search = () => {
       try {
@@ -58,7 +58,7 @@ class PortalLibrary extends Component {
       } catch (e) {
         console.log(`😱 Axios request failed: ${e}`);
       }
-    }
+    };
   }
   // The render function, where we actually tell the browser what it should show
   render() {
@@ -97,7 +97,8 @@ class PortalLibrary extends Component {
           {this.state.isLoading ? <Spinner animation="border" /> : ""}
         </h1>
         <div className="papers">
-          <Tabs className="lib-tabs"
+          <Tabs
+            className="lib-tabs"
             id="controlled-tab-library"
             activeKey={this.state.key}
             onSelect={key => {
@@ -120,10 +121,10 @@ class PortalLibrary extends Component {
                 <img src={iconAdd} alt="Create new Paper" />
               </Button>
             ) : (
-                <></>
-              )}
-            {this.state.academicPapers.map(paper => (
-              paper.year == this.state.key || this.state.key === "all" ?
+              <></>
+            )}
+            {this.state.academicPapers.map(paper =>
+              paper.year === this.state.key || this.state.key === "all" ? (
                 <AcademicPaper
                   id={paper._id}
                   name={paper.name}
@@ -132,8 +133,11 @@ class PortalLibrary extends Component {
                   year={paper.year}
                   updatePapers={this.updatePapers}
                   canEdit={this.state.canEdit}
-                /> : <></>
-            ))}
+                />
+              ) : (
+                <></>
+              )
+            )}
           </CardDeck>
         </div>
         {/* CREATE MODAL */}
@@ -197,8 +201,8 @@ class PortalLibrary extends Component {
               {this.state.isLoading ? (
                 <Spinner animation="border" />
               ) : (
-                  "Add Paper"
-                )}
+                "Add Paper"
+              )}
             </Button>
           </Modal.Footer>
         </Modal>

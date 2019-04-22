@@ -2,7 +2,6 @@
 import { Navbar, Modal, Nav } from "react-bootstrap";
 import React, { Component } from "react";
 
-
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -283,7 +282,9 @@ class App extends Component {
                 style={{ margin: "1%" }}
               />
             </Nav>
-            <Nav style={{ color: "black", margin: "1%", fontSize:"50%" }}>Easter Egg</Nav>
+            <Nav style={{ color: "black", margin: "1%", fontSize: "50%" }}>
+              Easter Egg
+            </Nav>
             {this.state.show ? (
               <Nav>
                 <Modal

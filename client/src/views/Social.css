@@ -1,11 +1,11 @@
 .social {
-  float:  none !important;
+  float: none !important;
   display: flex;
   flex-direction: row;
 }
 
-.social-div{
-  width:30%;
+.social-div {
+  width: 30%;
   margin: 3%;
   padding: 1%;
 }

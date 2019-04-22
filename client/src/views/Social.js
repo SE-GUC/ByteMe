@@ -20,7 +20,8 @@ class Social extends Component {
             sourceType="profile"
             screenName="gucmun"
             options={{ height: 580, width: 350 }}
-          /></div>
+          />
+        </div>
 
         <div className="social-div">
           <div id="fb-root" />
@@ -41,7 +42,7 @@ class Social extends Component {
             >
               <a href="https://www.facebook.com/GUCMUN">
                 German University in Cairo Model United Nations (GUCMUN)
-            </a>
+              </a>
             </blockquote>
           </div>
         </div>
@@ -50,7 +51,7 @@ class Social extends Component {
   }
 
   async componentDidMount() {
-    window.fbAsyncInit = function () {
+    window.fbAsyncInit = function() {
       FB.init({
         appId: "390253315039099",
         xfbml: true,
@@ -59,7 +60,7 @@ class Social extends Component {
       FB.XFBML.parse();
     };
 
-    (function (d, s, id) {
+    (function(d, s, id) {
       var js,
         fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {
