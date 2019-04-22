@@ -2,7 +2,9 @@
 
 
 # Deployment Link 
-https://gucmun-front.herokuapp.com/
+- GUCMUN: gucmun.me
+- Hub: hub.gucmun.me
+- back: https://gucmun-back.herokuapp.com/
 
 
 ## An AWG Platform implementation for the GUC and a portal for GUCMUN
