@@ -239,25 +239,28 @@ class Home extends Component {
         </Timeline>
         <div className="register">
           {this.props.isLoggedIn &&
-          (this.props.user.mun_role === "secretary_office" ||
-            this.props.user.awg_admin === "mun") &&
-          this.state.links[0] ? (
-            <Button
-              variant="warning"
-              className="buttonP"
-              onClick={this.handleShow3}
-            >
-              <img src={iconDelete} alt="Delete page" />
-            </Button>
-          ) : (
-            <Button
-              variant="warning"
-              className="buttonP"
-              onClick={this.handleShow2}
-            >
-              <img src={iconAdd} alt="Add new Member" />
-            </Button>
-          )}
+            (this.props.user.mun_role === "secretary_office" ||
+            this.props.user.awg_admin === "mun" ? (
+              <div>
+                {this.state.links[0] ? (
+                  <Button
+                    variant="warning"
+                    className="buttonP"
+                    onClick={this.handleShow3}
+                  >
+                    <img src={iconDelete} alt="Delete page" />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="warning"
+                    className="buttonP"
+                    onClick={this.handleShow2}
+                  >
+                    <img src={iconAdd} alt="Add new Member" />
+                  </Button>
+                )}
+              </div>
+            ) : null)}
 
           {this.state.links.map(link => (
             <input
