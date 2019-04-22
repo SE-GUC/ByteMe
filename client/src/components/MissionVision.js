@@ -86,7 +86,7 @@ class MissionVision extends Component {
             <div className="dod">
               <Button
                 variant="warning"
-                className="club-create-button"
+                className="product-create-button"
                 onClick={this.handleShow1}
               >
                 <img src={iconEdit} alt="Edit page" />

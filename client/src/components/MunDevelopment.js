@@ -121,14 +121,14 @@ class MunDevelopment extends Component {
               this.props.user.awg_admin === "mun" ? (
                 <div className="dod">
                   <Button
-                    variant="link"
+                    variant="info"
                     className="buttonP"
                     onClick={this.handleShow1}
                   >
                     <img src={iconEdit} alt="Edit page" />
                   </Button>
                   <Button
-                    variant="link"
+                    variant="danger"
                     className="buttonP"
                     onClick={this.handleShow3}
                   >

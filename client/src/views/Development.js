@@ -47,10 +47,10 @@ class Development extends Component {
         {  this.state.canEdit ? (
               <Button
                 variant="warning"
-                className="club-create-button"
+                className="product-create-button"
                 onClick={this.handleShow2}
               >
-                <img src={iconAdd} alt="Add club" />
+                <img src={iconAdd} alt="Add" />
               </Button>
             ) : (
               <></>

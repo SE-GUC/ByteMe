@@ -70,8 +70,8 @@ class MunDev extends Component {
             (this.props.user.mun_role === "secretary_office" ||
             this.props.user.awg_admin === "mun" ? (
               <Button
-                className="club-create-button"
-                variant="link"
+                className="product-create-button"
+                variant="warning"
                 onClick={this.handleShow}
               >
                 <img src={iconAdd} alt="Add new Member" />

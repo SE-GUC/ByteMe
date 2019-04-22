@@ -112,7 +112,7 @@ class AboutUs extends Component {
             this.props.user.awg_admin === "mun" ? (
               <Button
                 variant="warning"
-                className="club-create-button"
+                className="product-create-button"
                 onClick={this.handleShow}
               >
                 <img src={iconAdd} alt="Add new Member" />
@@ -135,50 +135,6 @@ class AboutUs extends Component {
           </Slide>
         </div>
         <div>
-          {/* <Modal show={this.state.show} onHide={this.handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>ADD PHOTO</Modal.Title>
-            </Modal.Header>
-            <Dropzone
-              onDrop={acceptedFiles => this.pictureUploader(acceptedFiles[0])}
-            >
-              {({ getRootProps, getInputProps }) => (
-                <section>
-                  <div {...getRootProps()}>
-                    <input {...getInputProps()} />
-                    <img
-                      className="product-picture-picker"
-                      src={
-                        this.state.pic_ref
-                          ? this.state.pic_ref
-                          : uploaderDefaultImage
-                      }
-                      alt="Product"
-                    />
-                  </div>
-                </section>
-              )}
-            </Dropzone>
-            <br />
-
-            <Form.Group controlId="editedPage">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows="10"
-                type="description"
-                placeholder="Enter description"
-                value={this.state.description}
-                onChange={e => this.setState({ description: e.target.value })}
-              />
-            </Form.Group>
-
-            <Modal.Footer>
-              <Button variant="secondary" onClick={e => this.add(e)}>
-                ADD
-              </Button>
-            </Modal.Footer>
-                    </Modal>*/}
           <Modal show={this.state.show} onHide={this.handleClose} centered>
             <Modal.Header closeButton>
               <Modal.Title>Add Achievement</Modal.Title>

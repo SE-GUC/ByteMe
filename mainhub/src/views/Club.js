@@ -1,81 +1,85 @@
-import React, { Component } from "react";
-import AWG from "../components/AWG";
-import "./Club.css";
-import API from "../utils/API";
+import React, { Component } from 'react'
+import AWG from '../components/AWG'
+import './Club.css'
+import API from '../utils/API'
 import {
   Button,
   Modal,
   InputGroup,
   FormControl,
   Spinner,
-  CardDeck,
-  CardGroup
+  CardDeck
 } from "react-bootstrap";
+import iconAdd from "../icons/plus.svg";
 import uploaderDefaultImage from "../images/upload-icon.png";
 import Dropzone from "react-dropzone";
 import Auth from "../utils/Auth";
 // First we create our class
 class Club extends Component {
   // Then we add our constructor which receives our props
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     // Next we establish our state
-
-    this.updateClub = this.updateClub.bind(this);
-    this.handleCreateShow = this.handleCreateShow.bind(this);
-    this.handleCreateClose = this.handleCreateClose.bind(this);
-    this.change = this.change.bind(this);
-    this.pictureUploader = this.pictureUploader.bind(this);
+    
+    this.updateClub = this.updateClub.bind(this)
+    this.handleCreateShow = this.handleCreateShow.bind(this)
+    this.handleCreateClose = this.handleCreateClose.bind(this)
+    this.change = this.change.bind(this)
+    this.pictureUploader = this.pictureUploader.bind(this)
     this.state = {
       isLoading: true,
       clubs: [],
       user: props.user,
       canEdit: false,
       showAddClubWindow: false,
-      newClub: {}
-    };
+      newClub: {
+
+      }
+    }
     if (this.state.user) {
-      if (this.state.user.is_admin) {
+      if (
+        this.state.user.is_admin 
+      ) {
         this.state.canEdit = true;
       }
     }
   }
   // The render function, where we actually tell the browser what it should show
-  render() {
+  render () {
     return (
       <div>
-        <h1 style={{ margin: "15px" }}>
-          AWGs {this.state.isLoading ? <Spinner animation="border" /> : ""}
-        </h1>
-
-        {this.state.canEdit ? (
-          <Button
-            variant="warning"
-            // className="club-create-button"
-            onClick={this.handleCreateShow}
-          >
-            Add Club
-          </Button>
-        ) : (
-          <></>
-        )}
-        <br />
-        <CardGroup>
-          {this.state.clubs.map(A => (
-            <AWG
-              id={A._id}
-              name={A.name}
-              description={A.description}
-              banner={A.banner}
-              link={A.link}
-              updateClub={this.updateClub}
-              canEdit={this.state.canEdit}
-            />
-          ))}
-        </CardGroup>
-
-        {/* CREATE MODAL */}
-        <Modal
+          <h1 style={{ margin: "15px" }}>AWGs    {this.state.canEdit ? (
+              <Button
+                variant="warning"
+                className="club-create-button"
+                onClick={this.handleCreateShow}
+              >
+                <img src={iconAdd} alt="Add club" />
+              </Button>
+              
+            ) : (
+              <></>
+            )}</h1>  
+        <div className="clubs">
+        
+        <div className="clubs-group">
+      
+            {this.state.clubs.map(A => (
+              <AWG
+                id={A._id}
+                name={A.name}
+                description={A.description}
+                banner={A.banner}
+                link={A.link}
+                updateClub={this.updateClub}
+                canEdit={this.state.canEdit}
+              />
+            ))}
+     
+          </div>
+        </div>
+         {/* CREATE MODAL */}
+         <Modal
           show={this.state.showAddClubWindow}
           onHide={this.handleCreateClose}
           centered
@@ -114,7 +118,7 @@ class Club extends Component {
                 aria-label="Club Name"
               />
             </InputGroup>
-
+          
             {/* description */}
             <InputGroup className="mb-3">
               <FormControl
@@ -125,8 +129,8 @@ class Club extends Component {
                 placeholder="Club description"
                 aria-label="Club description"
               />
-            </InputGroup>
-            {/* price */}
+              </InputGroup>
+               {/* price */}
             <InputGroup className="mb-3">
               <FormControl
                 name="link"
@@ -153,7 +157,7 @@ class Club extends Component {
           </Modal.Footer>
         </Modal>
       </div>
-    );
+    )
   }
   async componentDidMount() {
     this.updateClub();
@@ -161,7 +165,9 @@ class Club extends Component {
   async componentWillReceiveProps(props) {
     this.setState({ user: props.user });
     if (this.state.user) {
-      if (this.state.user.is_admin) {
+      if (
+        this.state.user.is_admin
+      ) {
         this.setState({ canEdit: true });
       }
     }
@@ -217,5 +223,6 @@ class Club extends Component {
     }
   }
 }
+  
 
-export default Club;
+export default Club
