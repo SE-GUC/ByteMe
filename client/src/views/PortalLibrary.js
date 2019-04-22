@@ -48,7 +48,10 @@ class PortalLibrary extends Component {
   render() {
     return (
       <div>
-        <h1 style={{ margin: "15px" }}>Portal Library</h1>
+        <h1 style={{ margin: "15px" }}>
+          Portal Library{" "}
+          {this.state.isLoading ? <Spinner animation="border" /> : ""}
+        </h1>
         <div className="papers">
           <Tabs
             id="controlled-tab-library"

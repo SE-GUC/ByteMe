@@ -53,7 +53,10 @@ class Merchandise extends Component {
   render() {
     return (
       <div>
-        <h1 style={{ margin: "15px" }}>GUCMUN SWAG</h1>
+        <h1 style={{ margin: "15px" }}>
+          GUCMUN SWAG{" "}
+          {this.state.isLoading ? <Spinner animation="border" /> : ""}
+        </h1>
         <div className="merchandise">
           <CardDeck className="product-group">
             {this.state.canEdit ? (
