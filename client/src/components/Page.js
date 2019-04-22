@@ -22,9 +22,14 @@ class Page extends Component {
       description: "",
       role_to_control: "",
       guc_id: "",
+      role: "",
       checked1: false,
       checked2: false,
-      checked3: false
+      checked3: false,
+      checked4: false,
+
+      checked5: false,
+      checked6: false
     };
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -41,6 +46,10 @@ class Page extends Component {
     this.one = this.one.bind(this);
     this.two = this.two.bind(this);
     this.three = this.three.bind(this);
+    this.four = this.four.bind(this);
+
+    this.five = this.five.bind(this);
+    this.six = this.six.bind(this);
 
     this.handleUpdate = this.handleUpdate.bind(this);
     this.update = this.update.bind(this);
@@ -51,7 +60,7 @@ class Page extends Component {
   handleUpdate = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  async update(e, url) {
+  async update(e) {
     e.preventDefault();
     this.setState({ show1: false });
     const { name, description, role_to_control } = this.state;
@@ -78,13 +87,13 @@ class Page extends Component {
   handleAdd = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  async add(e, url) {
+  async add(e) {
     e.preventDefault();
     this.setState({ show2: false });
-    const { guc_id } = this.state;
+    const { guc_id, role } = this.state;
     const token = Auth.getToken();
     await API.post(
-      `page/${this.props._id}/members`,
+      `page/${this.props._id}/members/${role}`,
       {
         guc_id
       },
@@ -100,7 +109,7 @@ class Page extends Component {
     });
   }
 
-  async delete(e, url) {
+  async delete(e) {
     e.preventDefault();
     this.setState({ show3: false });
     const token = Auth.getToken();
@@ -159,6 +168,7 @@ class Page extends Component {
       checked1: true,
       checked2: false,
       checked3: false,
+      checked4: false,
       role_to_control: "council"
     });
   }
@@ -167,6 +177,7 @@ class Page extends Component {
       checked1: false,
       checked2: true,
       checked3: false,
+      checked4: false,
       role_to_control: "committee"
     });
   }
@@ -175,7 +186,31 @@ class Page extends Component {
       checked1: false,
       checked2: false,
       checked3: true,
+      checked4: false,
       role_to_control: "office"
+    });
+  }
+  four() {
+    this.setState({
+      checked1: false,
+      checked2: false,
+      checked3: false,
+      checked4: true,
+      role_to_control: "general_assembly"
+    });
+  }
+  five() {
+    this.setState({
+      checked5: true,
+      checked6: false,
+      role: `${this.props.name}`
+    });
+  }
+  six() {
+    this.setState({
+      checked5: false,
+      checked6: true,
+      role: `${this.props.name}_member`
     });
   }
   render() {
@@ -195,21 +230,21 @@ class Page extends Component {
             this.props.user.mun_role === name ? (
               <div className="dod">
                 <Button
-                  variant="link"
+                  variant="info"
                   className="buttonP"
                   onClick={this.handleShow2}
                 >
                   <img src={iconAdd} alt="Add new Member" />
                 </Button>
                 <Button
-                  variant="link"
+                  variant="warning"
                   className="buttonP"
                   onClick={this.handleShow1}
                 >
                   <img src={iconEdit} alt="Edit page" />
                 </Button>
                 <Button
-                  variant="link"
+                  variant="danger"
                   className="buttonP"
                   onClick={this.handleShow3}
                 >
@@ -245,7 +280,7 @@ class Page extends Component {
           </Modal.Header>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.delete(e, url)}>
+            <Button variant="secondary" onClick={e => this.delete(e)}>
               Delete
             </Button>
           </Modal.Footer>
@@ -263,8 +298,29 @@ class Page extends Component {
               onChange={e => this.setState({ guc_id: e.target.value })}
             />
           </Form.Group>
+          <Form.Label>Set his role</Form.Label>
+          <Form.Check
+            className="cbx"
+            inline
+            name="c"
+            id="1"
+            label="Head"
+            type="radio"
+            checked={this.state.checked5}
+            onChange={this.five}
+          />
+          <Form.Check
+            className="cbx"
+            inline
+            name="com"
+            id="2"
+            label="Member"
+            type="radio"
+            checked={this.state.checked6}
+            onChange={this.six}
+          />
           <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.add(e, url)}>
+            <Button variant="secondary" onClick={e => this.add(e)}>
               ADD
             </Button>
           </Modal.Footer>
@@ -316,6 +372,16 @@ class Page extends Component {
                 checked={this.state.checked3}
                 onChange={this.three}
               />
+              <Form.Check
+                className="cbx"
+                inline
+                name="o"
+                id="3"
+                label="General Aseembly"
+                type="radio"
+                checked={this.state.checked4}
+                onChange={this.four}
+              />
             </Form.Group>
             <br />
             <br />
@@ -330,7 +396,7 @@ class Page extends Component {
           </Form.Group>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.update(e, url)}>
+            <Button variant="secondary" onClick={e => this.update(e)}>
               Edit
             </Button>
           </Modal.Footer>
