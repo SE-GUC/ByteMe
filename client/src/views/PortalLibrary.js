@@ -124,7 +124,7 @@ class PortalLibrary extends Component {
               <></>
             )}
             {this.state.academicPapers.map(paper =>
-              paper.year === this.state.key || this.state.key === "all" ? (
+              paper.year == this.state.key || this.state.key === "all" ? (
                 <AcademicPaper
                   id={paper._id}
                   name={paper.name}
