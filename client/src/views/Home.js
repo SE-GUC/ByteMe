@@ -187,17 +187,7 @@ class Home extends Component {
                 />
               ))}
             </Timeline>
-            {this.props.isLoggedIn &&
-              (this.props.user.mun_role === "secretary_office" ||
-              this.props.user.awg_admin === "mun" ? (
-                <Button
-                  variant="warning"
-                  className="buttonP"
-                  onClick={this.handleShow1}
-                >
-                  Give admin
-                </Button>
-              ) : null)}
+           
 
             <div className="register">
               {this.props.isLoggedIn &&
