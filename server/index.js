@@ -12,9 +12,13 @@ const announcements = require("./routes/api/announcements");
 const clubs = require("./routes/api/clubs");
 const product = require("./routes/api/products");
 const search = require("./routes/api/search");
-const forms = require('./routes/api/forms')
-
-const subscribers = require('./routes/api/subscribers')
+const forms = require("./routes/api/forms");
+const form = require("./routes/api/form");
+const achievement = require("./routes/api/achievement");
+const gallery = require("./routes/api/gallery");
+const mission_vision = require("./routes/api/mission_vision");
+const mun_development = require("./routes/api/mun_development");
+const subscribers = require("./routes/api/subscribers");
 const app = express();
 
 // DB Config
@@ -66,8 +70,13 @@ app.use("/api/announcements", announcements);
 app.use("/api/clubs", clubs);
 app.use("/api/products", product);
 app.use("/api/search", search);
-app.use('/api/forms', forms)
-app.use('/api/subscribers', subscribers)
+app.use("/api/forms", forms);
+app.use("/api/form", form);
+app.use("/api/achievement", achievement);
+app.use("/api/gallery", gallery);
+app.use("/api/mission_vision", mission_vision);
+app.use("/api/mun_development", mun_development);
+app.use("/api/subscribers", subscribers);
 app.use((req, res) =>
   res.status(404).send(`<h1>Can not find what you're looking for</h1>`)
 );

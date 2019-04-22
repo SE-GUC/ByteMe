@@ -1,7 +1,7 @@
 const { SMTP_URL } = process.env;
 const nodemailer = require("nodemailer");
 var smtpTransport = require("nodemailer-smtp-transport");
-const defaultEmailData = {to: "GUCMUN@gucmun.me"};
+const defaultEmailData = { to: "gucmun2019@gmail.com" };
 const sendEmail = (emailData, smtpUrl = SMTP_URL) => {
   const completeEmailData = Object.assign(defaultEmailData, emailData);
   const transporter = nodemailer.createTransport(

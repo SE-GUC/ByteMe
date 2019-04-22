@@ -1,8 +1,8 @@
 .delete-button {
-  float: right;          
-    border-radius: 50px !important; 
-   
-  }
+  float: right;
+  border-radius: 50px !important;
+}
 
-
-
+.contain {
+  font-family: CenturyGothic;
+}

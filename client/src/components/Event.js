@@ -3,14 +3,12 @@ import PropTypes from "prop-types";
 import {
   Card,
   Button,
-  Badge,
   Modal,
   ButtonGroup,
   InputGroup,
   FormControl,
   Carousel,
-  Spinner,
-  Alert
+  Spinner
 } from "react-bootstrap";
 import "./Event.css";
 import Dropzone from "react-dropzone";
@@ -21,6 +19,8 @@ import eventDefaultImage from "../images/event-icon.png";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 import StarRatings from "react-star-ratings";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
 
 class Event extends Component {
   constructor(props, context) {
@@ -29,7 +29,6 @@ class Event extends Component {
     this.handleDeleteClose = this.handleDeleteClose.bind(this);
     this.handleEditShow = this.handleEditShow.bind(this);
     this.handleEditClose = this.handleEditClose.bind(this);
-
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
@@ -40,7 +39,10 @@ class Event extends Component {
       showEditWindow: false,
       editedEvent: {},
       canEdit: props.canEdit,
-      newComment: ""
+      newPhotos: [],
+      newComment: "",
+      isOpen: false,
+      photoIndex: 0
     };
   }
 
@@ -63,24 +65,41 @@ class Event extends Component {
       description,
       photos,
       comments,
-      rates,
       creator,
       rating
     } = this.props;
 
-    console.log(comments + "coms")
-
     return (
       <div>
+        {this.state.isOpen && (
+          <Lightbox
+            mainSrc={photos[this.state.photoIndex].link}
+            nextSrc={photos[(this.state.photoIndex + 1) % photos.length].link}
+            prevSrc={
+              photos[
+                (this.state.photoIndex + photos.length - 1) % photos.length
+              ].link
+            }
+            onCloseRequest={() => this.setState({ isOpen: false })}
+            onMovePrevRequest={() =>
+              this.setState({
+                photoIndex:
+                  (this.state.photoIndex + photos.length - 1) % photos.length
+              })
+            }
+            onMoveNextRequest={() =>
+              this.setState({
+                photoIndex: (this.state.photoIndex + 1) % photos.length
+              })
+            }
+          />
+        )}
         <Card
           className="text-center"
-          // bg="warning"
-          text="white"
           style={{
             width: "18rem",
-            backgroundColor: "#003255",
             margin: "10px",
-            height: "35rem"
+            borderColor: "#ffd700"
           }}
         >
           <Card.Header className="event-title">{title}</Card.Header>
@@ -113,6 +132,7 @@ class Event extends Component {
                     className="d-block w-100"
                     src={eventDefaultImage}
                     alt="No Photos"
+                    height="150rem"
                   />
                 </Carousel.Item>
               </Carousel>
@@ -126,6 +146,7 @@ class Event extends Component {
                       className="d-block w-100"
                       src={p.link}
                       alt="Event Photos"
+                      height="150rem"
                     />
                   </Carousel.Item>
                 ))}
@@ -151,16 +172,29 @@ class Event extends Component {
                 <p style={{ color: "#ffd700" }}>Not Rated</p>
               )}
             </Card.Subtitle>
-            <Card.Text className="mb-2 text-muted">{description}</Card.Text>
+            <Card.Text className="event-description">{description}</Card.Text>
           </Card.Body>
           <Card.Footer>
             <Button
               variant="secondary"
+              style={{ color: "#ffd700" }}
               className="event-button"
               onClick={this.handleShow}
             >
               View details
             </Button>
+            {photos.length === 0 ? (
+              <></>
+            ) : (
+              <Button
+                variant="secondary"
+                style={{ color: "#ffd700" }}
+                className="event-button-photos"
+                onClick={() => this.setState({ isOpen: true })}
+              >
+                View photos
+              </Button>
+            )}
           </Card.Footer>
 
           <Modal show={this.state.show} onHide={this.handleClose} centered>
@@ -169,7 +203,7 @@ class Event extends Component {
             </Modal.Header>
             <Modal.Body>
               <h4>Description</h4>
-              <h5 style={{ color: "#003255" }}>{description}</h5>
+              <h5>{description}</h5>
               <h4>Location</h4>
               <h5>{location}</h5>
               <h4>Date</h4>
@@ -271,27 +305,48 @@ class Event extends Component {
             <Modal.Title>Edit event</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {photos.length === 0 ? (
+              <></>
+            ) : (
+              <>
+                {photos.map(p => (
+                  <>
+                    <img
+                      className="eventt-picture-picker"
+                      src={p.link}
+                      alt="Event Photos"
+                    />
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      // className="event-delete-button"
+                      onClick={() => this.deletePhoto(_id, p._id)}
+                    >
+                      Delete Photo
+                    </Button>
+                  </>
+                ))}
+              </>
+            )}
             {/* image */}
-            {/* <Dropzone
-              onDrop={acceptedFiles => this.pictureUploader(acceptedFiles[0])}
+            <Dropzone
+              onDrop={acceptedFiles =>
+                acceptedFiles.forEach(a => this.pictureUploader(a))
+              }
             >
               {({ getRootProps, getInputProps }) => (
                 <section>
                   <div {...getRootProps()}>
                     <input {...getInputProps()} />
                     <img
-                      className="event-picture-picker"
-                      src={
-                        this.state.editedPhotos.photos
-                          ? this.state.editedPhotos.photos
-                          : uploaderDefaultImage
-                      }
-                      alt="Event"
+                      className="eventt-picture-picker"
+                      src={uploaderDefaultImage}
+                      alt="Event Photos"
                     />
                   </div>
                 </section>
               )}
-            </Dropzone> */}
+            </Dropzone>
             {/* Title */}
             <h6>Event Title</h6>
             <InputGroup className="mb-3">
@@ -391,7 +446,13 @@ class Event extends Component {
             </Button>
             <Button
               variant="success"
-              onClick={() => this.editEvent(_id, this.state.editedEvent)}
+              onClick={() =>
+                this.editEvent(
+                  _id,
+                  this.state.editedEvent,
+                  this.state.newPhotos
+                )
+              }
             >
               {this.state.isLoading ? (
                 <Spinner animation="border" />
@@ -446,6 +507,25 @@ class Event extends Component {
       console.log(`😱 Axios request failed: ${e}`);
     }
   }
+  deletePhoto(event_id, photo_id) {
+    try {
+      this.setState({ isLoading: true });
+      const token = Auth.getToken();
+      const headers = {
+        Authorization: `${token}`
+      };
+      API.delete(`events/${event_id}/${photo_id}/deletephoto`, {
+        headers
+      }).then(res => {
+        this.setState({ isLoading: false });
+        this.handleEditClose();
+        this.props.updateEvents();
+        // this.handleDeleteClose();
+      });
+    } catch (e) {
+      console.log(`😱 Axios request failed: ${e}`);
+    }
+  }
   commentEvent(_id, newComment) {
     try {
       this.setState({ isLoading: true });
@@ -479,9 +559,9 @@ class Event extends Component {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      const editedEvent = this.state.editedEvent;
-      editedEvent.photos = reader.result;
-      this.setState({ editedEvent: editedEvent });
+      const newPhotos = this.state.newPhotos;
+      newPhotos.push(reader.result);
+      this.setState({ newPhotos: newPhotos });
     };
     reader.onerror = error => {
       console.log("Error uploading image: ", error);
@@ -494,9 +574,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -509,9 +586,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -524,9 +598,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -539,9 +610,6 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
@@ -554,29 +622,41 @@ class Event extends Component {
         this.handleClose();
         this.props.updateEvents();
         this.setState({ isLoading: false });
-        // return (
-        //   <Alert variant="success">You rated this event with 1 star</Alert>
-        // );
       });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
   }
-  editEvent(_id, editedEvent) {
+  async editEvent(_id, editedEvent, newPhotos) {
+    this.setState({ isLoading: true });
+    const token = Auth.getToken();
+    const headers = {
+      Authorization: `${token}`
+    };
     try {
-      this.setState({ isLoading: true });
-      const token = Auth.getToken();
-      const headers = {
-        Authorization: `${token}`
-      };
-      API.put(`events/${_id}`, editedEvent, { headers }).then(res => {
-        this.props.updateEvents();
-        this.setState({ isLoading: false });
-        this.handleEditClose();
-      });
+      await API.put(`events/${_id}`, editedEvent, { headers });
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
+
+    try {
+      newPhotos.map(
+        async p =>
+          await API.post(
+            `events/${_id}/addphoto`,
+            { link: `${p}` },
+            {
+              headers
+            }
+          )
+      );
+    } catch (e) {
+      console.log(`😱 Axios request failed: ${e}`);
+    }
+
+    this.props.updateEvents();
+    this.setState({ isLoading: false });
+    this.handleEditClose();
   }
   async componentWillReceiveProps(props) {
     this.setState({ canEdit: props.canEdit });

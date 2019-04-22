@@ -77,7 +77,7 @@ router.post(
 );
 //5) add member to the page by secretary_office/executive member controlling it/one of the page's heads
 router.post(
-  "/:id/members",
+  "/:id/members/:role",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
@@ -96,6 +96,7 @@ router.post(
       }
 
       const guc_id = req.body.guc_id;
+      const role = req.params.role;
       const user = await User.findOne({ guc_id: guc_id });
       if (!user)
         return res.json({ msg: "A student with this id does not exists" });
@@ -113,7 +114,7 @@ router.post(
       ).exec();
       await User.updateOne(
         { guc_id: guc_id },
-        { mun_role: `${page.name}_member` },
+        { mun_role: role },
         { upsert: false }
       );
       var page1 = await Page.findById(id);
@@ -179,12 +180,18 @@ router.put(
       if (isValidated.error)
         return res.json({ message: "validations not satisfied" });
 
-      await User.update(
+      await Event.updateMany(
+        { creator: page.name },
+        { creator: req.body.name },
+        { upsert: false }
+      );
+
+      await User.updateMany(
         { mun_role: page.name },
         { mun_role: req.body.name },
         { upsert: false }
       );
-      await User.updateOne(
+      await User.updateMany(
         { mun_role: `${page.name}_member` },
         { mun_role: `${req.body.name}_member` },
         { upsert: false }
@@ -220,12 +227,12 @@ router.delete(
           msg: "Only admins can delete this entity"
         });
 
-      await User.update(
+      await User.updateMany(
         { mun_role: page.name },
         { mun_role: "none" },
         { upsert: false }
       );
-      await User.updateOne(
+      await User.updateMany(
         { mun_role: `${page.name}_member` },
         { mun_role: "none" },
         { upsert: false }
@@ -236,6 +243,30 @@ router.delete(
       // We will be handling the error later
       console.log(error);
     }
+  }
+);
+
+router.put(
+  "/give_admin/:guc_id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const userOne = req.user;
+
+    const guc_id = req.params.guc_id;
+    const user = await User.findOne({ guc_id: guc_id });
+
+    if (!user)
+      return res.json({ msg: "A member with this id does not exists" });
+
+    if (userOne.mun_role === "secretary_office" || userOne.awg_admin === "mun")
+      await User.updateOne(
+        { guc_id: guc_id },
+        { mun_role: req.body.role },
+        { upsert: false }
+      );
+
+    const updatedUser = await User.findOne({ guc_id: guc_id });
+    return res.json({ msg: "updated!", user: updatedUser });
   }
 );
 

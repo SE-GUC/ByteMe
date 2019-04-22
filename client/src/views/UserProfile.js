@@ -8,8 +8,6 @@ import User from "../components/User";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
 
-import LoadingGif from "../images/Loading.gif"
-
 import "./UserProfile.css";
 
 const queryString = require("query-string");
@@ -57,18 +55,25 @@ class UserProfile extends Component {
           .catch(err => {
             console.log(err.response);
             if (err.response.data)
-              this.setState({ editingErr: err.response.data.error, editLoading: false });
+              this.setState({
+                editingErr: err.response.data.error,
+                editLoading: false
+              });
             else {
               if (err.response.status === 413)
                 this.setState({
                   editingErr:
                     "That image is too large, try an image that is below 5MB"
                 });
-              else this.setState({ editingErr: err.message, editLoading: false });
+              else
+                this.setState({ editingErr: err.message, editLoading: false });
             }
           });
       } else {
-        this.setState({ editingErr: "Passwords Don't Match", editLoading: false });
+        this.setState({
+          editingErr: "Passwords Don't Match",
+          editLoading: false
+        });
       }
     };
 
@@ -79,10 +84,10 @@ class UserProfile extends Component {
     this.delete = () => {
       const prompts = [
         `Deleting ${
-        this.props.location.search === "" ? "your" : "this"
+          this.props.location.search === "" ? "your" : "this"
         } profile is permanent. There is no going back!`,
         `This means ${
-        this.props.location.search === "" ? "leaving" : "removing"
+          this.props.location.search === "" ? "leaving" : "removing"
         } forever!`,
         "Are you absolutely 100% certain you want this?"
       ];
@@ -170,76 +175,75 @@ class UserProfile extends Component {
       <Alert variant="danger"> {this.state.err} </Alert>
     ) : this.state.user ? (
       this.props.user &&
-        (this.props.user.is_admin ||
-          this.props.user.guc_id === this.state.user.guc_id) ? (
-          <>
-            {this.state.editingErr !== "" ? (
-              <Alert variant="danger">{this.state.editingErr}</Alert>
-            ) : (
-                <></>
-              )}
-            <User
-              user={this.state.user}
-              isEditing={this.state.isEditing}
-              requestUser={this.state.requestUser}
-              setUser={this.save}
-            />
+      (this.props.user.is_admin ||
+        this.props.user.guc_id === this.state.user.guc_id) ? (
+        <>
+          {this.state.editingErr !== "" ? (
+            <Alert variant="danger">{this.state.editingErr}</Alert>
+          ) : (
+            <></>
+          )}
+          <User
+            user={this.state.user}
+            isEditing={this.state.isEditing}
+            requestUser={this.state.requestUser}
+            setUser={this.save}
+          />
 
-            <Form.Row className="profile-row">
-              <Col />
-              {this.state.isEditing ? (
-                <Col xs="1" className="profile-col">
-                  <Button block variant="outline-warning" onClick={this.cancel}>
-                    Cancel
-                </Button>
-                </Col>
-              ) : (
-                  <></>
-                )}
-
-              <Col xs="1" className="profile-col">
-                {this.state.isEditing ?
-                  this.state.editLoading ?
-                    <img
-                      height="40"
-                      src={LoadingGif}
-                      alt="Loading"
-                    /> :
-                    <Button
-                      block
-                      variant="outline-warning"
-                      onClick={this.requestUser}
-                    >
-                      Save
-                    </Button>
-                  : (
-                    <Button block variant="outline-warning" onClick={this.edit}>
-                      Edit
-                </Button>
-                  )}
-              </Col>
-              <Col xs="1" className="profile-col">
-                <Button block variant="outline-danger" onClick={this.delete}>
-                  Delete
-              </Button>
-              </Col>
-            </Form.Row>
-
+          <Form.Row className="profile-row">
+            <Col />
             {this.state.isEditing ? (
-              <Alert variant="warning">
-                Only edit fields you want changed! Fields left empty will stay as
-                they are.
-            </Alert>
+              <Col xs="1" className="profile-col">
+                <Button block variant="outline-warning" onClick={this.cancel}>
+                  Cancel
+                </Button>
+              </Col>
             ) : (
-                <></>
+              <></>
+            )}
+
+            <Col xs="1" className="profile-col">
+              {this.state.isEditing ? (
+                this.state.editLoading ? (
+                  // <img height="40" src={LoadingGif} alt="Loading" />
+                  <p>Loading</p>
+                ) : (
+                  <Button
+                    block
+                    variant="outline-warning"
+                    onClick={this.requestUser}
+                  >
+                    Save
+                  </Button>
+                )
+              ) : (
+                <Button block variant="outline-warning" onClick={this.edit}>
+                  Edit
+                </Button>
               )}
-          </>
-        ) : (
-          <User user={this.state.user} />
-        )
+            </Col>
+            <Col xs="1" className="profile-col">
+              <Button block variant="outline-danger" onClick={this.delete}>
+                Delete
+              </Button>
+            </Col>
+          </Form.Row>
+
+          {this.state.isEditing ? (
+            <Alert variant="warning">
+              Only edit fields you want changed! Fields left empty will stay as
+              they are.
+            </Alert>
+          ) : (
+            <></>
+          )}
+        </>
+      ) : (
+        <User user={this.state.user} />
+      )
     ) : (
-          <></>
-        );
+      <></>
+    );
   }
 }
 

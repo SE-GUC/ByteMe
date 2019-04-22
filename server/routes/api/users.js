@@ -424,13 +424,13 @@ router.put("/forgotpass", (req, res) => {
   const emailData = {
     to: req.body.email,
     subject: "AWG reset Password",
-    text: `Please use the following link to reset your password: localhost:3001/resetpass/${token}`,
-    html: `<p>Please use the following link to reset your password:</p><p>localhost:3001/resetpass/${token}</p>`
+    text: `Please use the following link to reset your password: gucmun.me/resetpass/${token}`,
+    html: `<p>Please use the following link to reset your password:</p><p>gucmun.me/resetpass/${token}</p>`
   };
   return User.findOneAndUpdate(
     { email: req.body.email.toLowerCase() },
     { $set: { resetPassLink: token } },
-    function (error, feedback) {
+    function(error, feedback) {
       if (error) return res.send(error);
       else {
         emailer.sendEmail(emailData);
@@ -449,7 +449,7 @@ router.put("/resetpass", (req, res) => {
   return User.findOneAndUpdate(
     { resetPassLink },
     { $set: { password: hashedPassword, resetPassLink: "" } },
-    function (error, feedback) {
+    function(error, feedback) {
       if (error) return res.send(error);
       return res.send(feedback);
     }

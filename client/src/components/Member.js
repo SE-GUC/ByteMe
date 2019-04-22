@@ -24,14 +24,11 @@ class Member extends Component {
     var pathArray = url.split("/");
     const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    const deletedMember = await API.delete(
-      `page/${secondLevelLocation}/members/${guc_id}`,
-      {
-        headers: {
-          Authorization: token
-        }
+    await API.delete(`page/${secondLevelLocation}/members/${guc_id}`, {
+      headers: {
+        Authorization: token
       }
-    ).then(res => {
+    }).then(res => {
       this.props.updatePages();
       this.setState({ isLoading: false });
     });
@@ -44,7 +41,7 @@ class Member extends Component {
     var pathArray = url.split("/");
     const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    const updatedMember = await API.put(
+    await API.put(
       `page/${secondLevelLocation}/members/set_role`,
       {
         guc_id: `${x}`
@@ -84,7 +81,6 @@ class Member extends Component {
       birth_date,
       guc_id,
       picture_ref,
-      mun_role,
       url,
       role_to_control,
       page_name
@@ -124,14 +120,6 @@ class Member extends Component {
           </text>
           <text style={{ color: "white", fontFamily: "GothamBook" }}>
             GUC ID :{guc_id}
-          </text>
-          <text style={{ color: "white", fontFamily: "Gothambook" }}>
-            MUN Role :{" "}
-            {mun_role
-              .replace("_", " ")
-              .split(" ")
-              .map(i => i[0].toUpperCase() + i.substring(1).toLowerCase())
-              .join(" ")}
           </text>
           <Card.Footer style={{ height: "3rem", border: "none" }}>
             {this.props.isLoggedIn &&

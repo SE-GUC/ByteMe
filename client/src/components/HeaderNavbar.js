@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Navbar, NavDropdown, Nav, Modal, Form, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import logo from "../logo.svg";
 import "../App.css";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
@@ -44,7 +43,7 @@ class HeaderNavbar extends Component {
     this.setState({ show: false });
     const { name, description, role_to_control } = this.state;
     const token = Auth.getToken();
-    const addedPage = await API.post(
+    await API.post(
       "page",
       {
         name,
@@ -102,11 +101,12 @@ class HeaderNavbar extends Component {
           <LinkContainer to="/aboutus">
             <Nav.Link>About Us</Nav.Link>
           </LinkContainer>
+          <LinkContainer to="/gallery">
+            <Nav.Link>Gallery</Nav.Link>
+          </LinkContainer>
+
           <LinkContainer to="/development">
             <Nav.Link>Development</Nav.Link>
-            </LinkContainer>
-          <LinkContainer to="/announcements">
-            <Nav.Link>Announcements</Nav.Link>
           </LinkContainer>
 
           <NavDropdown title="Councils" id="basic-nav-dropdown">
@@ -136,12 +136,8 @@ class HeaderNavbar extends Component {
           <LinkContainer to="/merchandise">
             <Nav.Link>Merchandise</Nav.Link>
           </LinkContainer>
-
-          <LinkContainer to="/faq">
-            <Nav.Link>FAQ</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to="/clubs">
-            <Nav.Link>AWGs</Nav.Link>
+          <LinkContainer to="/Social">
+            <Nav.Link>Social Media</Nav.Link>
           </LinkContainer>
           <LinkContainer to="/ContactUs">
             <Nav.Link>Contact Us</Nav.Link>

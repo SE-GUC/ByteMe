@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {
-  Card,
-  Button,
-  Modal,
-  ButtonGroup,
-  Form,
-  Collapse,
-  Row,
-  Col
-} from "react-bootstrap";
+import { Card, Button, Modal, Form } from "react-bootstrap";
 import "./Page.css";
 import API from "../utils/API";
 import Auth from "../utils/Auth";
@@ -31,9 +22,14 @@ class Page extends Component {
       description: "",
       role_to_control: "",
       guc_id: "",
+      role: "",
       checked1: false,
       checked2: false,
-      checked3: false
+      checked3: false,
+      checked4: false,
+
+      checked5: false,
+      checked6: false
     };
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -50,6 +46,10 @@ class Page extends Component {
     this.one = this.one.bind(this);
     this.two = this.two.bind(this);
     this.three = this.three.bind(this);
+    this.four = this.four.bind(this);
+
+    this.five = this.five.bind(this);
+    this.six = this.six.bind(this);
 
     this.handleUpdate = this.handleUpdate.bind(this);
     this.update = this.update.bind(this);
@@ -60,15 +60,14 @@ class Page extends Component {
   handleUpdate = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  async update(e, url) {
+  async update(e) {
     e.preventDefault();
     this.setState({ show1: false });
     const { name, description, role_to_control } = this.state;
-    var pathArray = url.split("/");
-    const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    const updatedPage = await API.put(
-      `page/${secondLevelLocation}`,
+
+    await API.put(
+      `page/${this.props._id}`,
       {
         name,
         description,
@@ -81,22 +80,20 @@ class Page extends Component {
       }
     ).then(res => {
       this.props.updatePages();
-      window.location.replace(`${secondLevelLocation}`);
+      window.location.replace(`${this.props._id}`);
       this.setState({ isLoading: false });
     });
   }
   handleAdd = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  async add(e, url) {
+  async add(e) {
     e.preventDefault();
     this.setState({ show2: false });
-    const { guc_id } = this.state;
-    var pathArray = url.split("/");
-    const secondLevelLocation = pathArray[2];
+    const { guc_id, role } = this.state;
     const token = Auth.getToken();
-    const addedMember = await API.post(
-      `page/${secondLevelLocation}/members`,
+    await API.post(
+      `page/${this.props._id}/members/${role}`,
       {
         guc_id
       },
@@ -107,18 +104,16 @@ class Page extends Component {
       }
     ).then(res => {
       this.props.updatePages();
-      window.location.replace(`${secondLevelLocation}`);
+      window.location.replace(`${this.props._id}`);
       this.setState({ isLoading: false });
     });
   }
 
-  async delete(e, url) {
+  async delete(e) {
     e.preventDefault();
     this.setState({ show3: false });
-    var pathArray = url.split("/");
-    const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    const deletedMember = await API.delete(`page/${secondLevelLocation}`, {
+    await API.delete(`page/${this.props._id}`, {
       headers: {
         Authorization: token
       }
@@ -173,6 +168,7 @@ class Page extends Component {
       checked1: true,
       checked2: false,
       checked3: false,
+      checked4: false,
       role_to_control: "council"
     });
   }
@@ -181,6 +177,7 @@ class Page extends Component {
       checked1: false,
       checked2: true,
       checked3: false,
+      checked4: false,
       role_to_control: "committee"
     });
   }
@@ -189,12 +186,35 @@ class Page extends Component {
       checked1: false,
       checked2: false,
       checked3: true,
+      checked4: false,
       role_to_control: "office"
     });
   }
+  four() {
+    this.setState({
+      checked1: false,
+      checked2: false,
+      checked3: false,
+      checked4: true,
+      role_to_control: "general_assembly"
+    });
+  }
+  five() {
+    this.setState({
+      checked5: true,
+      checked6: false,
+      role: `${this.props.name}`
+    });
+  }
+  six() {
+    this.setState({
+      checked5: false,
+      checked6: true,
+      role: `${this.props.name}_member`
+    });
+  }
   render() {
-    const { name, description, url, role_to_control } = this.props;
-    const { open } = this.state;
+    const { name, description, role_to_control } = this.props;
     return (
       <Card className="card-style">
         <Card.Img
@@ -208,26 +228,35 @@ class Page extends Component {
             (this.props.user.mun_role === "secretary_office" ||
             this.props.user.mun_role === role_to_control ||
             this.props.user.mun_role === name ? (
-              <div>
+              <div className="dod">
                 <Button
-                  className="member-add-button"
+                  variant="info"
+                  className="buttonP"
                   onClick={this.handleShow2}
                 >
                   <img src={iconAdd} alt="Add new Member" />
                 </Button>
-                <Button className="page-edit-button" onClick={this.handleShow1}>
+                <Button
+                  variant="warning"
+                  className="buttonP"
+                  onClick={this.handleShow1}
+                >
                   <img src={iconEdit} alt="Edit page" />
                 </Button>
                 <Button
-                  className="page-delete-button"
+                  variant="danger"
+                  className="buttonP"
                   onClick={this.handleShow3}
                 >
                   <img src={iconDelete} alt="Delete page" />
                 </Button>
               </div>
             ) : null)}
+          <br />
+
+          <br />
           <Card.Title className="page-name">
-            <h1>
+            <h1 className="pageeeee">
               {" "}
               {name
                 .replace("_", " ")
@@ -251,7 +280,7 @@ class Page extends Component {
           </Modal.Header>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.delete(e, url)}>
+            <Button variant="secondary" onClick={e => this.delete(e)}>
               Delete
             </Button>
           </Modal.Footer>
@@ -269,8 +298,29 @@ class Page extends Component {
               onChange={e => this.setState({ guc_id: e.target.value })}
             />
           </Form.Group>
+          <Form.Label>Set his role</Form.Label>
+          <Form.Check
+            className="cbx"
+            inline
+            name="c"
+            id="1"
+            label="Head"
+            type="radio"
+            checked={this.state.checked5}
+            onChange={this.five}
+          />
+          <Form.Check
+            className="cbx"
+            inline
+            name="com"
+            id="2"
+            label="Member"
+            type="radio"
+            checked={this.state.checked6}
+            onChange={this.six}
+          />
           <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.add(e, url)}>
+            <Button variant="secondary" onClick={e => this.add(e)}>
               ADD
             </Button>
           </Modal.Footer>
@@ -280,13 +330,13 @@ class Page extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Edit Page</Modal.Title>
           </Modal.Header>
+          <h5>all fields are required to be updated</h5>
           <br />
           <Form.Group controlId="editedPage">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="name"
               placeholder="Enter the new name "
-              value={this.state.name}
               onChange={e => this.setState({ name: e.target.value })}
             />
             <br />
@@ -300,7 +350,6 @@ class Page extends Component {
                 label="Council"
                 type="radio"
                 checked={this.state.checked1}
-                value={this.state.role_to_control}
                 onChange={this.one}
               />
               <Form.Check
@@ -311,7 +360,6 @@ class Page extends Component {
                 label="Committee"
                 type="radio"
                 checked={this.state.checked2}
-                value={this.state.role_to_control}
                 onChange={this.two}
               />
               <Form.Check
@@ -322,8 +370,17 @@ class Page extends Component {
                 label="Office"
                 type="radio"
                 checked={this.state.checked3}
-                value={this.state.role_to_control}
                 onChange={this.three}
+              />
+              <Form.Check
+                className="cbx"
+                inline
+                name="o"
+                id="3"
+                label="General Aseembly"
+                type="radio"
+                checked={this.state.checked4}
+                onChange={this.four}
               />
             </Form.Group>
             <br />
@@ -334,13 +391,12 @@ class Page extends Component {
               rows="10"
               type="description"
               placeholder="Enter description"
-              value={this.state.description}
               onChange={e => this.setState({ description: e.target.value })}
             />
           </Form.Group>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.update(e, url)}>
+            <Button variant="secondary" onClick={e => this.update(e)}>
               Edit
             </Button>
           </Modal.Footer>
@@ -352,6 +408,7 @@ class Page extends Component {
 
 Page.propTypes = {
   name: PropTypes.string,
+  _id: PropTypes.string,
   role_to_control: PropTypes.string,
   description: PropTypes.string,
   url: PropTypes.string,
