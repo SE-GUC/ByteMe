@@ -12,7 +12,7 @@ import {
   Form
 } from "react-bootstrap";
 import Auth from "../utils/Auth";
-
+import iconAdd from "../icons/plus.svg";
 // First we create our class
 class Announcements extends Component {
   // Then we add our constructor which receives our props
@@ -47,12 +47,11 @@ class Announcements extends Component {
             {this.state.isLoading ? <Spinner animation="border" /> : ""}
           </h1>
           {this.state.canEdit ? (
-            <Button variant="warning" onClick={this.handleCreateShow}>
-              Add Announncement
-            </Button>
+            <Button variant="warning"  onClick={this.handleCreateShow}>
+             Add Announcement </Button>
           ) : (
             <></>
-          )}
+          )} 
           <ListGroup>
             {this.state.announcements.map(announcement => (
               <Announcement

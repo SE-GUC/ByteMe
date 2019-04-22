@@ -1,0 +1,13 @@
+.buttonA {
+  width: fit-content;
+  position: absolute;
+  right: 5px;
+  margin-top: 5px;
+  border-radius: 50px !important;
+  text-align: center;
+
+}
+.xxx{
+    float:right
+
+}
