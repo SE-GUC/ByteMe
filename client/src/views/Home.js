@@ -7,11 +7,9 @@ import EventTimeline from "../components/EventTimeline";
 import InstagramEmbed from "react-instagram-embed";
 import iconDelete from "../icons/x.svg";
 import iconAdd from "../icons/plus.svg";
-import instagram from "../icons/instagram.svg";
-import twitter from "../icons/twitter.svg";
 import { Button, Modal } from "react-bootstrap";
-import { TwitterTimelineEmbed } from "react-twitter-embed";
 import SearchBar from "../components/SearchBar";
+/*global FB*/
 
 class Home extends Component {
   constructor(props) {
@@ -167,66 +165,28 @@ class Home extends Component {
           src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2"
         />
         <div className="social">
-          <Button
-            variant="light"
-            className="social-button1"
-            onClick={this.handleShowT}
+          <div id="fb-root" />
+          <div
+            class="fb-page"
+            data-href="https://www.facebook.com/GUCMUN/"
+            data-tabs="timeline"
+            data-width="500"
+            data-height="750"
+            data-small-header="false"
+            data-adapt-container-width="true"
+            data-hide-cover="false"
+            data-show-facepile="true"
           >
-            <img src={twitter} alt="twitter" />
-          </Button>
-          <Button
-            variant="light"
-            className="social-button2"
-            onClick={this.handleShowI}
-          >
-            <img src={instagram} alt="instagram" />
-          </Button>
-          {this.state.showI ? (
-            <InstagramEmbed
-              url="https://instagr.am/p/BwKCtuhAgOQ/"
-              maxWidth={300}
-              hideCaption={false}
-              containerTagName="div"
-            />
-          ) : (
-            <></>
-          )}
-
-          {this.state.showT ? (
-            <TwitterTimelineEmbed
-              sourceType="profile"
-              screenName="gucmun"
-              options={{ height: 800, width: 300 }}
-            />
-          ) : (
-            <></>
-          )}
+            <blockquote
+              cite="https://www.facebook.com/GUCMUN/"
+              class="fb-xfbml-parse-ignore"
+            >
+              <a href="https://www.facebook.com/GUCMUN/">
+                German University in Cairo Model United Nations (GUCMUN)
+              </a>
+            </blockquote>
+          </div>
         </div>
-        {/* facebook starts here */}
-        {/* <div id="fb-root" />
-        <script
-          async
-          defer
-          crossorigin="anonymous"
-          src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=390253315039099&autoLogAppEvents=1"
-        />
-        <div
-          class="fb-page"
-          data-href="https://www.facebook.com/GUCMUN"
-          data-tabs="timeline, messages"
-          data-small-header="false"
-          data-adapt-container-width="true"
-          data-hide-cover="false"
-          data-show-facepile="true"
-        >
-          <blockquote
-            cite="https://www.facebook.com/facebook"
-            class="fb-xfbml-parse-ignore"
-          >
-            <a href="https://www.facebook.com/facebook">Facebook</a>
-          </blockquote>
-        </div> */}
-        {/* facebook ends here */}
         <Timeline lineColor={"#ffd700"} collapsible className="home">
           {this.state.events.map(event => (
             <EventTimeline
@@ -336,29 +296,29 @@ class Home extends Component {
       console.log(`😱 Axios request failed: ${e}`);
     }
 
-    //   window.fbAsyncInit = function() {
-    //     FB.init({
-    //       appId: "390253315039099",
-    //       xfbml: true,
-    //       version: "v2.6"
-    //     });
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId: "390253315039099",
+        xfbml: true,
+        version: "v2.6"
+      });
 
-    //     FB.getLoginStatus(function(response) {
-    //       //this.statusChangeCallback(response);
-    //     });
-    //   };
+      FB.getLoginStatus(function(response) {
+        // this.statusChangeCallback(response);
+      });
+    };
 
-    //   (function(d, s, id) {
-    //     var js,
-    //       fjs = d.getElementsByTagName(s)[0];
-    //     if (d.getElementById(id)) {
-    //       return;
-    //     }
-    //     js = d.createElement(s);
-    //     js.id = id;
-    //     js.src = "//connect.facebook.net/en_US/sdk.js";
-    //     fjs.parentNode.insertBefore(js, fjs);
-    //   })(document, "script", "facebook-jssdk");
+    (function(d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
   }
 }
 

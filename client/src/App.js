@@ -188,7 +188,6 @@ class App extends Component {
                 <PortalLibrary user={this.state.user} {...props} />
               )}
             />
-            />
             <Route
               exact
               path="/aboutus"
@@ -259,55 +258,57 @@ class App extends Component {
             <Route path="/resetpass/:id" component={ResetPass} />
           </div>
         </Router>
-        <Navbar bg="black">
-          <Navbar.Brand href="/home" className="mr-auto">
-            <img
-              src={logo}
-              width="50"
-              height="50"
-              className="d-inline-block align-top"
-              alt="React Bootstrap logo"
-            />
-          </Navbar.Brand>
-          <div className="sub">
-            <input
-              type="submit"
-              onClick={e => this.handleShow(e)}
-              value="Subscribe to our newsletter"
-            />
-          </div>
-          {this.state.show ? (
-            <Nav>
-              <Modal
-                className="pop"
-                show={this.state.show}
-                onHide={this.handleClose}
-              >
-                <Modal.Body>
-                  <h1>Subscribe here!</h1>
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Your email"
-                    value={this.state.email}
-                    onChange={e => this.setState({ email: e.target.value })}
-                  />
-                  <div className="errorMsg">{this.state.error}</div>
-                  <div className="sub">
+        <div>
+          <Navbar bg="black" sticky="bottom">
+            <Navbar.Brand href="/home" className="mr-auto">
+              <img
+                src={logo}
+                width="50"
+                height="50"
+                className="d-inline-block align-top"
+                alt="GUCMUN logo"
+              />
+            </Navbar.Brand>
+            <div className="sub">
+              <input
+                type="submit"
+                onClick={e => this.handleShow(e)}
+                value="Subscribe to our newsletter"
+              />
+            </div>
+            {this.state.show ? (
+              <Nav>
+                <Modal
+                  className="pop"
+                  show={this.state.show}
+                  onHide={this.handleClose}
+                >
+                  <Modal.Body>
+                    <h1>Subscribe here!</h1>
+                    <label>Email</label>
                     <input
-                      type="submit"
-                      onClick={e => this.handleSubmit(e)}
-                      value="Done"
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="Your email"
+                      value={this.state.email}
+                      onChange={e => this.setState({ email: e.target.value })}
                     />
-                  </div>
-                </Modal.Body>
-              </Modal>
-            </Nav>
-          ) : null}
-          © 2019 GUCMUN
-        </Navbar>{" "}
+                    <div className="errorMsg">{this.state.error}</div>
+                    <div className="sub">
+                      <input
+                        type="submit"
+                        onClick={e => this.handleSubmit(e)}
+                        value="Done"
+                      />
+                    </div>
+                  </Modal.Body>
+                </Modal>
+              </Nav>
+            ) : null}
+            © 2019 GUCMUN
+          </Navbar>
+        </div>
       </div>
     );
   }

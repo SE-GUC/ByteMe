@@ -1,26 +1,28 @@
 .home {
   min-height: 42.8rem;
+  display: flex;
+  flex-direction: column;
 }
-.register{
+.register {
   text-align: center;
 }
-.social{
-  float:right;
+.social {
+  float: right;
   text-align: right;
 }
 
-.dod{
- float:right;
- right: 45px;
- margin-top: 10px;
- text-align: center;
+.dod {
+  float: right;
+  right: 45px;
+  margin-top: 10px;
+  text-align: center;
 }
-.ddd{
-  float:right;
+.ddd {
+  float: right;
   width: fit-content;
   position: absolute;
   right: 45px;
   margin-top: 10px;
   border-radius: 50px !important;
   text-align: center;
- }
+}
