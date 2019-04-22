@@ -64,7 +64,12 @@ class AcademicPaper extends Component {
             <Card.Title>{name}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">{year}</Card.Subtitle>
 
-            <Card.Link href={link}>View Academic Paper</Card.Link>
+            <Card.Footer>
+              {" "}
+              <a href={link} target="_blank">
+                View Academic Paper
+              </a>
+            </Card.Footer>
           </Card.Body>
         </Card>
         {/* DELETE MODAL */}
