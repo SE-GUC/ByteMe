@@ -53,6 +53,7 @@ class Login extends Component {
           });
           Auth.authenticateUser(res.data.data);
           this.props.login();
+          window.location.replace(`/profile`);
         })
         .catch(err => {
           console.log(err);
