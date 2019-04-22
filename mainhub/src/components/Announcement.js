@@ -42,6 +42,7 @@ class Announcement extends Component {
                 {date}
               </Tab.Pane>
             }
+            <div className="vvv"></div>
             {this.state.canEdit ? (
               <>
                 <Button variant="dark" onClick={this.handleEditShow}>

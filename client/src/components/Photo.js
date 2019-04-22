@@ -136,14 +136,14 @@ class Photo extends Component {
             <Card.Title>
               <Button
                 variant="info"
-                className="club-edit-button"
+                className="product-edit-button"
                 onClick={this.handleShow1}
               >
                 <img src={iconEdit} alt="Edit " />
               </Button>
               <Button
                 variant="danger"
-                className="club-delete-button"
+                className="product-delete-button"
                 onClick={this.handleShow3}
               >
                 <img src={iconDelete} alt="Delete" />

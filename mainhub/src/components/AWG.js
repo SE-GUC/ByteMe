@@ -10,6 +10,8 @@ import {
   Spinner
 } from "react-bootstrap";
 import Dropzone from "react-dropzone";
+import iconDelete from "../icons/x.svg";
+import iconEdit from "../icons/pencil.svg";
 import uploaderDefaultImage from "../images/upload-icon.png";
 import productDefaultImage from "../images/club.png";
 import API from "../utils/API";
@@ -31,51 +33,50 @@ class AWG extends Component {
     };
   }
   render() {
-    const { id, name, description, banner, link } = this.props;
+    const { id,name, description, banner, link } = this.props;
 
     return (
       <div>
-        <Card
-          border="warning"
-          style={{
-            width: "35rem",
-            // heiht: "50",
-            margin: "10px"
-          }}
-        >
-          <Card.Img
+      <Card className="card" style={{ width: "25rem", margin: "15px", height: "35rem" }}>
+      {this.state.canEdit ? (
+            <>
+              <Button
+                variant="info"
+                className="club-edit-button"
+                onClick={this.handleEditShow}
+              >
+                <img src={iconEdit} alt="Edit Club" />
+              </Button>
+              <Button
+                variant="danger"
+                className="club-delete-button"
+                onClick={this.handleDeleteShow}
+              >
+                <img src={iconDelete} alt="Delete club" />
+              </Button>
+            </>
+          ) : (
+            <></>
+          )}
+        <Card.Img 
             variant="top"
-            className="d-block w-100"
-            src={banner !== "false" ? banner : productDefaultImage}
-            height="150rem"
-          />
-
-          <Card.Title>{name}</Card.Title>
-          <Card.Subtitle>{description}</Card.Subtitle>
-          {/* <ul>
+            src={banner !== "false" ? banner : productDefaultImage}/>
+        <Card.Body className="club-body">
+          <Card.Title className="club-name">{name}</Card.Title>
+          <Card.Text className="club-description" >{description}</Card.Text>
+          <br/> 
+          <Card.Footer >
+          <ul>
             <li>
               <a href={link}>Visit us</a>
-              {""}
+             
             </li>
-          </ul> */}
-          <Card.Footer>
-            <Card.Link href={link}>Visit US</Card.Link>
-            {this.state.canEdit ? (
-              <>
-                <Button variant="dark" onClick={this.handleEditShow}>
-                  Edit
-                </Button>
-                <Button variant="danger" onClick={this.handleDeleteShow}>
-                  Delete
-                </Button>
-              </>
-            ) : (
-              <></>
-            )}
+          </ul>
           </Card.Footer>
-        </Card>
-        {/* DELETE MODAL */}
-        <Modal
+        </Card.Body>
+      </Card>
+       {/* DELETE MODAL */}
+       <Modal
           show={this.state.showDeleteConfirmation}
           onHide={this.handleDeleteClose}
           centered
@@ -83,20 +84,22 @@ class AWG extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Delete Club?</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            You're about to delete this Club! Do you want to proceed?
-          </Modal.Body>
+          <Modal.Body>You're about to delete this Club! Do you want to proceed?</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleDeleteClose}>
               Close
             </Button>
             <Button variant="danger" onClick={() => this.deleteClub(id)}>
-              {this.state.isLoading ? <Spinner animation="border" /> : "Yes"}
+              {this.state.isLoading ? (
+                <Spinner animation="border" />
+              ) : (
+                "Yes"
+              )}
             </Button>
           </Modal.Footer>
         </Modal>
-        {/* EDIT MODAL */}
-        <Modal
+         {/* EDIT MODAL */}
+         <Modal
           show={this.state.showEditWindow}
           onHide={this.handleEditClose}
           centered
@@ -131,12 +134,12 @@ class AWG extends Component {
               <FormControl
                 name="name"
                 onChange={this.change}
-                placeholder="Club Name"
+                placeholder= "Club Name"
                 aria-label="Club Name"
                 defaultValue={name}
               />
             </InputGroup>
-
+            
             {/* description */}
             <InputGroup className="mb-3">
               <FormControl
@@ -159,6 +162,7 @@ class AWG extends Component {
                 defaultValue={link}
               />
             </InputGroup>
+            
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleEditClose}>
@@ -176,75 +180,76 @@ class AWG extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-      </div>
-    );
+  </div>
+
+       );
   }
 
-  handleDeleteClose() {
-    this.setState({ showDeleteConfirmation: false });
+handleDeleteClose() {
+  this.setState({ showDeleteConfirmation: false });
+}
+handleDeleteShow() {
+  this.setState({ showDeleteConfirmation: true });
+}
+deleteClub(id) {
+  try {
+    this.setState({ isLoading: true });
+    const token = Auth.getToken();
+    const headers = {
+      Authorization: `${token}`
+    };
+    API.delete(`clubs/${id}`,  {headers}).then(res => {
+      this.props.updateClub();
+      this.setState({ isLoading: false });
+      this.handleDeleteClose();
+    });
+  } catch (e) {
+    console.log(`😱 Axios request failed: ${e}`);
   }
-  handleDeleteShow() {
-    this.setState({ showDeleteConfirmation: true });
-  }
-  deleteClub(id) {
-    try {
-      this.setState({ isLoading: true });
-      const token = Auth.getToken();
-      const headers = {
-        Authorization: `${token}`
-      };
-      API.delete(`clubs/${id}`, { headers }).then(res => {
-        this.props.updateClub();
-        this.setState({ isLoading: false });
-        this.handleDeleteClose();
-      });
-    } catch (e) {
-      console.log(`😱 Axios request failed: ${e}`);
-    }
-  }
-  handleEditClose() {
-    this.setState({ showEditWindow: false });
-  }
-  handleEditShow() {
-    this.setState({ showEditWindow: true });
-  }
-  change = event => {
+}
+handleEditClose() {
+  this.setState({ showEditWindow: false });
+}
+handleEditShow() {
+  this.setState({ showEditWindow: true });
+}
+change = event => {
+  const editedClub = this.state.editedClub;
+  const name = event.target.name;
+  editedClub[name] = event.target.value;
+  this.setState({ editedClub: editedClub });
+};
+pictureUploader = file => {
+  let reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => {
     const editedClub = this.state.editedClub;
-    const name = event.target.name;
-    editedClub[name] = event.target.value;
+    editedClub.banner = reader.result;
     this.setState({ editedClub: editedClub });
   };
-  pictureUploader = file => {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const editedClub = this.state.editedClub;
-      editedClub.banner = reader.result;
-      this.setState({ editedClub: editedClub });
-    };
-    reader.onerror = error => {
-      console.log("Error uploading image: ", error);
-    };
+  reader.onerror = error => {
+    console.log("Error uploading image: ", error);
   };
-  editClub(id, editedClub) {
-    try {
-      this.setState({ isLoading: true });
-      const token = Auth.getToken();
-      const headers = {
-        Authorization: `${token}`
-      };
-      API.put(`clubs/${id}`, editedClub, { headers }).then(res => {
-        this.props.updateClub();
-        this.setState({ isLoading: false });
-        this.handleEditClose();
-      });
-    } catch (e) {
-      console.log(`😱 Axios request failed: ${e}`);
-    }
+};
+editClub(id, editedClub) {
+  try {
+    this.setState({ isLoading: true });
+    const token = Auth.getToken();
+    const headers = {
+      Authorization: `${token}`
+    };
+    API.put(`clubs/${id}`, editedClub, {headers}).then(res => {
+      this.props.updateClub();
+      this.setState({ isLoading: false });
+      this.handleEditClose();
+    });
+  } catch (e) {
+    console.log(`😱 Axios request failed: ${e}`);
   }
-  async componentWillReceiveProps(props) {
-    this.setState({ canEdit: props.canEdit });
-  }
+}
+async componentWillReceiveProps(props) {
+  this.setState({ canEdit: props.canEdit });
+}
 }
 
 AWG.propTypes = {

@@ -4,7 +4,7 @@ import API from "../utils/API";
 import logo from "../guc-logo.png";
 import SearchBar from "../components/SearchBar"
 import { Button, Modal, ModalFooter, Navbar } from "react-bootstrap";
-
+import Club from "./Club"
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +23,7 @@ class Home extends Component {
           <br />
           <h1>Welcome to GUC main hub</h1>
         </header>
+        
       </div>
     );
   }

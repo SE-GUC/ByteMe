@@ -83,13 +83,13 @@ class App extends Component {
             <Route
               exact
               path="/"
-              render={props => <><Home user={this.state.user} {...props} /><Club user={this.state.user} {...props} /></>}
+              render={props => <><Home user={this.state.user} {...props} /> <Club user={this.state.user} {...props}/></>}
             />
 
             <Route
               exact
               path="/home"
-              render={props => <><Home user={this.state.user} {...props} /><Club user={this.state.user} {...props} /></>}
+              render={props => <><Home user={this.state.user} {...props} /><Club user={this.state.user} {...props}/></>}
             />
             <Route
               exact

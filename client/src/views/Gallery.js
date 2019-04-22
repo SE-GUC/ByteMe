@@ -96,10 +96,10 @@ class Gallery extends Component {
             this.props.user.awg_admin === "mun" ? (
               <Button
                 variant="warning"
-                className="club-create-button"
+                className="product-create-button"
                 onClick={this.handleShow}
               >
-                <img src={iconAdd} alt="Add new Member" />
+                <img src={iconAdd} alt="Add " />
               </Button>
             ) : null)}
         </h1>
