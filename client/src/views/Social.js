@@ -8,44 +8,49 @@ class Social extends Component {
   render() {
     return (
       <div className="social">
-        <InstagramEmbed
-          url="https://instagr.am/p/BwKCtuhAgOQ/"
-          hideCaption={false}
-          containerTagName="div"
-        />
-        <TwitterTimelineEmbed
-          sourceType="profile"
-          screenName="gucmun"
-          options={{ height: 800, width: 500 }}
-        />
+        <div className="social-div">
+          <InstagramEmbed
+            url="https://instagr.am/p/BwKCtuhAgOQ/"
+            hideCaption={false}
+            containerTagName="div"
+          />
+        </div>
+        <div className="social-div">
+          <TwitterTimelineEmbed
+            sourceType="profile"
+            screenName="gucmun"
+            options={{ height: 800, width: 500 }}
+          /></div>
 
-        <div id="fb-root" />
-        <div
-          class="fb-page"
-          data-href="https://www.facebook.com/GUCMUN"
-          data-tabs="timeline"
-          data-width="500"
-          data-height="800"
-          data-small-header="false"
-          data-adapt-container-width="true"
-          data-hide-cover="false"
-          data-show-facepile="true"
-        >
-          <blockquote
-            cite="https://www.facebook.com/GUCMUN"
-            class="fb-xfbml-parse-ignore"
+        <div className="social-div">
+          <div id="fb-root" />
+          <div
+            class="fb-page"
+            data-href="https://www.facebook.com/GUCMUN"
+            data-tabs="timeline"
+            data-width="3000"
+            data-height="800"
+            data-small-header="false"
+            data-adapt-container-width="true"
+            data-hide-cover="false"
+            data-show-facepile="true"
           >
-            <a href="https://www.facebook.com/GUCMUN">
-              German University in Cairo Model United Nations (GUCMUN)
+            <blockquote
+              cite="https://www.facebook.com/GUCMUN"
+              class="fb-xfbml-parse-ignore"
+            >
+              <a href="https://www.facebook.com/GUCMUN">
+                German University in Cairo Model United Nations (GUCMUN)
             </a>
-          </blockquote>
+            </blockquote>
+          </div>
         </div>
       </div>
     );
   }
 
   async componentDidMount() {
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = function () {
       FB.init({
         appId: "390253315039099",
         xfbml: true,
@@ -54,7 +59,7 @@ class Social extends Component {
       FB.XFBML.parse();
     };
 
-    (function(d, s, id) {
+    (function (d, s, id) {
       var js,
         fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {

@@ -62,7 +62,7 @@ class MunDev extends Component {
   // The render function, where we actually tell the browser what it should show
   render() {
     return (
-      <div>
+      <div style={{margin:"2%"}}>
         <h1 style={{ color: "black", fontFamily: "GothamBook" }}>
           {" "}
           OUR DEVELOPMENT{" "}

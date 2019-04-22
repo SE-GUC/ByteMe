@@ -85,7 +85,7 @@ class AboutUs extends Component {
     };
     return (
       <div>
-        <h1>Our Hierarchy</h1>
+        <h1 style={{ margin: "2%" }}>OUR HEIRARCHY</h1>
         <br />
         <div className="hierarchy">
           <Hierarchy />
@@ -109,15 +109,15 @@ class AboutUs extends Component {
           Our Achievements{" "}
           {this.props.isLoggedIn &&
             (this.props.user.mun_role === "secretary_office" ||
-            this.props.user.awg_admin === "mun" ? (
-              <Button
-                variant="warning"
-                className="product-create-button"
-                onClick={this.handleShow}
-              >
-                <img src={iconAdd} alt="Add new Member" />
-              </Button>
-            ) : null)}
+              this.props.user.awg_admin === "mun" ? (
+                <Button
+                  variant="warning"
+                  className="product-create-button"
+                  onClick={this.handleShow}
+                >
+                  <img src={iconAdd} alt="Add new Member" />
+                </Button>
+              ) : null)}
         </h1>
 
         <div className="slide-container">

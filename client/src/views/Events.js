@@ -50,8 +50,8 @@ class Events extends Component {
   render() {
     return (
       <div>
-        <h1 style={{ margin: "15px" }}>
-          Events {this.state.isLoading ? <Spinner animation="border" /> : ""}
+        <h1 style={{ margin: "2%" }}>
+          EVENTS {this.state.isLoading ? <Spinner animation="border" /> : ""}
         </h1>
         <div className="eventss">
           <CardDeck className="event-group">

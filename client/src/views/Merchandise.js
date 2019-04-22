@@ -53,7 +53,7 @@ class Merchandise extends Component {
   render() {
     return (
       <div>
-        <h1 style={{ margin: "15px" }}>
+        <h1 style={{ margin: "2%" }}>
           GUCMUN SWAG{" "}
           {this.state.isLoading ? <Spinner animation="border" /> : ""}
         </h1>
