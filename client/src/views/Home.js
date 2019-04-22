@@ -6,7 +6,7 @@ import API from "../utils/API";
 import EventTimeline from "../components/EventTimeline";
 import iconDelete from "../icons/x.svg";
 import iconAdd from "../icons/plus.svg";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Form } from "react-bootstrap";
 import SearchBar from "../components/SearchBar";
 
 import logo from "../logo.svg";
@@ -18,14 +18,15 @@ class Home extends Component {
       user: props.user,
       events: [],
       show: false,
-      link:
-        "https://docs.google.com/forms/d/e/1FAIpQLSfaF06d-I4_eLAwSSK3neOTjeD5eOUeM0VyyjCm1M54PORj4g/viewform?embedded=true",
       canEdit: false,
+      show1: false,
       show2: false,
       show3: false,
       showI: false,
       showT: false,
       links: [],
+      guc_id: "",
+      role: "",
       canAdd: false,
       isSDKInitialized: false
     };
@@ -47,6 +48,8 @@ class Home extends Component {
     this.handleClose3 = this.handleClose3.bind(this);
     this.handleShow2 = this.handleShow2.bind(this);
     this.handleClose2 = this.handleClose2.bind(this);
+    this.handleShow1 = this.handleShow1.bind(this);
+    this.handleClose1 = this.handleClose1.bind(this);
 
     this.handleUpdate = this.handleUpdate.bind(this);
     this.update = this.update.bind(this);
@@ -61,14 +64,14 @@ class Home extends Component {
   async update(e) {
     e.preventDefault();
     this.setState({ show1: false });
-    const { link } = this.state;
+    const { guc_id, role } = this.state;
 
     const token = Auth.getToken();
 
     await API.put(
-      `form/${this.state.links[0].link}`,
+      `page/give_admin/${guc_id}`,
       {
-        link
+        role
       },
       {
         headers: {
@@ -76,7 +79,6 @@ class Home extends Component {
         }
       }
     ).then(res => {
-      this.props.updatePages();
       window.location.replace(`/home`);
       this.setState({ isLoading: false });
     });
@@ -116,6 +118,14 @@ class Home extends Component {
       window.location.replace("/home");
       this.setState({ isLoading: false, canAdd: true });
     });
+  }
+
+  handleShow1() {
+    this.setState({ show1: true });
+  }
+
+  handleClose1() {
+    this.setState({ show1: false });
   }
 
   handleShow() {
@@ -164,6 +174,18 @@ class Home extends Component {
                 />
               ))}
             </Timeline>
+            {this.props.isLoggedIn &&
+              (this.props.user.mun_role === "secretary_office" ||
+              this.props.user.awg_admin === "mun" ? (
+                <Button
+                  variant="warning"
+                  className="buttonP"
+                  onClick={this.handleShow1}
+                >
+                  Give admin
+                </Button>
+              ) : null)}
+
             <div className="register">
               {this.props.isLoggedIn &&
                 (this.props.user.mun_role === "secretary_office" ||
@@ -197,6 +219,33 @@ class Home extends Component {
                 />
               ))}
             </div>
+            <Modal show={this.state.show1} onHide={this.handleClose1}>
+              <Modal.Header closeButton>
+                <Modal.Title>GIVE ADMIN</Modal.Title>
+              </Modal.Header>
+              <br />
+              <Form.Group controlId="editedPage">
+                <Form.Label>GUC ID</Form.Label>
+                <Form.Control
+                  type="name"
+                  placeholder="Enter Guc ID "
+                  onChange={e => this.setState({ guc_id: e.target.value })}
+                />
+                <br />
+                <Form.Label>Role To Be Given</Form.Label>
+                <Form.Control
+                  type="description"
+                  placeholder="Enter Role"
+                  onChange={e => this.setState({ role: e.target.value })}
+                />
+              </Form.Group>
+
+              <Modal.Footer>
+                <Button variant="secondary" onClick={e => this.update(e)}>
+                  Save
+                </Button>
+              </Modal.Footer>
+            </Modal>
             <Modal show={this.state.show2} onHide={this.handleClose2}>
               <Modal.Header closeButton>
                 <Modal.Title>Add google form link</Modal.Title>

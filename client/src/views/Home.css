@@ -40,6 +40,10 @@
   height: 20vmin;
   pointer-events: none;
 }
+
+.giveAdmin {
+  float: top;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

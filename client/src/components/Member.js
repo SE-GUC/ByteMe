@@ -122,14 +122,6 @@ class Member extends Component {
           <text style={{ color: "white", fontFamily: "GothamBook" }}>
             GUC ID :{guc_id}
           </text>
-          <text style={{ color: "white", fontFamily: "Gothambook" }}>
-            MUN Role :{" "}
-            {mun_role
-              .replace("_", " ")
-              .split(" ")
-              .map(i => i[0].toUpperCase() + i.substring(1).toLowerCase())
-              .join(" ")}
-          </text>
           <Card.Footer style={{ height: "3rem", border: "none" }}>
             {this.props.isLoggedIn &&
               (this.props.user.mun_role === "secretary_office" ||
