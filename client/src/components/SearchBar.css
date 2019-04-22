@@ -16,20 +16,3 @@
   padding: 0.5%;
 }
 
-.search-form{
-  color: white;
-  text-align: center;
-  background-color: #05375A
-}
-
-.search-button{
-  color: #05375A; 
-  border: #05375A; 
-  border-radius: 0; 
-  background-color: #ffd700; 
-  font-weight: 600;
-}
-
-.search-button:hover{
-  font-weight: bolder;
-}

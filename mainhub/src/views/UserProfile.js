@@ -20,6 +20,8 @@ class UserProfile extends Component {
       err: "",
       isEditing: false,
       editingErr: "",
+      message: "",
+      otherLoading: false,
       requestUser: false,
       editLoading: false
     };
@@ -81,13 +83,56 @@ class UserProfile extends Component {
       this.setState({ requestUser: false, isEditing: false, editingErr: "" });
     };
 
+    this.giveAdmin = () => {
+      const token = Auth.getToken();
+      const parsed = queryString.parse(this.props.location.search);
+      this.setState({ otherLoading: true })
+      API.put(`/users/giveAdmin`,
+        { guc_id: parsed.gucid },
+        {
+          headers: {
+            Authorization: token
+          }
+        })
+        .then(res => {
+          this.setState({ err: "", message: res.data.message, otherLoading: false })
+        })
+        .catch(err => {
+          console.log(err.response);
+          if (err.response.data)
+            this.setState({ err: err.response.data.error, message: "", otherLoading: false });
+          else this.setState({ err: err.message, message: "", otherLoading: false });
+        });
+    }
+
+    this.forefitAdmin = () => {
+      const token = Auth.getToken();
+      this.setState({ otherLoading: true })
+      API.put(`/users/forefitAdmin`, {},
+        {
+          headers: {
+            Authorization: token
+          }
+        })
+        .then(res => {
+          this.setState({ err: "", message: res.data.message, otherLoading: false })
+          this.props.login()
+        })
+        .catch(err => {
+          console.log(err.response);
+          if (err.response.data)
+            this.setState({ err: err.response.data.error, message: "", otherLoading: false });
+          else this.setState({ err: err.message, message: "", otherLoading: false });
+        });
+    }
+
     this.delete = () => {
       const prompts = [
         `Deleting ${
-          this.props.location.search === "" ? "your" : "this"
+        this.props.location.search === "" ? "your" : "this"
         } profile is permanent. There is no going back!`,
         `This means ${
-          this.props.location.search === "" ? "leaving" : "removing"
+        this.props.location.search === "" ? "leaving" : "removing"
         } forever!`,
         "Are you absolutely 100% certain you want this?"
       ];
@@ -175,75 +220,92 @@ class UserProfile extends Component {
       <Alert variant="danger"> {this.state.err} </Alert>
     ) : this.state.user ? (
       this.props.user &&
-      (this.props.user.is_admin ||
-        this.props.user.guc_id === this.state.user.guc_id) ? (
-        <>
-          {this.state.editingErr !== "" ? (
-            <Alert variant="danger">{this.state.editingErr}</Alert>
-          ) : (
-            <></>
-          )}
-          <User
-            user={this.state.user}
-            isEditing={this.state.isEditing}
-            requestUser={this.state.requestUser}
-            setUser={this.save}
-          />
-
-          <Form.Row className="profile-row">
-            <Col />
-            {this.state.isEditing ? (
-              <Col xs="1" className="profile-col">
-                <Button block variant="outline-warning" onClick={this.cancel}>
-                  Cancel
-                </Button>
-              </Col>
+        (this.props.user.is_admin ||
+          this.props.user.guc_id === this.state.user.guc_id) ? (
+          <>
+            {this.state.editingErr !== "" ? (
+              <Alert variant="danger">{this.state.editingErr}</Alert>
             ) : (
-              <></>
-            )}
-
-            <Col xs="1" className="profile-col">
-              {this.state.isEditing ? (
-                this.state.editLoading ? (
-                  // <img height="40" src={LoadingGif} alt="Loading" />
-                  <p>Loading</p>
-                ) : (
-                  <Button
-                    block
-                    variant="outline-warning"
-                    onClick={this.requestUser}
-                  >
-                    Save
-                  </Button>
-                )
-              ) : (
-                <Button block variant="outline-warning" onClick={this.edit}>
-                  Edit
-                </Button>
+                <></>
               )}
-            </Col>
-            <Col xs="1" className="profile-col">
-              <Button block variant="outline-danger" onClick={this.delete}>
-                Delete
-              </Button>
-            </Col>
-          </Form.Row>
+            {this.state.message !== "" ? (
+              <Alert variant="info">{this.state.message}</Alert>
+            ) : (
+                <></>
+              )}
+            <User
+              user={this.state.user}
+              isEditing={this.state.isEditing}
+              requestUser={this.state.requestUser}
+              setUser={this.save}
+            />
 
-          {this.state.isEditing ? (
-            <Alert variant="warning">
-              Only edit fields you want changed! Fields left empty will stay as
-              they are.
+            <Form.Row className="profile-row">
+              <Col />
+              {this.state.isEditing ? (
+                <Col xs="1" className="profile-col">
+                  <Button block variant="outline-warning" onClick={this.cancel}>
+                    Cancel
+                </Button>
+                </Col>
+              ) : (
+                  <></>
+                )}
+
+              <Col xs="1" className="profile-col">
+                {this.state.isEditing ? (
+                  this.state.editLoading ? (
+                    // <img height="40" src={LoadingGif} alt="Loading" />
+                    <p>Loading</p>
+                  ) : (
+                      <Button
+                        block
+                        variant="outline-warning"
+                        onClick={this.requestUser}
+                      >
+                        Save
+                  </Button>
+                    )
+                ) : (
+                    <Button block variant="outline-warning" onClick={this.edit}>
+                      Edit
+                </Button>
+                  )}
+              </Col>
+              <Col xs="1" className="profile-col">
+                <Button block variant="outline-danger" onClick={this.delete}>
+                  Delete
+              </Button>
+              </Col>
+              <Col xs="0" className="profile-col">
+                {this.props.user.is_admin ?
+                  this.props.user.guc_id === this.state.user.guc_id ?
+                    <Button block variant="outline-danger" onClick={this.forefitAdmin}>
+                      {this.state.otherLoading ? "Forefitting ..." : "Forefit Admin"}
+                    </Button>
+                    : <Button block variant="outline-info" onClick={this.giveAdmin}>
+                      {this.state.otherLoading ? "Giving ..." : "Give Admin"}
+                    </Button>
+                  : <></>
+                }
+              </Col>
+            </Form.Row>
+
+            {this.state.isEditing ? (
+              <Alert variant="warning">
+                Only edit fields you want changed! Fields left empty will stay as
+                they are.
             </Alert>
-          ) : (
-            <></>
-          )}
-        </>
-      ) : (
-        <User user={this.state.user} />
-      )
+            ) : (
+                <></>
+              )}
+          </>
+        ) : (
+          <User user={this.state.user} />
+        )
     ) : (
-      <></>
-    );
+          <></>
+        );
   }
 }
 
