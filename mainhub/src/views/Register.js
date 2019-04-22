@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button, Alert, Col } from "react-bootstrap";
+import { Form, Button, Alert, Col, FormGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import API from "../utils/API";
@@ -76,8 +76,8 @@ class Register extends Component {
             </Link>
           </Alert>
         ) : (
-          <div />
-        )}
+              <div />
+            )}
 
         <Form className="register-form">
           <Form.Row>
@@ -90,25 +90,28 @@ class Register extends Component {
               />
             </Col>
           </Form.Row>
-
-          <Form.Row>
-            <Col>
-              <Form.Control
-                type="text"
-                placeholder="First Name"
-                name="first_name"
-                onChange={this.change}
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                type="text"
-                placeholder="Last Name"
-                name="last_name"
-                onChange={this.change}
-              />
-            </Col>
-          </Form.Row>
+          <Form.Group>
+          </Form.Group>
+          <Form.Group>
+            <Form.Row>
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="First Name"
+                  name="first_name"
+                  onChange={this.change}
+                />
+              </Col>
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Last Name"
+                  name="last_name"
+                  onChange={this.change}
+                />
+              </Col>
+            </Form.Row>
+          </Form.Group>
 
           <Form.Group>
             <Form.Control

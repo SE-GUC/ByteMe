@@ -58,25 +58,24 @@ class Pages extends Component {
             />
           ))}
           <div className="x">
-          <ButtonGroup className="events-members">
-           
-            <Button
-              className="events"
-              variant="secondary"
-              onClick={() => this.handleOne()}
-            >
-              Events
-            </Button>
-            <Button
-              className="members"
-              variant="secondary"
-              onClick={() => this.handleTwo()}
-            >
-              Our People
-            </Button>
-          </ButtonGroup>
+            <ButtonGroup className="events-members">
+              <Button
+                className="events"
+                variant="secondary"
+                onClick={() => this.handleOne()}
+              >
+                Events
+              </Button>
+              <Button
+                className="members"
+                variant="secondary"
+                onClick={() => this.handleTwo()}
+              >
+                Our People
+              </Button>
+            </ButtonGroup>
           </div>
-          
+
           {this.state.show && this.state.show1 ? (
             <CardDeck className="deck">
               {this.state.events.map(event => (
@@ -92,6 +91,7 @@ class Pages extends Component {
                   comments={event.comments}
                   rates={event.rates}
                   creator={event.creator}
+                  updateEvents={this.updatePages}
                   rating={event.rating}
                 />
               ))}

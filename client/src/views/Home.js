@@ -4,13 +4,13 @@ import { Timeline } from "vertical-timeline-component-for-react";
 import Auth from "../utils/Auth";
 import API from "../utils/API";
 import EventTimeline from "../components/EventTimeline";
-import InstagramEmbed from "react-instagram-embed";
 import iconDelete from "../icons/x.svg";
 import iconAdd from "../icons/plus.svg";
 import { Button, Modal } from "react-bootstrap";
 import SearchBar from "../components/SearchBar";
 /*global FB*/
 
+import logo from "../logo.svg";
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -43,8 +43,6 @@ class Home extends Component {
     }
 */
     this.handleShow = this.handleShow.bind(this);
-    this.handleShowI = this.handleShowI.bind(this);
-    this.handleShowT = this.handleShowT.bind(this);
     this.handleShow3 = this.handleShow3.bind(this);
     this.handleClose3 = this.handleClose3.bind(this);
     this.handleShow2 = this.handleShow2.bind(this);
@@ -124,21 +122,6 @@ class Home extends Component {
     this.setState({ show: !this.state.show });
   }
 
-  handleShowI() {
-    if (this.state.showI === true) {
-      this.setState({ showI: false, showT: false });
-    } else {
-      this.setState({ showI: true, showT: false });
-    }
-  }
-  handleShowT() {
-    if (this.state.showT === true) {
-      this.setState({ showT: false, showI: false });
-    } else {
-      this.setState({ showT: true, showI: false });
-    }
-  }
-
   handleClose2() {
     this.setState({ show2: false });
   }
@@ -157,136 +140,155 @@ class Home extends Component {
     return (
       <div>
         <SearchBar />
-        <div id="fb-root" />
-        <script
-          async
-          defer
-          crossorigin="anonymous"
-          src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2"
-        />
         <div className="social">
           <div id="fb-root" />
+          <script
+            async
+            defer
+            crossorigin="anonymous"
+            src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2"
+          />
           <div
             class="fb-page"
-            data-href="https://www.facebook.com/GUCMUN/"
+            data-href="https://www.facebook.com/GUCMUN"
             data-tabs="timeline"
             data-width="500"
-            data-height="750"
+            data-height="800"
             data-small-header="false"
             data-adapt-container-width="true"
             data-hide-cover="false"
             data-show-facepile="true"
           >
             <blockquote
-              cite="https://www.facebook.com/GUCMUN/"
+              cite="https://www.facebook.com/GUCMUN"
               class="fb-xfbml-parse-ignore"
             >
-              <a href="https://www.facebook.com/GUCMUN/">
+              <a href="https://www.facebook.com/GUCMUN">
                 German University in Cairo Model United Nations (GUCMUN)
               </a>
             </blockquote>
           </div>
         </div>
-        <Timeline lineColor={"#ffd700"} collapsible className="home">
-          {this.state.events.map(event => (
-            <EventTimeline
-              title={event.title}
-              brief={event.brief}
-              dateTime={event.dateTime}
-              description={event.description}
-            />
-          ))}
-        </Timeline>
-        <div className="register">
-          {this.props.isLoggedIn &&
-          (this.props.user.mun_role === "secretary_office" ||
-            this.props.user.awg_admin === "mun") &&
-          this.state.links[0] ? (
-            <Button
-              variant="warning"
-              className="buttonP"
-              onClick={this.handleShow3}
-            >
-              <img src={iconDelete} alt="Delete page" />
-            </Button>
-          ) : (
-            <Button
-              variant="warning"
-              className="buttonP"
-              onClick={this.handleShow2}
-            >
-              <img src={iconAdd} alt="Add new Member" />
-            </Button>
-          )}
+        {this.state.isLoading ? (
+          <div>
+            <br />
+            <br />
+            <br />
+            <header className="Home-header">
+              <img src={logo} className="Home-logo" alt="logo" />
+              <br />
+              <h1>Welcome to GUCMUN</h1>
+              <h5>Loading...</h5>
+            </header>
+          </div>
+        ) : (
+          <div>
+            <Timeline lineColor={"#ffd700"} collapsible className="home">
+              {this.state.events.map(event => (
+                <EventTimeline
+                  title={event.title}
+                  brief={event.brief}
+                  dateTime={event.dateTime}
+                  description={event.description}
+                />
+              ))}
+            </Timeline>
+            <div className="register">
+              {this.props.isLoggedIn &&
+                (this.props.user.mun_role === "secretary_office" ||
+                this.props.user.awg_admin === "mun" ? (
+                  <div>
+                    {this.state.links[0] ? (
+                      <Button
+                        variant="warning"
+                        className="buttonP"
+                        onClick={this.handleShow3}
+                      >
+                        <img src={iconDelete} alt="Delete page" />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="warning"
+                        className="buttonP"
+                        onClick={this.handleShow2}
+                      >
+                        <img src={iconAdd} alt="Add new Member" />
+                      </Button>
+                    )}
+                  </div>
+                ) : null)}
 
-          {this.state.links.map(link => (
-            <input
-              type="submit"
-              onClick={this.handleShow}
-              value="Register to our current event"
-            />
-          ))}
-        </div>
-        <Modal show={this.state.show2} onHide={this.handleClose2}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add google form link</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {/* name */}
-            <label>Link</label>
-            <textarea
-              id="link"
-              name="Google form link "
-              placeholder="Google form link"
-              onChange={e => this.setState({ link: e.target.value })}
-              value={this.state.link}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.add(e)}>
-              ADD
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal show={this.state.show3} onHide={this.handleClose3}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              Are you sure you want to delete this registration link ?
-            </Modal.Title>
-          </Modal.Header>
+              {this.state.links.map(link => (
+                <input
+                  type="submit"
+                  onClick={this.handleShow}
+                  value="Register to our current event"
+                />
+              ))}
+            </div>
+            <Modal show={this.state.show2} onHide={this.handleClose2}>
+              <Modal.Header closeButton>
+                <Modal.Title>Add google form link</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {/* name */}
+                <label>Link</label>
+                <textarea
+                  id="link"
+                  name="Google form link "
+                  placeholder="Google form link"
+                  onChange={e => this.setState({ link: e.target.value })}
+                  value={this.state.link}
+                />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={e => this.add(e)}>
+                  ADD
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <Modal show={this.state.show3} onHide={this.handleClose3}>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  Are you sure you want to delete this registration link ?
+                </Modal.Title>
+              </Modal.Header>
 
-          <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.delete(e)}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={e => this.delete(e)}>
+                  Delete
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
-        <div className="register">
-          {this.state.show ? (
-            <iframe
-              src={this.state.links[0].link}
-              title="iframe"
-              width="640"
-              height="640"
-              frameborder="0"
-              marginheight="0"
-              marginwidth="0"
-            >
-              Loading...
-            </iframe>
-          ) : (
-            <></>
-          )}
-        </div>
+            <div className="register">
+              {this.state.show ? (
+                <iframe
+                  src={this.state.links[0].link}
+                  title="iframe"
+                  width="640"
+                  height="640"
+                  frameborder="0"
+                  marginheight="0"
+                  marginwidth="0"
+                >
+                  Loading...
+                </iframe>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
   async componentDidMount() {
     try {
+      this.setState({ isLoading: true });
       API.get("events").then(res => {
         console.log(res.data.data);
-        this.setState({ events: res.data.data });
+        this.setState({ isLoading: false, events: res.data.data });
 
         API.get(`form`).then(res => {
           this.setState({ links: res.data.data, isLoading: false });

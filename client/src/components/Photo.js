@@ -167,7 +167,7 @@ class Photo extends Component {
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
                   <img
-                    className="club-picture-picker"
+                    className="product-picture-picker"
                     src={
                       this.state.pic_ref
                         ? this.state.pic_ref

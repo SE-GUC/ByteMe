@@ -26,3 +26,25 @@
   border-radius: 50px !important;
   text-align: center;
 }
+.Home-header {
+  min-height: 33vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(0, 0, 0);
+}
+.Home-logo {
+  animation: App-logo-spin infinite 5s linear;
+  height: 20vmin;
+  pointer-events: none;
+}
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

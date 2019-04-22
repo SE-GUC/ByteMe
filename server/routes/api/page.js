@@ -179,12 +179,18 @@ router.put(
       if (isValidated.error)
         return res.json({ message: "validations not satisfied" });
 
-      await User.update(
+      await Event.updateMany(
+        { creator: page.name },
+        { creator: req.body.name },
+        { upsert: false }
+      );
+
+      await User.updateMany(
         { mun_role: page.name },
         { mun_role: req.body.name },
         { upsert: false }
       );
-      await User.updateOne(
+      await User.updateMany(
         { mun_role: `${page.name}_member` },
         { mun_role: `${req.body.name}_member` },
         { upsert: false }
@@ -220,12 +226,12 @@ router.delete(
           msg: "Only admins can delete this entity"
         });
 
-      await User.update(
+      await User.updateMany(
         { mun_role: page.name },
         { mun_role: "none" },
         { upsert: false }
       );
-      await User.updateOne(
+      await User.updateMany(
         { mun_role: `${page.name}_member` },
         { mun_role: "none" },
         { upsert: false }

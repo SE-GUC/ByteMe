@@ -38,9 +38,6 @@ class AwgHeaderNavbar extends Component {
           <LinkContainer to="/home">
             <Nav.Link>Home</Nav.Link>
           </LinkContainer>
-          <LinkContainer to="/clubs">
-            <Nav.Link>AWGs</Nav.Link>
-          </LinkContainer>
           <LinkContainer to="/announcements">
             <Nav.Link>Announcements</Nav.Link>
           </LinkContainer>
@@ -66,16 +63,16 @@ class AwgHeaderNavbar extends Component {
             </LinkContainer>
           </Nav>
         ) : (
-          <Nav>
-            <LinkContainer to="/register">
-              <Nav.Link>Register</Nav.Link>
-            </LinkContainer>
+            <Nav>
+              <LinkContainer to="/register">
+                <Nav.Link>Register</Nav.Link>
+              </LinkContainer>
 
-            <LinkContainer to="/login">
-              <Nav.Link>Login</Nav.Link>
-            </LinkContainer>
-          </Nav>
-        )}
+              <LinkContainer to="/login">
+                <Nav.Link>Login</Nav.Link>
+              </LinkContainer>
+            </Nav>
+          )}
       </Navbar>
     );
   }
