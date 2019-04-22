@@ -27,7 +27,8 @@ class Home extends Component {
       showI: false,
       showT: false,
       links: [],
-      canAdd: false
+      canAdd: false,
+      isSDKInitialized: false
     };
     if (this.state.user) {
       if (
@@ -142,12 +143,6 @@ class Home extends Component {
         <SearchBar />
         <div className="social">
           <div id="fb-root" />
-          <script
-            async
-            defer
-            crossorigin="anonymous"
-            src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2"
-          />
           <div
             class="fb-page"
             data-href="https://www.facebook.com/GUCMUN"
@@ -283,6 +278,7 @@ class Home extends Component {
       </div>
     );
   }
+
   async componentDidMount() {
     try {
       this.setState({ isLoading: true });
@@ -304,10 +300,7 @@ class Home extends Component {
         xfbml: true,
         version: "v2.6"
       });
-
-      FB.getLoginStatus(function(response) {
-        // this.statusChangeCallback(response);
-      });
+      FB.XFBML.parse();
     };
 
     (function(d, s, id) {

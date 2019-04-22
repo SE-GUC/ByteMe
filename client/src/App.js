@@ -65,6 +65,7 @@ class App extends Component {
       });
 
       Auth.deauthenticateUser();
+      window.location.reload();
     };
 
     if (Auth.isUserAuthenticated()) this.login();
@@ -107,6 +108,7 @@ class App extends Component {
       this.setState({ events: res.data.data });
     });
   }
+
   async handleSubmit(e) {
     e.preventDefault();
     if (this.validateForm()) {
