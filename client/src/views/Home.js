@@ -164,6 +164,19 @@ class Home extends Component {
           </div>
         ) : (
           <div>
+              <div className="soc">
+              
+              {this.props.isLoggedIn &&
+                (this.props.user.mun_role === "secretary_office" ||
+                this.props.user.awg_admin === "mun" ? (
+                  <Button
+                    variant="warning"
+                    className="buttonX"
+                    onClick={this.handleShow1}
+                  >
+                    Give/Forfeit Admin
+                  </Button>
+                ) : null)}</div>
             <Timeline lineColor={"#ffd700"} collapsible className="home">
               {this.state.events.map(event => (
                 <EventTimeline

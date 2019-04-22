@@ -6,10 +6,12 @@
 .register {
   text-align: center;
 }
-.social {
-  float: right;
+
+.soc {
+  float: left;
   text-align: right;
 }
+
 
 .dod {
   float: right;

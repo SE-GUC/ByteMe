@@ -19,7 +19,7 @@ class Social extends Component {
           <TwitterTimelineEmbed
             sourceType="profile"
             screenName="gucmun"
-            options={{ height: 800, width: 500 }}
+            options={{ height: 580, width: 350 }}
           /></div>
 
         <div className="social-div">
@@ -28,8 +28,8 @@ class Social extends Component {
             class="fb-page"
             data-href="https://www.facebook.com/GUCMUN"
             data-tabs="timeline"
-            data-width="3000"
-            data-height="800"
+            data-width="350"
+            data-height="580"
             data-small-header="false"
             data-adapt-container-width="true"
             data-hide-cover="false"
