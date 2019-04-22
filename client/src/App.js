@@ -19,6 +19,7 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 import MunDev from "./views/MunDev";
 import Gallery from "./views/Gallery";
+import Social from "./views/Social";
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import Auth from "./utils/Auth";
@@ -227,6 +228,7 @@ class App extends Component {
               )}
             />
             <Route exact path="/ContactUs" component={Contact} />
+            <Route exact path="/Social" component={Social} />
             <Route
               exact
               path="/login"

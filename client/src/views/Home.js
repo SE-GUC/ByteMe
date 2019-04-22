@@ -8,7 +8,6 @@ import iconDelete from "../icons/x.svg";
 import iconAdd from "../icons/plus.svg";
 import { Button, Modal } from "react-bootstrap";
 import SearchBar from "../components/SearchBar";
-/*global FB*/
 
 import logo from "../logo.svg";
 class Home extends Component {
@@ -141,29 +140,6 @@ class Home extends Component {
     return (
       <div>
         <SearchBar />
-        <div className="social">
-          <div id="fb-root" />
-          <div
-            class="fb-page"
-            data-href="https://www.facebook.com/GUCMUN"
-            data-tabs="timeline"
-            data-width="500"
-            data-height="800"
-            data-small-header="false"
-            data-adapt-container-width="true"
-            data-hide-cover="false"
-            data-show-facepile="true"
-          >
-            <blockquote
-              cite="https://www.facebook.com/GUCMUN"
-              class="fb-xfbml-parse-ignore"
-            >
-              <a href="https://www.facebook.com/GUCMUN">
-                German University in Cairo Model United Nations (GUCMUN)
-              </a>
-            </blockquote>
-          </div>
-        </div>
         {this.state.isLoading ? (
           <div>
             <br />
@@ -293,27 +269,6 @@ class Home extends Component {
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
-
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId: "390253315039099",
-        xfbml: true,
-        version: "v2.6"
-      });
-      FB.XFBML.parse();
-    };
-
-    (function(d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    })(document, "script", "facebook-jssdk");
   }
 }
 

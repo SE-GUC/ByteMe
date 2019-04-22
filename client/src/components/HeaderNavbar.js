@@ -136,7 +136,9 @@ class HeaderNavbar extends Component {
           <LinkContainer to="/merchandise">
             <Nav.Link>Merchandise</Nav.Link>
           </LinkContainer>
-
+          <LinkContainer to="/Social">
+            <Nav.Link>Social Media</Nav.Link>
+          </LinkContainer>
           <LinkContainer to="/ContactUs">
             <Nav.Link>Contact Us</Nav.Link>
           </LinkContainer>
