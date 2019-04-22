@@ -32,6 +32,7 @@ class PortalLibrary extends Component {
       user: props.user,
       canEdit: false,
       showAddPaperWindow: false,
+      searchKey: "",
       newPaper: {},
       key: "all"
     };
@@ -43,22 +44,64 @@ class PortalLibrary extends Component {
         this.state.canEdit = true;
       }
     }
+
+    this.changeSearchKey = event => {
+      this.setState({ searchKey: event.target.value })
+    }
+
+    this.search = () => {
+      try {
+        this.setState({ isLoading: true });
+        API.get(`library/${this.state.searchKey}`).then(res => {
+          this.setState({ academicPapers: res.data.data, isLoading: false });
+        });
+      } catch (e) {
+        console.log(`😱 Axios request failed: ${e}`);
+      }
+    }
   }
   // The render function, where we actually tell the browser what it should show
   render() {
     return (
       <div>
+        <InputGroup>
+          <FormControl
+            placeholder="What are you looking for?"
+            onChange={this.changeSearchKey}
+            plaintext
+            style={{
+              color: "white",
+              textAlign: "center",
+              backgroundColor: "#05375A"
+            }}
+          />
+          <InputGroup.Append>
+            <Button
+              style={{
+                color: "#05375A",
+                border: "#05375A",
+                borderRadius: "0",
+                fontWeight: "600",
+                textAlign: "center",
+                backgroundColor: "#ffd700"
+              }}
+              variant="warning"
+              onClick={this.search}
+            >
+              Search
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
         <h1 style={{ margin: "15px" }}>
           Portal Library{" "}
           {this.state.isLoading ? <Spinner animation="border" /> : ""}
         </h1>
         <div className="papers">
-          <Tabs
+          <Tabs className="lib-tabs"
             id="controlled-tab-library"
             activeKey={this.state.key}
             onSelect={key => {
               this.setState({ key });
-              this.updatePapers();
             }}
             defaultActiveKey="all"
           >
@@ -77,18 +120,19 @@ class PortalLibrary extends Component {
                 <img src={iconAdd} alt="Create new Paper" />
               </Button>
             ) : (
-              <></>
-            )}
+                <></>
+              )}
             {this.state.academicPapers.map(paper => (
-              <AcademicPaper
-                id={paper._id}
-                name={paper.name}
-                date={paper.date}
-                link={paper.link}
-                year={paper.year}
-                updatePapers={this.updatePapers}
-                canEdit={this.state.canEdit}
-              />
+              paper.year == this.state.key || this.state.key === "all" ?
+                <AcademicPaper
+                  id={paper._id}
+                  name={paper.name}
+                  date={paper.date}
+                  link={paper.link}
+                  year={paper.year}
+                  updatePapers={this.updatePapers}
+                  canEdit={this.state.canEdit}
+                /> : <></>
             ))}
           </CardDeck>
         </div>
@@ -153,8 +197,8 @@ class PortalLibrary extends Component {
               {this.state.isLoading ? (
                 <Spinner animation="border" />
               ) : (
-                "Add Paper"
-              )}
+                  "Add Paper"
+                )}
             </Button>
           </Modal.Footer>
         </Modal>
