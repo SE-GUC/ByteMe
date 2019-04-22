@@ -30,8 +30,10 @@ input[type="submit"] {
   color: white;
   border: none;
   cursor: pointer;
+  margin: 1%;
 }
 
 input[type="submit"]:hover {
   background-color: #ffd700;
+  color: black
 }

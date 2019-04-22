@@ -1,6 +1,7 @@
 ﻿import { BrowserRouter as Router, Route } from "react-router-dom";
-import React, { Component } from "react";
 import { Navbar, Modal, Nav } from "react-bootstrap";
+import React, { Component } from "react";
+
 
 import logo from "./logo.svg";
 import "./App.css";
@@ -11,15 +12,16 @@ import UserProfile from "./views/UserProfile";
 import Merchandise from "./views/Merchandise";
 import ResetPass from "./views/ResetPass";
 import Register from "./views/Register";
+import Gallery from "./views/Gallery";
 import AboutUs from "./views/AboutUs";
 import Contact from "./views/Contact";
+import Social from "./views/Social";
 import Events from "./views/Events";
+import MunDev from "./views/MunDev";
 import Pages from "./views/Pages";
 import Login from "./views/Login";
 import Home from "./views/Home";
-import MunDev from "./views/MunDev";
-import Gallery from "./views/Gallery";
-import Social from "./views/Social";
+
 import HeaderNavbar from "./components/HeaderNavbar";
 
 import Auth from "./utils/Auth";
@@ -273,13 +275,15 @@ class App extends Component {
                 alt="GUCMUN logo"
               />
             </Navbar.Brand>
-            <div className="sub">
+            <Nav>
               <input
                 type="submit"
                 onClick={e => this.handleShow(e)}
                 value="Subscribe to our newsletter"
+                style={{ margin: "1%" }}
               />
-            </div>
+            </Nav>
+            <Nav style={{ color: "black", margin: "1%", fontSize:"50%" }}>Easter Egg</Nav>
             {this.state.show ? (
               <Nav>
                 <Modal
