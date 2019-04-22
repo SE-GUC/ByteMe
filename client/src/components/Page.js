@@ -55,12 +55,10 @@ class Page extends Component {
     e.preventDefault();
     this.setState({ show1: false });
     const { name, description, role_to_control } = this.state;
-    var pathArray = url.split("/");
-    const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
 
     await API.put(
-      `page/${secondLevelLocation}`,
+      `page/${this.props._id}`,
       {
         name,
         description,
@@ -73,7 +71,7 @@ class Page extends Component {
       }
     ).then(res => {
       this.props.updatePages();
-      window.location.replace(`${secondLevelLocation}`);
+      window.location.replace(`${this.props._id}`);
       this.setState({ isLoading: false });
     });
   }
@@ -84,11 +82,9 @@ class Page extends Component {
     e.preventDefault();
     this.setState({ show2: false });
     const { guc_id } = this.state;
-    var pathArray = url.split("/");
-    const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
     await API.post(
-      `page/${secondLevelLocation}/members`,
+      `page/${this.props._id}/members`,
       {
         guc_id
       },
@@ -99,7 +95,7 @@ class Page extends Component {
       }
     ).then(res => {
       this.props.updatePages();
-      window.location.replace(`${secondLevelLocation}`);
+      window.location.replace(`${this.props._id}`);
       this.setState({ isLoading: false });
     });
   }
@@ -107,10 +103,8 @@ class Page extends Component {
   async delete(e, url) {
     e.preventDefault();
     this.setState({ show3: false });
-    var pathArray = url.split("/");
-    const secondLevelLocation = pathArray[2];
     const token = Auth.getToken();
-    await API.delete(`page/${secondLevelLocation}`, {
+    await API.delete(`page/${this.props._id}`, {
       headers: {
         Authorization: token
       }
@@ -280,13 +274,13 @@ class Page extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Edit Page</Modal.Title>
           </Modal.Header>
+          <h5>all fields are required to be updated</h5>
           <br />
           <Form.Group controlId="editedPage">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="name"
               placeholder="Enter the new name "
-              defaultValue={name}
               onChange={e => this.setState({ name: e.target.value })}
             />
             <br />
@@ -300,7 +294,6 @@ class Page extends Component {
                 label="Council"
                 type="radio"
                 checked={this.state.checked1}
-                value={role_to_control}
                 onChange={this.one}
               />
               <Form.Check
@@ -311,7 +304,6 @@ class Page extends Component {
                 label="Committee"
                 type="radio"
                 checked={this.state.checked2}
-                defaultValue={role_to_control}
                 onChange={this.two}
               />
               <Form.Check
@@ -322,7 +314,6 @@ class Page extends Component {
                 label="Office"
                 type="radio"
                 checked={this.state.checked3}
-                defaultValue={role_to_control}
                 onChange={this.three}
               />
             </Form.Group>
@@ -334,7 +325,6 @@ class Page extends Component {
               rows="10"
               type="description"
               placeholder="Enter description"
-              defaultValue={description}
               onChange={e => this.setState({ description: e.target.value })}
             />
           </Form.Group>
@@ -352,6 +342,7 @@ class Page extends Component {
 
 Page.propTypes = {
   name: PropTypes.string,
+  _id: PropTypes.string,
   role_to_control: PropTypes.string,
   description: PropTypes.string,
   url: PropTypes.string,
