@@ -74,22 +74,13 @@ class Announcements extends Component {
             <Modal.Title>Add a new announcement</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* date */}
-            <InputGroup className="mb-3">
-              <FormControl
-                name="date"
-                type="date"
-                onChange={this.change}
-                placeholder="Announcement date"
-                aria-label="Announcement date"
-                autoComplete="off"
-              />
-            </InputGroup>
             {/* info */}
             <InputGroup className="mb-3">
               <FormControl
                 name="info"
                 onChange={this.change}
+                as="textarea"
+                rows="4"
                 placeholder="Announcement info"
                 aria-label="Announcement info"
                 autoComplete="off"
@@ -154,6 +145,10 @@ class Announcements extends Component {
 
   createAnnouncement(announcement) {
     this.setState({ isLoading: true });
+    const newAnnouncement = this.state.newAnnouncement;
+
+    newAnnouncement["date"] = Date.now();
+    this.setState({ newAnnouncement: newAnnouncement });
 
     try {
       const token = Auth.getToken();

@@ -12,7 +12,7 @@ import twitter from "../icons/twitter.svg";
 import { Button, Modal } from "react-bootstrap";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import SearchBar from "../components/SearchBar";
-
+import logo from "../logo.svg";
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -159,177 +159,195 @@ class Home extends Component {
     return (
       <div>
         <SearchBar />
-        <div id="fb-root" />
-        <script
-          async
-          defer
-          crossorigin="anonymous"
-          src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2"
-        />
-        <div className="social">
-          <Button
-            variant="light"
-            className="social-button1"
-            onClick={this.handleShowT}
-          >
-            <img src={twitter} alt="twitter" />
-          </Button>
-          <Button
-            variant="light"
-            className="social-button2"
-            onClick={this.handleShowI}
-          >
-            <img src={instagram} alt="instagram" />
-          </Button>
-          {this.state.showI ? (
-            <InstagramEmbed
-              url="https://instagr.am/p/BwKCtuhAgOQ/"
-              maxWidth={300}
-              hideCaption={false}
-              containerTagName="div"
+        {this.state.isLoading ? (
+          <div>
+            <br />
+            <br />
+            <br />
+            <header className="Home-header">
+              <img src={logo} className="Home-logo" alt="logo" />
+              <br />
+              <h1>Welcome to GUCMUN</h1>
+              <h5>Loading...</h5>
+            </header>
+          </div>
+        ) : (
+          <div>
+            <div id="fb-root" />
+            <script
+              async
+              defer
+              crossorigin="anonymous"
+              src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2"
             />
-          ) : (
-            <></>
-          )}
+            <div className="social">
+              <Button
+                variant="light"
+                className="social-button1"
+                onClick={this.handleShowT}
+              >
+                <img src={twitter} alt="twitter" />
+              </Button>
+              <Button
+                variant="light"
+                className="social-button2"
+                onClick={this.handleShowI}
+              >
+                <img src={instagram} alt="instagram" />
+              </Button>
+              {this.state.showI ? (
+                <InstagramEmbed
+                  url="https://instagr.am/p/BwKCtuhAgOQ/"
+                  maxWidth={300}
+                  hideCaption={false}
+                  containerTagName="div"
+                />
+              ) : (
+                <></>
+              )}
 
-          {this.state.showT ? (
-            <TwitterTimelineEmbed
-              sourceType="profile"
-              screenName="gucmun"
-              options={{ height: 800, width: 300 }}
+              {this.state.showT ? (
+                <TwitterTimelineEmbed
+                  sourceType="profile"
+                  screenName="gucmun"
+                  options={{ height: 800, width: 300 }}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+            {/* facebook starts here */}
+            {/* <div id="fb-root" />
+            <script
+              async
+              defer
+              crossorigin="anonymous"
+              src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=390253315039099&autoLogAppEvents=1"
             />
-          ) : (
-            <></>
-          )}
-        </div>
-        {/* facebook starts here */}
-        {/* <div id="fb-root" />
-        <script
-          async
-          defer
-          crossorigin="anonymous"
-          src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=390253315039099&autoLogAppEvents=1"
-        />
-        <div
-          class="fb-page"
-          data-href="https://www.facebook.com/GUCMUN"
-          data-tabs="timeline, messages"
-          data-small-header="false"
-          data-adapt-container-width="true"
-          data-hide-cover="false"
-          data-show-facepile="true"
-        >
-          <blockquote
-            cite="https://www.facebook.com/facebook"
-            class="fb-xfbml-parse-ignore"
-          >
-            <a href="https://www.facebook.com/facebook">Facebook</a>
-          </blockquote>
-        </div> */}
-        {/* facebook ends here */}
-        <Timeline lineColor={"#ffd700"} collapsible className="home">
-          {this.state.events.map(event => (
-            <EventTimeline
-              title={event.title}
-              brief={event.brief}
-              dateTime={event.dateTime}
-              description={event.description}
-            />
-          ))}
-        </Timeline>
-        <div className="register">
-          {this.props.isLoggedIn &&
-            (this.props.user.mun_role === "secretary_office" ||
-            this.props.user.awg_admin === "mun" ? (
-              <div>
-                {this.state.links[0] ? (
-                  <Button
-                    variant="warning"
-                    className="buttonP"
-                    onClick={this.handleShow3}
-                  >
-                    <img src={iconDelete} alt="Delete page" />
-                  </Button>
-                ) : (
-                  <Button
-                    variant="warning"
-                    className="buttonP"
-                    onClick={this.handleShow2}
-                  >
-                    <img src={iconAdd} alt="Add new Member" />
-                  </Button>
-                )}
-              </div>
-            ) : null)}
-
-          {this.state.links.map(link => (
-            <input
-              type="submit"
-              onClick={this.handleShow}
-              value="Register to our current event"
-            />
-          ))}
-        </div>
-        <Modal show={this.state.show2} onHide={this.handleClose2}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add google form link</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {/* name */}
-            <label>Link</label>
-            <textarea
-              id="link"
-              name="Google form link "
-              placeholder="Google form link"
-              onChange={e => this.setState({ link: e.target.value })}
-              value={this.state.link}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.add(e)}>
-              ADD
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal show={this.state.show3} onHide={this.handleClose3}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              Are you sure you want to delete this registration link ?
-            </Modal.Title>
-          </Modal.Header>
-
-          <Modal.Footer>
-            <Button variant="secondary" onClick={e => this.delete(e)}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <div className="register">
-          {this.state.show ? (
-            <iframe
-              src={this.state.links[0].link}
-              title="iframe"
-              width="640"
-              height="640"
-              frameborder="0"
-              marginheight="0"
-              marginwidth="0"
+            <div
+              class="fb-page"
+              data-href="https://www.facebook.com/GUCMUN"
+              data-tabs="timeline, messages"
+              data-small-header="false"
+              data-adapt-container-width="true"
+              data-hide-cover="false"
+              data-show-facepile="true"
             >
-              Loading...
-            </iframe>
-          ) : (
-            <></>
-          )}
-        </div>
+              <blockquote
+                cite="https://www.facebook.com/facebook"
+                class="fb-xfbml-parse-ignore"
+              >
+                <a href="https://www.facebook.com/facebook">Facebook</a>
+              </blockquote>
+            </div> */}
+            {/* facebook ends here */}
+
+            <Timeline lineColor={"#ffd700"} collapsible className="home">
+              {this.state.events.map(event => (
+                <EventTimeline
+                  title={event.title}
+                  brief={event.brief}
+                  dateTime={event.dateTime}
+                  description={event.description}
+                />
+              ))}
+            </Timeline>
+            <div className="register">
+              {this.props.isLoggedIn &&
+                (this.props.user.mun_role === "secretary_office" ||
+                this.props.user.awg_admin === "mun" ? (
+                  <div>
+                    {this.state.links[0] ? (
+                      <Button
+                        variant="warning"
+                        className="buttonP"
+                        onClick={this.handleShow3}
+                      >
+                        <img src={iconDelete} alt="Delete page" />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="warning"
+                        className="buttonP"
+                        onClick={this.handleShow2}
+                      >
+                        <img src={iconAdd} alt="Add new Member" />
+                      </Button>
+                    )}
+                  </div>
+                ) : null)}
+
+              {this.state.links.map(link => (
+                <input
+                  type="submit"
+                  onClick={this.handleShow}
+                  value="Register to our current event"
+                />
+              ))}
+            </div>
+            <Modal show={this.state.show2} onHide={this.handleClose2}>
+              <Modal.Header closeButton>
+                <Modal.Title>Add google form link</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {/* name */}
+                <label>Link</label>
+                <textarea
+                  id="link"
+                  name="Google form link "
+                  placeholder="Google form link"
+                  onChange={e => this.setState({ link: e.target.value })}
+                  value={this.state.link}
+                />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={e => this.add(e)}>
+                  ADD
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <Modal show={this.state.show3} onHide={this.handleClose3}>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  Are you sure you want to delete this registration link ?
+                </Modal.Title>
+              </Modal.Header>
+
+              <Modal.Footer>
+                <Button variant="secondary" onClick={e => this.delete(e)}>
+                  Delete
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+            <div className="register">
+              {this.state.show ? (
+                <iframe
+                  src={this.state.links[0].link}
+                  title="iframe"
+                  width="640"
+                  height="640"
+                  frameborder="0"
+                  marginheight="0"
+                  marginwidth="0"
+                >
+                  Loading...
+                </iframe>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
   async componentDidMount() {
     try {
+      this.setState({ isLoading: true });
       API.get("events").then(res => {
         console.log(res.data.data);
-        this.setState({ events: res.data.data });
+        this.setState({ isLoading: false, events: res.data.data });
 
         API.get(`form`).then(res => {
           this.setState({ links: res.data.data, isLoading: false });

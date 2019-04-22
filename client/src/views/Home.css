@@ -1,26 +1,48 @@
 .home {
   min-height: 42.8rem;
 }
-.register{
+.register {
   text-align: center;
 }
-.social{
-  float:right;
+.social {
+  float: right;
   text-align: right;
 }
 
-.dod{
- float:right;
- right: 45px;
- margin-top: 10px;
- text-align: center;
+.dod {
+  float: right;
+  right: 45px;
+  margin-top: 10px;
+  text-align: center;
 }
-.ddd{
-  float:right;
+.ddd {
+  float: right;
   width: fit-content;
   position: absolute;
   right: 45px;
   margin-top: 10px;
   border-radius: 50px !important;
   text-align: center;
- }
+}
+.Home-header {
+  min-height: 33vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(0, 0, 0);
+}
+.Home-logo {
+  animation: App-logo-spin infinite 5s linear;
+  height: 20vmin;
+  pointer-events: none;
+}
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

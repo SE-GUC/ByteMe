@@ -94,22 +94,13 @@ class Announcement extends Component {
             <Modal.Title>Update announcement</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* date */}
-            <InputGroup className="mb-3">
-              <FormControl
-                name="date"
-                type="date"
-                onChange={this.change}
-                placeholder="Announcement date"
-                aria-label="Announcement date"
-                defaultValue={date}
-              />
-            </InputGroup>
             {/* info */}
             <InputGroup className="mb-3">
               <FormControl
                 name="info"
                 onChange={this.change}
+                as="textarea"
+                rows="4"
                 placeholder="Announcement info"
                 aria-label="Announcement info"
                 defaultValue={info}
@@ -175,6 +166,10 @@ class Announcement extends Component {
   editAnnouncement(id, editedAnnouncement) {
     try {
       this.setState({ isLoading: true });
+      const editedAnnouncement = this.state.editedAnnouncement;
+
+      editedAnnouncement["date"] = Date.now();
+      this.setState({ editedAnnouncement: editedAnnouncement });
       const token = Auth.getToken();
       const headers = {
         Authorization: `${token}`
