@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://www.gucmun.me/api/",
+  baseURL: "https://gucmun-back.herokuapp.com/api",
   responseType: "json"
 });
